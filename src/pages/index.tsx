@@ -12,24 +12,24 @@ export function Home() {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
-    return <Navigate replace to="/sign-in" />;
-  }
+  // if (!data) {
+  //   return <Navigate replace to="/sign-in" />;
+  // }
 
   // biome-ignore lint/suspicious/noExplicitAny: typing is incomplete
-  const lastUserEventId = (data.user as any).lastUserEventId as
-    | string
-    | undefined;
+  // const lastUserEventId = (data.user as any).lastUserEventId as
+  //   | string
+  //   | undefined;
 
-  if (lastUserEventId) {
-    return (
-      <Navigate
-        params={{ eventId: lastUserEventId }}
-        replace
-        to="/$eventId/dashboard"
-      />
-    );
-  }
+  // if (lastUserEventId) {
+  //   return (
+  //     <Navigate
+  //       params={{ eventId: lastUserEventId }}
+  //       replace
+  //       to="/$eventId/dashboard"
+  //     />
+  //   );
+  // }
 
   return <Navigate replace to="/dashboard" />;
 }

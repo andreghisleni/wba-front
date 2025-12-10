@@ -17,12 +17,10 @@ import { Route as AuthSignInRouteImport } from './pages/_auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './pages/_auth/forgot-password'
 import { Route as AppSettingsRouteImport } from './pages/_app/settings'
 import { Route as AppDashboardRouteImport } from './pages/_app/dashboard'
+import { Route as WebhookOauthCallbackRouteImport } from './pages/webhook/oauth/callback'
 import { Route as AuthResetPasswordTokenRouteImport } from './pages/_auth/reset-password.$token'
-import { Route as AppRentalEquipmentIndexRouteImport } from './pages/_app/rental/equipment/index'
-import { Route as AppRentalCategoriesIndexRouteImport } from './pages/_app/rental/categories/index'
-import { Route as AppRentalBudgetsIndexRouteImport } from './pages/_app/rental/budgets/index'
-import { Route as AppRentalBudgetsBudgetIdIndexRouteImport } from './pages/_app/rental/budgets/$budgetId/index'
-import { Route as WRentalBudgetsBudgetIdPrintRouteImport } from './pages/w/rental/budgets/$budgetId/print'
+import { Route as AppWhatsappConnectRouteImport } from './pages/_app/whatsapp/connect'
+import { Route as AppWhatsappChatIndexRouteImport } from './pages/_app/whatsapp/chat/index'
 
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
   id: '/_auth',
@@ -62,39 +60,26 @@ const AppDashboardRoute = AppDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AppLayoutRoute,
 } as any)
+const WebhookOauthCallbackRoute = WebhookOauthCallbackRouteImport.update({
+  id: '/webhook/oauth/callback',
+  path: '/webhook/oauth/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthResetPasswordTokenRoute = AuthResetPasswordTokenRouteImport.update({
   id: '/reset-password/$token',
   path: '/reset-password/$token',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
-const AppRentalEquipmentIndexRoute = AppRentalEquipmentIndexRouteImport.update({
-  id: '/rental/equipment/',
-  path: '/rental/equipment/',
+const AppWhatsappConnectRoute = AppWhatsappConnectRouteImport.update({
+  id: '/whatsapp/connect',
+  path: '/whatsapp/connect',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-const AppRentalCategoriesIndexRoute =
-  AppRentalCategoriesIndexRouteImport.update({
-    id: '/rental/categories/',
-    path: '/rental/categories/',
-    getParentRoute: () => AppLayoutRoute,
-  } as any)
-const AppRentalBudgetsIndexRoute = AppRentalBudgetsIndexRouteImport.update({
-  id: '/rental/budgets/',
-  path: '/rental/budgets/',
+const AppWhatsappChatIndexRoute = AppWhatsappChatIndexRouteImport.update({
+  id: '/whatsapp/chat/',
+  path: '/whatsapp/chat/',
   getParentRoute: () => AppLayoutRoute,
 } as any)
-const AppRentalBudgetsBudgetIdIndexRoute =
-  AppRentalBudgetsBudgetIdIndexRouteImport.update({
-    id: '/rental/budgets/$budgetId/',
-    path: '/rental/budgets/$budgetId/',
-    getParentRoute: () => AppLayoutRoute,
-  } as any)
-const WRentalBudgetsBudgetIdPrintRoute =
-  WRentalBudgetsBudgetIdPrintRouteImport.update({
-    id: '/w/rental/budgets/$budgetId/print',
-    path: '/w/rental/budgets/$budgetId/print',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,12 +88,10 @@ export interface FileRoutesByFullPath {
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/whatsapp/connect': typeof AppWhatsappConnectRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
-  '/rental/budgets': typeof AppRentalBudgetsIndexRoute
-  '/rental/categories': typeof AppRentalCategoriesIndexRoute
-  '/rental/equipment': typeof AppRentalEquipmentIndexRoute
-  '/w/rental/budgets/$budgetId/print': typeof WRentalBudgetsBudgetIdPrintRoute
-  '/rental/budgets/$budgetId': typeof AppRentalBudgetsBudgetIdIndexRoute
+  '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
+  '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,12 +100,10 @@ export interface FileRoutesByTo {
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/whatsapp/connect': typeof AppWhatsappConnectRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
-  '/rental/budgets': typeof AppRentalBudgetsIndexRoute
-  '/rental/categories': typeof AppRentalCategoriesIndexRoute
-  '/rental/equipment': typeof AppRentalEquipmentIndexRoute
-  '/w/rental/budgets/$budgetId/print': typeof WRentalBudgetsBudgetIdPrintRoute
-  '/rental/budgets/$budgetId': typeof AppRentalBudgetsBudgetIdIndexRoute
+  '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
+  '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -134,12 +115,10 @@ export interface FileRoutesById {
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_app/whatsapp/connect': typeof AppWhatsappConnectRoute
   '/_auth/reset-password/$token': typeof AuthResetPasswordTokenRoute
-  '/_app/rental/budgets/': typeof AppRentalBudgetsIndexRoute
-  '/_app/rental/categories/': typeof AppRentalCategoriesIndexRoute
-  '/_app/rental/equipment/': typeof AppRentalEquipmentIndexRoute
-  '/w/rental/budgets/$budgetId/print': typeof WRentalBudgetsBudgetIdPrintRoute
-  '/_app/rental/budgets/$budgetId/': typeof AppRentalBudgetsBudgetIdIndexRoute
+  '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
+  '/_app/whatsapp/chat/': typeof AppWhatsappChatIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -150,12 +129,10 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
+    | '/whatsapp/connect'
     | '/reset-password/$token'
-    | '/rental/budgets'
-    | '/rental/categories'
-    | '/rental/equipment'
-    | '/w/rental/budgets/$budgetId/print'
-    | '/rental/budgets/$budgetId'
+    | '/webhook/oauth/callback'
+    | '/whatsapp/chat'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -164,12 +141,10 @@ export interface FileRouteTypes {
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
+    | '/whatsapp/connect'
     | '/reset-password/$token'
-    | '/rental/budgets'
-    | '/rental/categories'
-    | '/rental/equipment'
-    | '/w/rental/budgets/$budgetId/print'
-    | '/rental/budgets/$budgetId'
+    | '/webhook/oauth/callback'
+    | '/whatsapp/chat'
   id:
     | '__root__'
     | '/'
@@ -180,19 +155,17 @@ export interface FileRouteTypes {
     | '/_auth/forgot-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
+    | '/_app/whatsapp/connect'
     | '/_auth/reset-password/$token'
-    | '/_app/rental/budgets/'
-    | '/_app/rental/categories/'
-    | '/_app/rental/equipment/'
-    | '/w/rental/budgets/$budgetId/print'
-    | '/_app/rental/budgets/$budgetId/'
+    | '/webhook/oauth/callback'
+    | '/_app/whatsapp/chat/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AppLayoutRoute: typeof AppLayoutRouteWithChildren
   AuthLayoutRoute: typeof AuthLayoutRouteWithChildren
-  WRentalBudgetsBudgetIdPrintRoute: typeof WRentalBudgetsBudgetIdPrintRoute
+  WebhookOauthCallbackRoute: typeof WebhookOauthCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -253,6 +226,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppDashboardRouteImport
       parentRoute: typeof AppLayoutRoute
     }
+    '/webhook/oauth/callback': {
+      id: '/webhook/oauth/callback'
+      path: '/webhook/oauth/callback'
+      fullPath: '/webhook/oauth/callback'
+      preLoaderRoute: typeof WebhookOauthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_auth/reset-password/$token': {
       id: '/_auth/reset-password/$token'
       path: '/reset-password/$token'
@@ -260,40 +240,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthResetPasswordTokenRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
-    '/_app/rental/equipment/': {
-      id: '/_app/rental/equipment/'
-      path: '/rental/equipment'
-      fullPath: '/rental/equipment'
-      preLoaderRoute: typeof AppRentalEquipmentIndexRouteImport
+    '/_app/whatsapp/connect': {
+      id: '/_app/whatsapp/connect'
+      path: '/whatsapp/connect'
+      fullPath: '/whatsapp/connect'
+      preLoaderRoute: typeof AppWhatsappConnectRouteImport
       parentRoute: typeof AppLayoutRoute
     }
-    '/_app/rental/categories/': {
-      id: '/_app/rental/categories/'
-      path: '/rental/categories'
-      fullPath: '/rental/categories'
-      preLoaderRoute: typeof AppRentalCategoriesIndexRouteImport
+    '/_app/whatsapp/chat/': {
+      id: '/_app/whatsapp/chat/'
+      path: '/whatsapp/chat'
+      fullPath: '/whatsapp/chat'
+      preLoaderRoute: typeof AppWhatsappChatIndexRouteImport
       parentRoute: typeof AppLayoutRoute
-    }
-    '/_app/rental/budgets/': {
-      id: '/_app/rental/budgets/'
-      path: '/rental/budgets'
-      fullPath: '/rental/budgets'
-      preLoaderRoute: typeof AppRentalBudgetsIndexRouteImport
-      parentRoute: typeof AppLayoutRoute
-    }
-    '/_app/rental/budgets/$budgetId/': {
-      id: '/_app/rental/budgets/$budgetId/'
-      path: '/rental/budgets/$budgetId'
-      fullPath: '/rental/budgets/$budgetId'
-      preLoaderRoute: typeof AppRentalBudgetsBudgetIdIndexRouteImport
-      parentRoute: typeof AppLayoutRoute
-    }
-    '/w/rental/budgets/$budgetId/print': {
-      id: '/w/rental/budgets/$budgetId/print'
-      path: '/w/rental/budgets/$budgetId/print'
-      fullPath: '/w/rental/budgets/$budgetId/print'
-      preLoaderRoute: typeof WRentalBudgetsBudgetIdPrintRouteImport
-      parentRoute: typeof rootRouteImport
     }
   }
 }
@@ -301,19 +260,15 @@ declare module '@tanstack/react-router' {
 interface AppLayoutRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
   AppSettingsRoute: typeof AppSettingsRoute
-  AppRentalBudgetsIndexRoute: typeof AppRentalBudgetsIndexRoute
-  AppRentalCategoriesIndexRoute: typeof AppRentalCategoriesIndexRoute
-  AppRentalEquipmentIndexRoute: typeof AppRentalEquipmentIndexRoute
-  AppRentalBudgetsBudgetIdIndexRoute: typeof AppRentalBudgetsBudgetIdIndexRoute
+  AppWhatsappConnectRoute: typeof AppWhatsappConnectRoute
+  AppWhatsappChatIndexRoute: typeof AppWhatsappChatIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
   AppSettingsRoute: AppSettingsRoute,
-  AppRentalBudgetsIndexRoute: AppRentalBudgetsIndexRoute,
-  AppRentalCategoriesIndexRoute: AppRentalCategoriesIndexRoute,
-  AppRentalEquipmentIndexRoute: AppRentalEquipmentIndexRoute,
-  AppRentalBudgetsBudgetIdIndexRoute: AppRentalBudgetsBudgetIdIndexRoute,
+  AppWhatsappConnectRoute: AppWhatsappConnectRoute,
+  AppWhatsappChatIndexRoute: AppWhatsappChatIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
@@ -342,7 +297,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AppLayoutRoute: AppLayoutRouteWithChildren,
   AuthLayoutRoute: AuthLayoutRouteWithChildren,
-  WRentalBudgetsBudgetIdPrintRoute: WRentalBudgetsBudgetIdPrintRoute,
+  WebhookOauthCallbackRoute: WebhookOauthCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -20,9 +20,8 @@ import { MenuLink } from "./menu-link";
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
   { href: "/dashboard", label: "Dashboard" },
-  { href: "/rental/categories", label: "Categorias" },
-  { href: "/rental/equipment", label: "Equipamentos" },
-  { href: "/rental/budgets", label: "Orçamentos" },
+  { href: "/whatsapp/connect", label: "Conectar" },
+  { href: "/whatsapp/chat", label: "Chat" },
 ];
 
 export function Header() {
