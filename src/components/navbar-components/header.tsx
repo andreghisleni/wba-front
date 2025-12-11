@@ -22,6 +22,7 @@ const navigationLinks = [
   { href: "/dashboard", label: "Dashboard" },
   { href: "/whatsapp/connect", label: "Conectar" },
   { href: "/whatsapp/chat", label: "Chat" },
+  { href: "/whatsapp/templates", label: "Templates" },
 ];
 
 export function Header() {

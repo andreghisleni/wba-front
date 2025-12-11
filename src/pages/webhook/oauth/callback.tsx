@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useNavigate } from "@tanstack/react-router"; // Ou 'react-router-dom'
 import { Loader2, CheckCircle2, XCircle } from "lucide-react";
 import { toast } from "sonner"; // Ou useToast do Shadcn
-import { useExchangeFacebookCode } from '@/http/generated';
+import { useWhatsappOnboard } from '@/http/generated';
 
 export const Route = createFileRoute('/webhook/oauth/callback')({
   component: RouteComponent,
@@ -16,7 +16,7 @@ function RouteComponent() {
   const hasCalledRef = useRef(false);
 
   // Hook do Kubb (React Query)
-  const { mutate, isPending, isError, error } = useExchangeFacebookCode({
+  const { mutate, isPending, isError, error } = useWhatsappOnboard({
     mutation: {
       onSuccess: (data) => {
         toast.success("Conexão realizada com sucesso!");

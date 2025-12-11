@@ -1,8 +1,12 @@
-export type { ExchangeFacebookCode200, ExchangeFacebookCode400, ExchangeFacebookCode500, ExchangeFacebookCodeMutationRequest, ExchangeFacebookCodeMutationResponse, ExchangeFacebookCodeMutation } from "./ExchangeFacebookCode.ts";
+export type { CreateWhatsappContact200, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
+export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./CreateWhatsappTemplates.ts";
 export type { GetWhatsappContacts200, GetWhatsappContactsQueryResponse, GetWhatsappContactsQuery } from "./GetWhatsappContacts.ts";
 export type { GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages200, GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesQuery } from "./GetWhatsappContactsContactIdMessages.ts";
+export type { GetWhatsappTemplates200, GetWhatsappTemplatesQueryResponse, GetWhatsappTemplatesQuery } from "./GetWhatsappTemplates.ts";
 export type { GetWhatsappWebhook200, GetWhatsappWebhookQueryResponse, GetWhatsappWebhookQuery } from "./GetWhatsappWebhook.ts";
 export type { HealthCheck200, HealthCheckQueryResponse, HealthCheckQuery } from "./HealthCheck.ts";
+export type { ImportWhatsappTemplates200, ImportWhatsappTemplates400, ImportWhatsappTemplates404, ImportWhatsappTemplatesMutationResponse, ImportWhatsappTemplatesMutation } from "./ImportWhatsappTemplates.ts";
+export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./PostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessages200, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";
-export type { PostWhatsappOnboard200, PostWhatsappOnboardMutationRequest, PostWhatsappOnboardMutationResponse, PostWhatsappOnboardMutation } from "./PostWhatsappOnboard.ts";
 export type { PostWhatsappWebhook200, PostWhatsappWebhookMutationResponse, PostWhatsappWebhookMutation } from "./PostWhatsappWebhook.ts";
+export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./WhatsappOnboard.ts";

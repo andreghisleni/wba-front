@@ -11,10 +11,42 @@ export type PostWhatsappMessagesMutationRequest = {
      * @type string
     */
     contactId: string;
+    type: (string | string);
     /**
-     * @type string
+     * @type string | undefined
     */
-    message: string;
+    message?: string;
+    /**
+     * @type object | undefined
+    */
+    template?: {
+        /**
+         * @type string
+        */
+        name: string;
+        /**
+         * @default "pt_BR"
+         * @type string
+        */
+        language: string;
+        /**
+         * @type array | undefined
+        */
+        bodyValues?: string[];
+        /**
+         * @type array | undefined
+        */
+        buttonValues?: {
+            /**
+             * @type number
+            */
+            index: number;
+            /**
+             * @type string
+            */
+            value: string;
+        }[];
+    };
 };
 
 export type PostWhatsappMessagesMutationResponse = PostWhatsappMessages200;

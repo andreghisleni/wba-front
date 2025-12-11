@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react'; // Adicionado useRef
 import { format } from 'date-fns';
 import { MoreVertical, Paperclip, Phone, Search, Send, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -10,14 +10,19 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { cn } from "@/lib/utils";
 
-// Importando os hooks gerados pelo Kubb
-// Ajuste o caminho conforme sua estrutura (src/http/generated/hooks)
+// Seus hooks gerados
 import {
+  getWhatsappContactsContactIdMessagesQueryKey,
   useGetWhatsappContacts,
   useGetWhatsappContactsContactIdMessages,
   usePostWhatsappMessages
 } from '@/http/generated/hooks';
 
+// O componente de mensagem que criamos anteriormente
+import { MessageBubble } from './-components/message-bubble';
+import { useQueryClient } from '@tanstack/react-query';
+import { SendTemplateDialog } from './-components/send-template-dialog';
+import { NewChatDialog } from './-components/new-chat-dialog';
 
 export const Route = createFileRoute('/_app/whatsapp/chat/')({
   component: RouteComponent,
@@ -26,46 +31,42 @@ export const Route = createFileRoute('/_app/whatsapp/chat/')({
 function RouteComponent() {
   const [selectedContactId, setSelectedContactId] = useState<string | null>(null);
   const [inputMessage, setInputMessage] = useState("");
+  const queryClient = useQueryClient();
 
-  // 1. Hook para Listar Contatos (Inbox)
-  // O TanStack Query já gerencia loading, error e cache
-  const {
-    data: contacts = [],
-    isLoading: isLoadingContacts,
-    error: errorContacts
-  } = useGetWhatsappContacts({
+  // Ref para o scroll automático
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // 2. Hook de Contatos (SEM refetchInterval)
+  const { data: contacts = [], isLoading: isLoadingContacts, error: errorContacts } = useGetWhatsappContacts({
     query: {
       // Atualiza a lista a cada 10s para ver novos contatos/mensagens
       refetchInterval: 10000
     }
   });
 
-  // Encontra o objeto do contato selecionado baseado no ID
-  const selectedContact = contacts.find(c => c.id === selectedContactId);
-
-  // 2. Hook para Listar Mensagens
-  // Só dispara se houver um selectedContactId (enabled: !!id)
-  const {
-    data: messages = [],
-    isLoading: isLoadingMessages
-  } = useGetWhatsappContactsContactIdMessages(
-    selectedContactId as string, // contactId
+  // 3. Hook de Mensagens (SEM refetchInterval)
+  const { data: messages = [], isLoading: isLoadingMessages } = useGetWhatsappContactsContactIdMessages(
+    selectedContactId as string,
     {
       query: {
-        enabled: !!selectedContactId, // Só busca se tiver ID
-        refetchInterval: 5000, // Polling de mensagens a cada 5s
+        enabled: !!selectedContactId,
+        refetchInterval: 5000,
       }
     }
   );
 
-  // 3. Hook de Mutação para Enviar Mensagem
+  const selectedContact = contacts.find(c => c.id === selectedContactId);
+
+  // Verifica se a janela está fechada
+  // Se isWindowOpen for undefined (carregando), assumimos false por segurança ou true dependendo da UX
+  const isWindowClosed = selectedContact ? !selectedContact.isWindowOpen : false;
+
+  // 3. Mutação de Envio
   const { mutateAsync: sendMessage, isPending: isSending } = usePostWhatsappMessages({
     mutation: {
-      onSuccess: () => {
+      onSuccess: async () => {
         setInputMessage("");
-        // Opcional: Invalidar a query de mensagens para forçar atualização imediata
-        // queryClient.invalidateQueries({ queryKey: ... }) 
-        // Mas o polling ou o retorno da mutação já ajudam.
+        await queryClient.invalidateQueries({ queryKey: getWhatsappContactsContactIdMessagesQueryKey(selectedContactId as string) })
       },
       onError: (error) => {
         console.error(error);
@@ -74,18 +75,30 @@ function RouteComponent() {
     }
   });
 
+  // Função de scroll para o fundo
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Efeito para rolar quando as mensagens mudam ou troca de contato
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, selectedContactId, isLoadingMessages]);
+
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !selectedContactId) return;
 
     try {
       await sendMessage({
         data: {
+          type: "text",
           contactId: selectedContactId,
           message: inputMessage
         }
       });
+      // O scroll automático via useEffect cuidará da rolagem
     } catch {
-      // Erro já tratado no onError do hook
+      // Erro tratado no hook
     }
   };
 
@@ -94,17 +107,20 @@ function RouteComponent() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-4rem)] overflow-hidden bg-background border rounded-lg m-4 shadow-sm">
+    // CONTAINER PRINCIPAL: Define altura fixa e esconde o scroll geral da página
+    <div className="flex h-[calc(100vh-120px)] overflow-hidden bg-background border rounded-lg m-4 shadow-sm">
 
-      {/* --- SIDEBAR: Lista de Contatos --- */}
+      {/* --- SIDEBAR (Esquerda) --- */}
       <div className="w-80 flex flex-col border-r bg-muted/10">
-        <div className="p-4 border-b">
+        <div className="p-4 border-b flex-none">
           <div className="relative">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input placeholder="Buscar conversas..." className="pl-8" />
           </div>
+          <NewChatDialog onContactCreated={(contactId) => setSelectedContactId(contactId)} />
         </div>
 
+        {/* ScrollArea é ok aqui na sidebar */}
         <ScrollArea className="flex-1">
           <div className="flex flex-col">
             {isLoadingContacts && (
@@ -122,7 +138,7 @@ function RouteComponent() {
                 key={contact.id}
                 onClick={() => setSelectedContactId(contact.id)}
                 className={cn(
-                  "flex items-center gap-3 p-4 text-left hover:bg-accent transition-colors border-b border-border/50",
+                  "flex items-center gap-3 p-4 text-left hover:bg-accent transition-colors border-b border-border/50 w-full",
                   selectedContactId === contact.id && "bg-accent"
                 )}
               >
@@ -147,12 +163,12 @@ function RouteComponent() {
         </ScrollArea>
       </div>
 
-      {/* --- MAIN: Janela de Chat --- */}
-      <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-950/50">
+      {/* --- CHAT AREA (Direita) --- */}
+      <div className="flex-1 flex flex-col bg-slate-50 dark:bg-slate-950/50 overflow-hidden relative">
         {selectedContact ? (
           <>
-            {/* Header do Chat */}
-            <div className="p-3 border-b flex justify-between items-center bg-background px-6 shadow-sm z-10">
+            {/* 1. HEADER (Fixo, flex-none) */}
+            <div className="flex-none p-3 border-b flex justify-between items-center bg-background px-6 shadow-sm z-10">
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
                   <AvatarImage src={selectedContact.profilePicUrl || undefined} />
@@ -169,85 +185,75 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Área de Mensagens (Scrollable) */}
-            <ScrollArea className="flex-1 p-4 bg-slate-100/50 dark:bg-slate-900/50">
+            {/* 2. ÁREA DE MENSAGENS (flex-1, overflow-y-auto) */}
+            {/* Nota: Usando div nativa em vez de ScrollArea para controle mais fácil do scroll-to-bottom */}
+            <div className="flex-1 overflow-y-auto p-4 bg-slate-100/50 dark:bg-slate-900/50">
               {isLoadingMessages ? (
-                <div className="flex justify-center p-4">
+                <div className="flex justify-center p-4 h-full items-center">
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
               ) : (
-                <div className="flex flex-col gap-3 max-w-4xl mx-auto">
+                <div className="flex flex-col gap-3 max-w-4xl mx-auto min-h-full justify-end">
                   {messages.length === 0 && (
                     <div className="text-center text-xs text-muted-foreground py-10">
                       Inicie a conversa...
                     </div>
                   )}
 
-                  {messages.map((msg) => {
-                    const isOut = msg.direction === "OUTBOUND";
-                    return (
-                      <div
-                        key={msg.id}
-                        className={cn(
-                          "flex w-max max-w-[75%] flex-col gap-1 rounded-lg px-3 py-2 text-sm shadow-sm",
-                          isOut
-                            ? "ml-auto bg-primary text-primary-foreground rounded-tr-none"
-                            : "bg-white dark:bg-slate-800 rounded-tl-none border"
-                        )}
-                      >
-                        {msg.type === "image" ? (
-                          // SE FOR IMAGEM
-                          <div className="mb-1">
-                            <img
-                              src={String(msg.mediaUrl).replace('https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/', 'http://localhost:8787/')}
-                              alt="Foto enviada"
-                              className="rounded-lg max-h-64 object-cover cursor-pointer hover:opacity-90"
-                              onClick={() => window.open(String(msg.mediaUrl).replace('https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/', 'http://localhost:8787/'), '_blank')} // Abre original ao clicar
-                            />
-                            {/* Se tiver legenda (body), mostra embaixo da foto */}
-                            {msg.body && <p className="mt-1 text-sm">{msg.body}</p>}
-                          </div>
-                        ) : (
-                          // SE FOR TEXTO NORMAL
-                          <p className="leading-relaxed whitespace-pre-wrap">{msg.body}</p>
-                        )}
-                        <span className={cn("text-[10px] self-end opacity-70", isOut ? "text-primary-foreground/90" : "text-muted-foreground")}>
-                          {msg.timestamp && format(new Date(msg.timestamp), "HH:mm")}
-                          {isOut && <span className="ml-1 text-[10px] font-bold">
-                            {msg.status === 'READ' ? '✓✓' : msg.status === 'DELIVERED' ? '✓✓' : '✓'}
-                          </span>}
-                        </span>
-                      </div>
-                    );
-                  })}
+                  {messages.map((msg) => (
+                    <MessageBubble key={msg.id} message={msg} />
+                  ))}
+
+                  {/* Elemento invisível para ancorar o scroll no fim */}
+                  <div ref={messagesEndRef} />
                 </div>
               )}
-            </ScrollArea>
+            </div>
 
-            {/* Input de Envio */}
-            <div className="p-4 bg-background border-t">
+            {/* 3. INPUT AREA (Fixo, flex-none) */}
+            <div className="flex-none p-4 bg-background border-t">
+              {/* AVISO VISUAL DE JANELA FECHADA */}
+              {isWindowClosed && (
+                <div className="flex flex-col items-center gap-3 py-2 bg-yellow-50/50 rounded-lg border border-yellow-100 p-4">
+                  <div className="flex items-center gap-2 text-yellow-700 text-sm">
+                    <span className="font-semibold">⚠️ Sessão encerrada.</span>
+                    <span>Você precisa usar um template para reabrir a conversa.</span>
+                  </div>
+
+                  {/* Aqui está o componente novo */}
+                  <SendTemplateDialog
+                    contactId={selectedContactId!}
+                    disabled={true} // Passamos true para ele renderizar como botão grande
+                  />
+                </div>
+              )}
+
               <form
                 onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
                 className="flex gap-2 max-w-4xl mx-auto items-center"
               >
-                <Button variant="ghost" size="icon" type="button" className="text-muted-foreground">
+                <Button variant="ghost" size="icon" type="button" className="text-muted-foreground" disabled={isWindowClosed || isSending}>
                   <Paperclip className="h-5 w-5" />
                 </Button>
                 <Input
                   value={inputMessage}
                   onChange={(e) => setInputMessage(e.target.value)}
                   placeholder="Digite uma mensagem..."
-                  className="flex-1"
-                  disabled={isSending}
+                  className="flex-1" disabled={isWindowClosed || isSending}
                 />
-                <Button type="submit" size="icon" disabled={!inputMessage.trim() || isSending}>
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={!inputMessage.trim() || isSending || isWindowClosed}
+                  className={isWindowClosed ? "opacity-50 cursor-not-allowed" : ""}
+                >
                   {isSending ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
                 </Button>
               </form>
             </div>
           </>
         ) : (
-          /* Estado Vazio (Nenhuma conversa selecionada) */
+          /* Estado Vazio */
           <div className="flex-1 flex flex-col items-center justify-center text-muted-foreground p-8 text-center bg-muted/5">
             <div className="h-16 w-16 bg-muted rounded-full flex items-center justify-center mb-4">
               <Phone className="h-8 w-8 opacity-20" />

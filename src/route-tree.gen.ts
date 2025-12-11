@@ -20,6 +20,7 @@ import { Route as AppDashboardRouteImport } from './pages/_app/dashboard'
 import { Route as WebhookOauthCallbackRouteImport } from './pages/webhook/oauth/callback'
 import { Route as AuthResetPasswordTokenRouteImport } from './pages/_auth/reset-password.$token'
 import { Route as AppWhatsappConnectRouteImport } from './pages/_app/whatsapp/connect'
+import { Route as AppWhatsappTemplatesIndexRouteImport } from './pages/_app/whatsapp/templates/index'
 import { Route as AppWhatsappChatIndexRouteImport } from './pages/_app/whatsapp/chat/index'
 
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
@@ -75,6 +76,12 @@ const AppWhatsappConnectRoute = AppWhatsappConnectRouteImport.update({
   path: '/whatsapp/connect',
   getParentRoute: () => AppLayoutRoute,
 } as any)
+const AppWhatsappTemplatesIndexRoute =
+  AppWhatsappTemplatesIndexRouteImport.update({
+    id: '/whatsapp/templates/',
+    path: '/whatsapp/templates/',
+    getParentRoute: () => AppLayoutRoute,
+  } as any)
 const AppWhatsappChatIndexRoute = AppWhatsappChatIndexRouteImport.update({
   id: '/whatsapp/chat/',
   path: '/whatsapp/chat/',
@@ -92,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
+  '/whatsapp/templates': typeof AppWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -104,6 +112,7 @@ export interface FileRoutesByTo {
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
+  '/whatsapp/templates': typeof AppWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -119,6 +128,7 @@ export interface FileRoutesById {
   '/_auth/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/_app/whatsapp/chat/': typeof AppWhatsappChatIndexRoute
+  '/_app/whatsapp/templates/': typeof AppWhatsappTemplatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -133,6 +143,7 @@ export interface FileRouteTypes {
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/whatsapp/chat'
+    | '/whatsapp/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -145,6 +156,7 @@ export interface FileRouteTypes {
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/whatsapp/chat'
+    | '/whatsapp/templates'
   id:
     | '__root__'
     | '/'
@@ -159,6 +171,7 @@ export interface FileRouteTypes {
     | '/_auth/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/_app/whatsapp/chat/'
+    | '/_app/whatsapp/templates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -247,6 +260,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWhatsappConnectRouteImport
       parentRoute: typeof AppLayoutRoute
     }
+    '/_app/whatsapp/templates/': {
+      id: '/_app/whatsapp/templates/'
+      path: '/whatsapp/templates'
+      fullPath: '/whatsapp/templates'
+      preLoaderRoute: typeof AppWhatsappTemplatesIndexRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
     '/_app/whatsapp/chat/': {
       id: '/_app/whatsapp/chat/'
       path: '/whatsapp/chat'
@@ -262,6 +282,7 @@ interface AppLayoutRouteChildren {
   AppSettingsRoute: typeof AppSettingsRoute
   AppWhatsappConnectRoute: typeof AppWhatsappConnectRoute
   AppWhatsappChatIndexRoute: typeof AppWhatsappChatIndexRoute
+  AppWhatsappTemplatesIndexRoute: typeof AppWhatsappTemplatesIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
@@ -269,6 +290,7 @@ const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppSettingsRoute: AppSettingsRoute,
   AppWhatsappConnectRoute: AppWhatsappConnectRoute,
   AppWhatsappChatIndexRoute: AppWhatsappChatIndexRoute,
+  AppWhatsappTemplatesIndexRoute: AppWhatsappTemplatesIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(
