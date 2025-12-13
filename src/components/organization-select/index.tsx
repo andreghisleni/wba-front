@@ -1,3 +1,4 @@
+import { useLocation, useNavigate, useParams } from '@tanstack/react-router';
 import { CheckIcon, ChevronDownIcon, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
@@ -23,56 +24,44 @@ import { OrganizationFormDialog } from './organization-form-dialog';
 import { OrganizationSelectScreen } from './organization-select-screen';
 
 export function OrganizationSelect() {
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { organizationSlug } = useParams({ strict: false });
   const [open, setOpen] = useState<boolean>(false);
-
-  // const location = useLocation();
-  // const { organizationId: currentOrganizationId } = useParams({
-  //   strict: false,
-  // });
 
   const { data: organizations, isPending: isLoading } =
     auth.useListOrganizations();
   const { data: activeOrg, isPending } = auth.useActiveOrganization();
 
   async function handleSelect(orgId: string) {
+    const selectedOrg = organizations?.find((o) => o.id === orgId);
+    if (!selectedOrg) return;
+
     await auth.organization.setActive({
       organizationId: orgId,
     });
+
+    if (organizationSlug) {
+      const newPath = location.pathname.replace(
+        organizationSlug,
+        selectedOrg.slug
+      );
+      await navigate({ to: newPath });
+    } else {
+      await navigate({ to: `/${selectedOrg.slug}/dashboard` });
+    }
+
     toast.success('Organização selecionada');
     setOpen(false);
   }
 
   const withoutOrganizationRoute = location.pathname.startsWith('/sessions');
 
-  // async function handleSelect(newOrganizationId?: string) {
-  //   // Não faz nada se o novo ID não existir ou for o mesmo que o atual
-  //   if (!newOrganizationId || newOrganizationId === currentOrganizationId) {
-  //     return;
-  //   }
-
-  //   await updateUserLastOrganizationId(newOrganizationId);
-
-  //   if (currentOrganizationId) {
-  //     // Constrói o novo caminho substituindo o ID antigo pelo novo na URL atual
-  //     const newPath = location.pathname.replace(currentOrganizationId, newOrganizationId);
-  //     // Navega para a nova rota mantendo o restante da URL
-  //     await navigate({ to: newPath });
-  //   } else {
-  //     // Caso seja a primeira seleção (sem organizationId na URL), vai para o dashboard
-  //     await navigate({
-  //       to: '/$organizationId/dashboard',
-  //       params: { organizationId: newOrganizationId },
-  //     });
-  //   }
-  // }
-
   const currentOrganizationId = activeOrg?.id;
 
   if (isPending) {
     return <Skeleton className="h-8 w-48 rounded-full" />;
   }
-
 
   return (
     <>

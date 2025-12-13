@@ -30,7 +30,7 @@ import { MessageBubble } from './-components/message-bubble';
 import { NewChatDialog } from './-components/new-chat-dialog';
 import { SendTemplateDialog } from './-components/send-template-dialog';
 
-export const Route = createFileRoute('/_app/whatsapp/chat/')({
+export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
   component: RouteComponent,
 });
 
@@ -198,7 +198,6 @@ function RouteComponent() {
           </div>
         </ScrollArea>
       </div>
-
       {/* --- CHAT AREA (Direita) --- */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50">
         {selectedContact ? (
@@ -322,15 +321,15 @@ function RouteComponent() {
           </>
         ) : (
           /* Estado Vazio */
-          <div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
+          (<div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Phone className="h-8 w-8 opacity-20" />
             </div>
             <h3 className="font-semibold text-lg">WhatsApp Web Integration</h3>
             <p>Selecione uma conversa ao lado para visualizar o histórico.</p>
-          </div>
+          </div>)
         )}
       </div>
     </div>
-  );
+  )
 }

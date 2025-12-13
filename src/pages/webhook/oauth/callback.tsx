@@ -1,14 +1,14 @@
-import { createFileRoute } from '@tanstack/react-router'
-
-import { useEffect, useRef } from "react";
-import { useNavigate } from "@tanstack/react-router"; // Ou 'react-router-dom'
-import { Loader2, CheckCircle2, XCircle } from "lucide-react";
-import { toast } from "sonner"; // Ou useToast do Shadcn
+/** biome-ignore-all lint/suspicious/noConsole: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+import { createFileRoute, useNavigate } from '@tanstack/react-router'; // Ou 'react-router-dom'
+import { CheckCircle2, Loader2, XCircle } from 'lucide-react';
+import { useEffect, useRef } from 'react';
+import { toast } from 'sonner'; // Ou useToast do Shadcn
 import { useWhatsappOnboard } from '@/http/generated';
 
 export const Route = createFileRoute('/webhook/oauth/callback')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
   const navigate = useNavigate();
@@ -19,38 +19,40 @@ function RouteComponent() {
   const { mutate, isPending, isError, error } = useWhatsappOnboard({
     mutation: {
       onSuccess: (data) => {
-        toast.success("Conexão realizada com sucesso!");
+        toast.success('Conexão realizada com sucesso!');
 
         // 1. Salvar token (ex: Zustand, Context ou localStorage)
-        // Nota: O ideal é salvar em HttpOnly Cookie via backend, 
+        // Nota: O ideal é salvar em HttpOnly Cookie via backend,
         // mas se precisar usar no front agora:
-        localStorage.setItem("fb_access_token", data.accessToken);
+        localStorage.setItem('fb_access_token', data.accessToken);
 
         // 2. Redirecionar para o Dashboard ou onde preferir
         setTimeout(() => {
-          navigate({ to: "/dashboard" }); // Ajuste a rota de destino
+          navigate({ to: '/dashboard' }); // Ajuste a rota de destino
         }, 1500);
       },
       onError: (err) => {
-        console.error("Erro no login:", err);
-        toast.error("Falha ao conectar com Facebook. Tente novamente.");
-      }
-    }
+        console.error('Erro no login:', err);
+        toast.error('Falha ao conectar com Facebook. Tente novamente.');
+      },
+    },
   });
 
   useEffect(() => {
     // Pegar params da URL (Funciona em qualquer Router)
     const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-    const errorParam = params.get("error");
+    const code = params.get('code');
+    const errorParam = params.get('error');
 
-    if (hasCalledRef.current) return;
+    if (hasCalledRef.current) {
+      return;
+    }
 
     // Caso o usuário clique em "Cancelar" no Facebook
     if (errorParam) {
       hasCalledRef.current = true;
-      toast.error("Acesso negado pelo usuário.");
-      navigate({ to: "/settings" }); // Volta para tentar de novo
+      toast.error('Acesso negado pelo usuário.');
+      navigate({ to: '/dashboard' }); // Volta para tentar de novo
       return;
     }
 
@@ -60,29 +62,34 @@ function RouteComponent() {
       mutate({ data: { code } });
     } else {
       // Se chegou nessa tela sem código
-      toast.error("Código de autorização não encontrado.");
-      navigate({ to: "/settings" });
+      toast.error('Código de autorização não encontrado.');
+      navigate({ to: '/dashboard' });
     }
   }, [mutate, navigate]);
 
   return (
-    <div className="h-screen w-full flex flex-col items-center justify-center bg-gray-50">
-      <div className="max-w-md w-full p-8 bg-white rounded-lg shadow-lg text-center space-y-4">
-
+    <div className='flex h-screen w-full flex-col items-center justify-center bg-gray-50'>
+      <div className='w-full max-w-md space-y-4 rounded-lg bg-white p-8 text-center shadow-lg'>
         {/* ESTADO: CARREGANDO */}
         {isPending && (
           <>
-            <Loader2 className="w-12 h-12 text-blue-600 animate-spin mx-auto" />
-            <h2 className="text-xl font-semibold text-gray-800">Conectando...</h2>
-            <p className="text-gray-500">Estamos finalizando a configuração com a Meta.</p>
+            <Loader2 className='mx-auto h-12 w-12 animate-spin text-blue-600' />
+            <h2 className='font-semibold text-gray-800 text-xl'>
+              Conectando...
+            </h2>
+            <p className="text-gray-500">
+              Estamos finalizando a configuração com a Meta.
+            </p>
           </>
         )}
 
         {/* ESTADO: SUCESSO (Ocorre brevemente antes do redirect) */}
-        {!isPending && !isError && hasCalledRef.current && (
+        {!(isPending || isError) && hasCalledRef.current && (
           <>
-            <CheckCircle2 className="w-12 h-12 text-green-500 mx-auto" />
-            <h2 className="text-xl font-semibold text-gray-800">Tudo pronto!</h2>
+            <CheckCircle2 className='mx-auto h-12 w-12 text-green-500' />
+            <h2 className='font-semibold text-gray-800 text-xl'>
+              Tudo pronto!
+            </h2>
             <p className="text-gray-500">Redirecionando você...</p>
           </>
         )}
@@ -90,15 +97,19 @@ function RouteComponent() {
         {/* ESTADO: ERRO */}
         {isError && (
           <>
-            <XCircle className="w-12 h-12 text-red-500 mx-auto" />
-            <h2 className="text-xl font-semibold text-gray-800">Algo deu errado</h2>
-            <p className="text-red-600 text-sm bg-red-50 p-2 rounded">
+            <XCircle className='mx-auto h-12 w-12 text-red-500' />
+            <h2 className='font-semibold text-gray-800 text-xl'>
+              Algo deu errado
+            </h2>
+            <p className='rounded bg-red-50 p-2 text-red-600 text-sm'>
               {/* Tenta mostrar a mensagem detalhada do backend se existir */}
-              {(error as any)?.response?.data?.message || "Não foi possível validar o código."}
+              {(error as any)?.response?.data?.message ||
+                'Não foi possível validar o código.'}
             </p>
             <button
-              onClick={() => navigate({ to: "/settings" })}
-              className="mt-4 px-4 py-2 bg-gray-900 text-white rounded hover:bg-gray-800"
+              className='mt-4 rounded bg-gray-900 px-4 py-2 text-white hover:bg-gray-800'
+              onClick={() => navigate({ to: '/dashboard' })}
+              type='button'
             >
               Voltar e tentar novamente
             </button>

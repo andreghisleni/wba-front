@@ -15,15 +15,17 @@ import { Route as IndexRouteImport } from './pages/index'
 import { Route as AuthSignUpRouteImport } from './pages/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './pages/_auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './pages/_auth/forgot-password'
-import { Route as AppSettingsRouteImport } from './pages/_app/settings'
-import { Route as AppOrganizationRouteImport } from './pages/_app/organization'
 import { Route as AppDashboardRouteImport } from './pages/_app/dashboard'
+import { Route as AppOrganizationSlugRouteImport } from './pages/_app/$organizationSlug'
 import { Route as WebhookOauthCallbackRouteImport } from './pages/webhook/oauth/callback'
 import { Route as AuthResetPasswordTokenRouteImport } from './pages/_auth/reset-password.$token'
 import { Route as AuthAcceptInvitationInvitationIdRouteImport } from './pages/_auth/accept-invitation.$invitationId'
-import { Route as AppWhatsappConnectRouteImport } from './pages/_app/whatsapp/connect'
-import { Route as AppWhatsappTemplatesIndexRouteImport } from './pages/_app/whatsapp/templates/index'
-import { Route as AppWhatsappChatIndexRouteImport } from './pages/_app/whatsapp/chat/index'
+import { Route as AppOrganizationSlugSettingsRouteImport } from './pages/_app/$organizationSlug/settings'
+import { Route as AppOrganizationSlugOrganizationRouteImport } from './pages/_app/$organizationSlug/organization'
+import { Route as AppOrganizationSlugDashboardRouteImport } from './pages/_app/$organizationSlug/dashboard'
+import { Route as AppOrganizationSlugWhatsappConnectRouteImport } from './pages/_app/$organizationSlug/whatsapp/connect'
+import { Route as AppOrganizationSlugWhatsappTemplatesIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/templates/index'
+import { Route as AppOrganizationSlugWhatsappChatIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/chat/index'
 
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
   id: '/_auth',
@@ -53,19 +55,14 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppLayoutRoute,
-} as any)
-const AppOrganizationRoute = AppOrganizationRouteImport.update({
-  id: '/organization',
-  path: '/organization',
-  getParentRoute: () => AppLayoutRoute,
-} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
+const AppOrganizationSlugRoute = AppOrganizationSlugRouteImport.update({
+  id: '/$organizationSlug',
+  path: '/$organizationSlug',
   getParentRoute: () => AppLayoutRoute,
 } as any)
 const WebhookOauthCallbackRoute = WebhookOauthCallbackRouteImport.update({
@@ -84,119 +81,151 @@ const AuthAcceptInvitationInvitationIdRoute =
     path: '/accept-invitation/$invitationId',
     getParentRoute: () => AuthLayoutRoute,
   } as any)
-const AppWhatsappConnectRoute = AppWhatsappConnectRouteImport.update({
-  id: '/whatsapp/connect',
-  path: '/whatsapp/connect',
-  getParentRoute: () => AppLayoutRoute,
-} as any)
-const AppWhatsappTemplatesIndexRoute =
-  AppWhatsappTemplatesIndexRouteImport.update({
+const AppOrganizationSlugSettingsRoute =
+  AppOrganizationSlugSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
+const AppOrganizationSlugOrganizationRoute =
+  AppOrganizationSlugOrganizationRouteImport.update({
+    id: '/organization',
+    path: '/organization',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
+const AppOrganizationSlugDashboardRoute =
+  AppOrganizationSlugDashboardRouteImport.update({
+    id: '/dashboard',
+    path: '/dashboard',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
+const AppOrganizationSlugWhatsappConnectRoute =
+  AppOrganizationSlugWhatsappConnectRouteImport.update({
+    id: '/whatsapp/connect',
+    path: '/whatsapp/connect',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
+const AppOrganizationSlugWhatsappTemplatesIndexRoute =
+  AppOrganizationSlugWhatsappTemplatesIndexRouteImport.update({
     id: '/whatsapp/templates/',
     path: '/whatsapp/templates/',
-    getParentRoute: () => AppLayoutRoute,
+    getParentRoute: () => AppOrganizationSlugRoute,
   } as any)
-const AppWhatsappChatIndexRoute = AppWhatsappChatIndexRouteImport.update({
-  id: '/whatsapp/chat/',
-  path: '/whatsapp/chat/',
-  getParentRoute: () => AppLayoutRoute,
-} as any)
+const AppOrganizationSlugWhatsappChatIndexRoute =
+  AppOrganizationSlugWhatsappChatIndexRouteImport.update({
+    id: '/whatsapp/chat/',
+    path: '/whatsapp/chat/',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/$organizationSlug': typeof AppOrganizationSlugRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
-  '/organization': typeof AppOrganizationRoute
-  '/settings': typeof AppSettingsRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/$organizationSlug/dashboard': typeof AppOrganizationSlugDashboardRoute
+  '/$organizationSlug/organization': typeof AppOrganizationSlugOrganizationRoute
+  '/$organizationSlug/settings': typeof AppOrganizationSlugSettingsRoute
   '/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
-  '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
-  '/whatsapp/templates': typeof AppWhatsappTemplatesIndexRoute
+  '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
+  '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/$organizationSlug': typeof AppOrganizationSlugRouteWithChildren
   '/dashboard': typeof AppDashboardRoute
-  '/organization': typeof AppOrganizationRoute
-  '/settings': typeof AppSettingsRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
-  '/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/$organizationSlug/dashboard': typeof AppOrganizationSlugDashboardRoute
+  '/$organizationSlug/organization': typeof AppOrganizationSlugOrganizationRoute
+  '/$organizationSlug/settings': typeof AppOrganizationSlugSettingsRoute
   '/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
-  '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
-  '/whatsapp/templates': typeof AppWhatsappTemplatesIndexRoute
+  '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
+  '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_app': typeof AppLayoutRouteWithChildren
   '/_auth': typeof AuthLayoutRouteWithChildren
+  '/_app/$organizationSlug': typeof AppOrganizationSlugRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
-  '/_app/organization': typeof AppOrganizationRoute
-  '/_app/settings': typeof AppSettingsRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
-  '/_app/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/_app/$organizationSlug/dashboard': typeof AppOrganizationSlugDashboardRoute
+  '/_app/$organizationSlug/organization': typeof AppOrganizationSlugOrganizationRoute
+  '/_app/$organizationSlug/settings': typeof AppOrganizationSlugSettingsRoute
   '/_auth/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/_auth/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
-  '/_app/whatsapp/chat/': typeof AppWhatsappChatIndexRoute
-  '/_app/whatsapp/templates/': typeof AppWhatsappTemplatesIndexRoute
+  '/_app/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/_app/$organizationSlug/whatsapp/chat/': typeof AppOrganizationSlugWhatsappChatIndexRoute
+  '/_app/$organizationSlug/whatsapp/templates/': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/$organizationSlug'
     | '/dashboard'
-    | '/organization'
-    | '/settings'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
-    | '/whatsapp/connect'
+    | '/$organizationSlug/dashboard'
+    | '/$organizationSlug/organization'
+    | '/$organizationSlug/settings'
     | '/accept-invitation/$invitationId'
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
-    | '/whatsapp/chat'
-    | '/whatsapp/templates'
+    | '/$organizationSlug/whatsapp/connect'
+    | '/$organizationSlug/whatsapp/chat'
+    | '/$organizationSlug/whatsapp/templates'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/$organizationSlug'
     | '/dashboard'
-    | '/organization'
-    | '/settings'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
-    | '/whatsapp/connect'
+    | '/$organizationSlug/dashboard'
+    | '/$organizationSlug/organization'
+    | '/$organizationSlug/settings'
     | '/accept-invitation/$invitationId'
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
-    | '/whatsapp/chat'
-    | '/whatsapp/templates'
+    | '/$organizationSlug/whatsapp/connect'
+    | '/$organizationSlug/whatsapp/chat'
+    | '/$organizationSlug/whatsapp/templates'
   id:
     | '__root__'
     | '/'
     | '/_app'
     | '/_auth'
+    | '/_app/$organizationSlug'
     | '/_app/dashboard'
-    | '/_app/organization'
-    | '/_app/settings'
     | '/_auth/forgot-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
-    | '/_app/whatsapp/connect'
+    | '/_app/$organizationSlug/dashboard'
+    | '/_app/$organizationSlug/organization'
+    | '/_app/$organizationSlug/settings'
     | '/_auth/accept-invitation/$invitationId'
     | '/_auth/reset-password/$token'
     | '/webhook/oauth/callback'
-    | '/_app/whatsapp/chat/'
-    | '/_app/whatsapp/templates/'
+    | '/_app/$organizationSlug/whatsapp/connect'
+    | '/_app/$organizationSlug/whatsapp/chat/'
+    | '/_app/$organizationSlug/whatsapp/templates/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -250,25 +279,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
-    '/_app/settings': {
-      id: '/_app/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppLayoutRoute
-    }
-    '/_app/organization': {
-      id: '/_app/organization'
-      path: '/organization'
-      fullPath: '/organization'
-      preLoaderRoute: typeof AppOrganizationRouteImport
-      parentRoute: typeof AppLayoutRoute
-    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AppDashboardRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
+    '/_app/$organizationSlug': {
+      id: '/_app/$organizationSlug'
+      path: '/$organizationSlug'
+      fullPath: '/$organizationSlug'
+      preLoaderRoute: typeof AppOrganizationSlugRouteImport
       parentRoute: typeof AppLayoutRoute
     }
     '/webhook/oauth/callback': {
@@ -292,46 +314,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthAcceptInvitationInvitationIdRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
-    '/_app/whatsapp/connect': {
-      id: '/_app/whatsapp/connect'
+    '/_app/$organizationSlug/settings': {
+      id: '/_app/$organizationSlug/settings'
+      path: '/settings'
+      fullPath: '/$organizationSlug/settings'
+      preLoaderRoute: typeof AppOrganizationSlugSettingsRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
+    '/_app/$organizationSlug/organization': {
+      id: '/_app/$organizationSlug/organization'
+      path: '/organization'
+      fullPath: '/$organizationSlug/organization'
+      preLoaderRoute: typeof AppOrganizationSlugOrganizationRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
+    '/_app/$organizationSlug/dashboard': {
+      id: '/_app/$organizationSlug/dashboard'
+      path: '/dashboard'
+      fullPath: '/$organizationSlug/dashboard'
+      preLoaderRoute: typeof AppOrganizationSlugDashboardRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
+    '/_app/$organizationSlug/whatsapp/connect': {
+      id: '/_app/$organizationSlug/whatsapp/connect'
       path: '/whatsapp/connect'
-      fullPath: '/whatsapp/connect'
-      preLoaderRoute: typeof AppWhatsappConnectRouteImport
-      parentRoute: typeof AppLayoutRoute
+      fullPath: '/$organizationSlug/whatsapp/connect'
+      preLoaderRoute: typeof AppOrganizationSlugWhatsappConnectRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
     }
-    '/_app/whatsapp/templates/': {
-      id: '/_app/whatsapp/templates/'
+    '/_app/$organizationSlug/whatsapp/templates/': {
+      id: '/_app/$organizationSlug/whatsapp/templates/'
       path: '/whatsapp/templates'
-      fullPath: '/whatsapp/templates'
-      preLoaderRoute: typeof AppWhatsappTemplatesIndexRouteImport
-      parentRoute: typeof AppLayoutRoute
+      fullPath: '/$organizationSlug/whatsapp/templates'
+      preLoaderRoute: typeof AppOrganizationSlugWhatsappTemplatesIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
     }
-    '/_app/whatsapp/chat/': {
-      id: '/_app/whatsapp/chat/'
+    '/_app/$organizationSlug/whatsapp/chat/': {
+      id: '/_app/$organizationSlug/whatsapp/chat/'
       path: '/whatsapp/chat'
-      fullPath: '/whatsapp/chat'
-      preLoaderRoute: typeof AppWhatsappChatIndexRouteImport
-      parentRoute: typeof AppLayoutRoute
+      fullPath: '/$organizationSlug/whatsapp/chat'
+      preLoaderRoute: typeof AppOrganizationSlugWhatsappChatIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
     }
   }
 }
 
+interface AppOrganizationSlugRouteChildren {
+  AppOrganizationSlugDashboardRoute: typeof AppOrganizationSlugDashboardRoute
+  AppOrganizationSlugOrganizationRoute: typeof AppOrganizationSlugOrganizationRoute
+  AppOrganizationSlugSettingsRoute: typeof AppOrganizationSlugSettingsRoute
+  AppOrganizationSlugWhatsappConnectRoute: typeof AppOrganizationSlugWhatsappConnectRoute
+  AppOrganizationSlugWhatsappChatIndexRoute: typeof AppOrganizationSlugWhatsappChatIndexRoute
+  AppOrganizationSlugWhatsappTemplatesIndexRoute: typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
+}
+
+const AppOrganizationSlugRouteChildren: AppOrganizationSlugRouteChildren = {
+  AppOrganizationSlugDashboardRoute: AppOrganizationSlugDashboardRoute,
+  AppOrganizationSlugOrganizationRoute: AppOrganizationSlugOrganizationRoute,
+  AppOrganizationSlugSettingsRoute: AppOrganizationSlugSettingsRoute,
+  AppOrganizationSlugWhatsappConnectRoute:
+    AppOrganizationSlugWhatsappConnectRoute,
+  AppOrganizationSlugWhatsappChatIndexRoute:
+    AppOrganizationSlugWhatsappChatIndexRoute,
+  AppOrganizationSlugWhatsappTemplatesIndexRoute:
+    AppOrganizationSlugWhatsappTemplatesIndexRoute,
+}
+
+const AppOrganizationSlugRouteWithChildren =
+  AppOrganizationSlugRoute._addFileChildren(AppOrganizationSlugRouteChildren)
+
 interface AppLayoutRouteChildren {
+  AppOrganizationSlugRoute: typeof AppOrganizationSlugRouteWithChildren
   AppDashboardRoute: typeof AppDashboardRoute
-  AppOrganizationRoute: typeof AppOrganizationRoute
-  AppSettingsRoute: typeof AppSettingsRoute
-  AppWhatsappConnectRoute: typeof AppWhatsappConnectRoute
-  AppWhatsappChatIndexRoute: typeof AppWhatsappChatIndexRoute
-  AppWhatsappTemplatesIndexRoute: typeof AppWhatsappTemplatesIndexRoute
 }
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
+  AppOrganizationSlugRoute: AppOrganizationSlugRouteWithChildren,
   AppDashboardRoute: AppDashboardRoute,
-  AppOrganizationRoute: AppOrganizationRoute,
-  AppSettingsRoute: AppSettingsRoute,
-  AppWhatsappConnectRoute: AppWhatsappConnectRoute,
-  AppWhatsappChatIndexRoute: AppWhatsappChatIndexRoute,
-  AppWhatsappTemplatesIndexRoute: AppWhatsappTemplatesIndexRoute,
 }
 
 const AppLayoutRouteWithChildren = AppLayoutRoute._addFileChildren(

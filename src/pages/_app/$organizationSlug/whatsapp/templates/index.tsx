@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: <explanation> */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { FileText, Loader2, RefreshCw } from 'lucide-react';
@@ -19,7 +20,7 @@ import {
 import { CreateTemplateDialog } from './-components/create-template-dialog';
 import { TemplateStatusBadge } from './-components/status-badge';
 
-export const Route = createFileRoute('/_app/whatsapp/templates/')({
+export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/templates/')({
   component: TemplatesPage,
 });
 
@@ -30,7 +31,6 @@ function TemplatesPage() {
   const {
     data: templatesResponse,
     isLoading,
-    refetch,
     isRefetching,
   } = useGetWhatsappTemplates();
 

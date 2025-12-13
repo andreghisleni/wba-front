@@ -6,7 +6,7 @@ export const Route = createFileRoute('/')({
 });
 
 export function Home() {
-  const { data, isPending } = auth.useSession();
+  const { data, isPending } = auth.useActiveOrganization()
 
   if (isPending) {
     return <div>Loading...</div>;
@@ -16,20 +16,17 @@ export function Home() {
     return <Navigate replace to="/sign-in" />;
   }
 
-  // biome-ignore lint/suspicious/noExplicitAny: typing is incomplete
-  // const lastUserEventId = (data.user as any).lastUserEventId as
-  //   | string
-  //   | undefined;
+  const activeOrganization = data.slug as string | undefined;
 
-  // if (lastUserEventId) {
-  //   return (
-  //     <Navigate
-  //       params={{ eventId: lastUserEventId }}
-  //       replace
-  //       to="/$eventId/dashboard"
-  //     />
-  //   );
-  // }
+  if (activeOrganization) {
+    return (
+      <Navigate
+        params={{ organizationSlug: activeOrganization }}
+        replace
+        to="/$organizationSlug/dashboard"
+      />
+    );
+  }
 
   return <Navigate replace to="/dashboard" />;
 }

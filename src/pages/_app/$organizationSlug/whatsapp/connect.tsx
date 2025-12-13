@@ -3,7 +3,7 @@ import { Facebook, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useGenerateWhatsappOauthLink } from '@/http/generated';
 
-export const Route = createFileRoute('/_app/whatsapp/connect')({
+export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/connect')({
   component: WhatsAppConnectPage,
 });
 

@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, useParams } from '@tanstack/react-router';
 import InfoMenu from '@/components/navbar-components/info-menu';
 import Logo from '@/components/navbar-components/logo';
 import NotificationMenu from '@/components/navbar-components/notification-menu';
@@ -18,16 +18,18 @@ import {
 import { OrganizationSelect } from '../organization-select';
 import { MenuLink } from './menu-link';
 
-// Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/organization', label: 'Organização' },
-  { href: '/whatsapp/connect', label: 'Conectar' },
-  { href: '/whatsapp/chat', label: 'Chat' },
-  { href: '/whatsapp/templates', label: 'Templates' },
-];
-
 export function Header() {
+  const { organizationSlug } = useParams({ strict: false });
+
+  // Navigation links array to be used in both desktop and mobile menus
+  const navigationLinks = [
+    { href: `/${organizationSlug}/dashboard`, label: 'Dashboard' },
+    { href: `/${organizationSlug}/organization`, label: 'Organização' },
+    { href: `/${organizationSlug}/whatsapp/connect`, label: 'Conectar' },
+    { href: `/${organizationSlug}/whatsapp/chat`, label: 'Chat' },
+    { href: `/${organizationSlug}/whatsapp/templates`, label: 'Templates' },
+  ];
+
   return (
     <header className="border-b px-4 md:px-6">
       <div className="flex h-16 items-center justify-between gap-4">
@@ -92,7 +94,10 @@ export function Header() {
           <div className="flex items-center gap-6">
             <Link
               className="text-primary hover:text-primary/90"
-              to="/dashboard"
+              params={{
+                organizationSlug: organizationSlug ?? 'default',
+              }}
+              to="/$organizationSlug/dashboard"
             >
               <Logo />
             </Link>
@@ -116,7 +121,6 @@ export function Header() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-4">
-
           <div className="flex items-center gap-2">
             {/* Info menu */}
             <InfoMenu />

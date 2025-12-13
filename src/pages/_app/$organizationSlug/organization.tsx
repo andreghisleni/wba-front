@@ -40,7 +40,7 @@ import {
 import { auth } from '@/lib/auth';
 import { getNameInitials } from '@/utils/get-name-initials';
 
-export const Route = createFileRoute('/_app/organization')({
+export const Route = createFileRoute('/_app/$organizationSlug/organization')({
   component: OrganizationPage,
 });
 
