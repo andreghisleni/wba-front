@@ -6,14 +6,19 @@ export const Route = createFileRoute('/')({
 });
 
 export function Home() {
+  const { data: userData, isPending: isUserLoading } = auth.useSession();
   const { data, isPending } = auth.useActiveOrganization()
 
-  if (isPending) {
+  if (isPending || isUserLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
+  if (!userData) {
     return <Navigate replace to="/sign-in" />;
+  }
+
+  if (!data) {
+    return <Navigate replace to="/dashboard" />;
   }
 
   const activeOrganization = data.slug as string | undefined;

@@ -6,27 +6,32 @@ export const Route = createFileRoute('/_app/dashboard')({
 });
 
 function RouteComponent() {
-  const { data, isPending } = auth.useActiveOrganization();
+  const { data: userData, isPending: isUserLoading } = auth.useSession();
+  const { data, isPending } = auth.useActiveOrganization()
 
-  if (isPending) {
+  if (isPending || isUserLoading) {
     return <div>Loading...</div>;
   }
 
-  if (!data) {
+  if (!userData) {
     return <Navigate replace to="/sign-in" />;
   }
 
-  const activeOrganization = data.slug as string | undefined;
+  if (data) {
+    const activeOrganization = data.slug as string | undefined;
 
-  if (activeOrganization) {
-    return (
-      <Navigate
-        params={{ organizationSlug: activeOrganization }}
-        replace
-        to="/$organizationSlug/dashboard"
-      />
-    );
+    if (activeOrganization) {
+      return (
+        <Navigate
+          params={{ organizationSlug: activeOrganization }}
+          replace
+          to="/$organizationSlug/dashboard"
+        />
+      );
+    }
   }
+
+
 
   return <div>Hello "/_app/dashboard"!</div>;
 }
