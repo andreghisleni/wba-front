@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: <explanation> */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { format } from 'date-fns';
@@ -102,7 +103,9 @@ function RouteComponent() {
   }, [messages, selectedContactId, isLoadingMessages]);
 
   const handleSendMessage = async () => {
-    if (!(inputMessage.trim() && selectedContactId)) return;
+    if (!(inputMessage.trim() && selectedContactId)) {
+      return;
+    }
 
     try {
       await sendMessage({
@@ -128,12 +131,12 @@ function RouteComponent() {
 
   return (
     // CONTAINER PRINCIPAL: Define altura fixa e esconde o scroll geral da página
-    <div className='m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm'>
+    <div className="m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm">
       {/* --- SIDEBAR (Esquerda) --- */}
-      <div className='flex w-80 flex-col border-r bg-muted/10'>
-        <div className='flex-none border-b p-4'>
+      <div className="flex w-80 flex-col border-r bg-muted/10">
+        <div className='flex flex-none flex-row gap-2 border-b p-4'>
           <div className="relative">
-            <Search className='absolute top-2.5 left-2 h-4 w-4 text-muted-foreground' />
+            <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
             <Input className="pl-8" placeholder="Buscar conversas..." />
           </div>
           <NewChatDialog
@@ -151,7 +154,7 @@ function RouteComponent() {
             )}
 
             {!isLoadingContacts && contacts.length === 0 && (
-              <div className='p-4 text-center text-muted-foreground text-sm'>
+              <div className="p-4 text-center text-muted-foreground text-sm">
                 Nenhuma conversa encontrada.
               </div>
             )}
@@ -164,6 +167,7 @@ function RouteComponent() {
                 )}
                 key={contact.id}
                 onClick={() => setSelectedContactId(contact.id)}
+                type="button"
               >
                 <Avatar>
                   <AvatarImage src={contact.profilePicUrl || undefined} />
@@ -174,8 +178,8 @@ function RouteComponent() {
                   </AvatarFallback>
                 </Avatar>
                 <div className="flex-1 overflow-hidden">
-                  <div className='flex items-baseline justify-between'>
-                    <span className='truncate font-medium text-sm'>
+                  <div className="flex items-baseline justify-between">
+                    <span className="truncate font-medium text-sm">
                       {contact.pushName || contact.waId}
                     </span>
                     <span className="text-[10px] text-muted-foreground">
@@ -183,7 +187,7 @@ function RouteComponent() {
                         format(new Date(contact.lastMessageAt), 'HH:mm')}
                     </span>
                   </div>
-                  <p className='mt-1 h-4 truncate text-muted-foreground text-xs'>
+                  <p className="mt-1 h-4 truncate text-muted-foreground text-xs">
                     {contact.lastMessage}
                   </p>
                 </div>
@@ -194,11 +198,11 @@ function RouteComponent() {
       </div>
 
       {/* --- CHAT AREA (Direita) --- */}
-      <div className='relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50'>
+      <div className="relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50">
         {selectedContact ? (
           <>
             {/* 1. HEADER (Fixo, flex-none) */}
-            <div className='z-10 flex flex-none items-center justify-between border-b bg-background p-3 px-6 shadow-sm'>
+            <div className="z-10 flex flex-none items-center justify-between border-b bg-background p-3 px-6 shadow-sm">
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
                   <AvatarImage
@@ -214,7 +218,7 @@ function RouteComponent() {
                   <h2 className="font-semibold text-sm">
                     {selectedContact.pushName || selectedContact.waId}
                   </h2>
-                  <p className='text-muted-foreground text-xs'>
+                  <p className="text-muted-foreground text-xs">
                     +{selectedContact.waId}
                   </p>
                 </div>
@@ -231,15 +235,15 @@ function RouteComponent() {
 
             {/* 2. ÁREA DE MENSAGENS (flex-1, overflow-y-auto) */}
             {/* Nota: Usando div nativa em vez de ScrollArea para controle mais fácil do scroll-to-bottom */}
-            <div className='flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50'>
+            <div className="flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50">
               {isLoadingMessages ? (
-                <div className='flex h-full items-center justify-center p-4'>
+                <div className="flex h-full items-center justify-center p-4">
                   <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 </div>
               ) : (
-                <div className='mx-auto flex min-h-full max-w-4xl flex-col justify-end gap-3'>
+                <div className="mx-auto flex min-h-full max-w-4xl flex-col justify-end gap-3">
                   {messages.length === 0 && (
-                    <div className='py-10 text-center text-muted-foreground text-xs'>
+                    <div className="py-10 text-center text-muted-foreground text-xs">
                       Inicie a conversa...
                     </div>
                   )}
@@ -255,11 +259,11 @@ function RouteComponent() {
             </div>
 
             {/* 3. INPUT AREA (Fixo, flex-none) */}
-            <div className='flex-none border-t bg-background p-4'>
+            <div className="flex-none border-t bg-background p-4">
               {/* AVISO VISUAL DE JANELA FECHADA */}
               {isWindowClosed && (
-                <div className='flex flex-col items-center gap-3 rounded-lg border border-yellow-100 bg-yellow-50/50 p-4 py-2'>
-                  <div className='flex items-center gap-2 text-sm text-yellow-700'>
+                <div className="flex flex-col items-center gap-3 rounded-lg border border-yellow-100 bg-yellow-50/50 p-4 py-2">
+                  <div className="flex items-center gap-2 text-sm text-yellow-700">
                     <span className="font-semibold">⚠️ Sessão encerrada.</span>
                     <span>
                       Você precisa usar um template para reabrir a conversa.
@@ -268,14 +272,14 @@ function RouteComponent() {
 
                   {/* Aqui está o componente novo */}
                   <SendTemplateDialog
-                    contactId={selectedContactId!}
+                    contactId={selectedContactId || ''}
                     disabled={true} // Passamos true para ele renderizar como botão grande
                   />
                 </div>
               )}
 
               <form
-                className='mx-auto flex max-w-4xl items-center gap-2'
+                className="mx-auto flex max-w-4xl items-center gap-2"
                 onSubmit={(e) => {
                   e.preventDefault();
                   handleSendMessage();
@@ -316,8 +320,8 @@ function RouteComponent() {
           </>
         ) : (
           /* Estado Vazio */
-          <div className='flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground'>
-            <div className='mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted'>
+          <div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
+            <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Phone className="h-8 w-8 opacity-20" />
             </div>
             <h3 className="font-semibold text-lg">WhatsApp Web Integration</h3>

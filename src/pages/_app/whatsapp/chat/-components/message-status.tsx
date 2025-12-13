@@ -1,4 +1,4 @@
-import { Check, CheckCheck, Clock, AlertCircle } from "lucide-react";
+import { AlertCircle, Check, CheckCheck, Clock } from 'lucide-react';
 
 interface MessageStatusProps {
   status: string; // 'SENT', 'DELIVERED', 'READ', 'FAILED', 'PENDING'
@@ -7,50 +7,52 @@ interface MessageStatusProps {
 
 export function MessageStatus({ status, isUser }: MessageStatusProps) {
   // Se a mensagem não fui eu que mandei, não mostra check (não faz sentido ver se eu li minha própria msg recebida aqui)
-  if (!isUser) return null;
+  if (!isUser) {
+    return null;
+  }
 
   // Normaliza para garantir que maiúsculas/minúsculas não quebrem
-  const normalizedStatus = status?.toUpperCase() || "PENDING";
+  const normalizedStatus = status?.toUpperCase() || 'PENDING';
 
   switch (normalizedStatus) {
-    case "FAILED":
+    case 'FAILED':
       return (
         <span title="Falha ao enviar">
-          <AlertCircle size={14} className="text-red-500" />
+          <AlertCircle className="text-red-500" size={14} />
         </span>
       );
 
-    case "read": // Caso venha minúsculo
-    case "READ":
+    case 'read': // Caso venha minúsculo
+    case 'READ':
       return (
         <span title="Lida">
           {/* Dois risquinhos AZUIS */}
-          <CheckCheck size={16} className="text-blue-500" />
+          <CheckCheck className="text-blue-500" size={16} />
         </span>
       );
 
-    case "delivered":
-    case "DELIVERED":
+    case 'delivered':
+    case 'DELIVERED':
       return (
         <span title="Entregue">
           {/* Dois risquinhos CINZA */}
-          <CheckCheck size={16} className="text-gray-500" />
+          <CheckCheck className="text-gray-500" size={16} />
         </span>
       );
 
-    case "sent":
-    case "SENT":
+    case 'sent':
+    case 'SENT':
       return (
         <span title="Enviado ao servidor">
           {/* Um risquinho CINZA */}
-          <Check size={16} className="text-gray-500" />
+          <Check className="text-gray-500" size={16} />
         </span>
       );
 
     default: // PENDING ou status desconhecido
       return (
         <span title="Aguardando envio">
-          <Clock size={14} className="text-gray-500" />
+          <Clock className="text-gray-500" size={14} />
         </span>
       );
   }

@@ -38,6 +38,7 @@ type SignInSchema = z.infer<typeof signInSchema>;
 // Esquema para os parâmetros de busca da URL
 const signInSearchSchema = z.object({
   email: z.string().email().optional(),
+  callbackURL: z.string().url().optional(),
 });
 
 // Definição da rota com Tanstack Router
@@ -51,7 +52,7 @@ export const Route = createFileRoute('/_auth/sign-in')({
 
 function SignIn() {
   const navigate = Route.useNavigate();
-  const { email } = Route.useSearch();
+  const { email, callbackURL } = Route.useSearch();
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Configuração do formulário com React Hook Form
@@ -76,9 +77,9 @@ function SignIn() {
       return;
     }
 
-    toast.success(`Bem-vindo ${data.user.name}`);
+    toast.success(`Bem-vindo ${data.user.name} ${callbackURL}`);
     // Navega para o dashboard após o login bem-sucedido
-    navigate({ to: '/', replace: true });
+    navigate({ to: callbackURL ?? '/', replace: true, href: callbackURL ?? '/' });
   }
 
   return (
@@ -86,7 +87,7 @@ function SignIn() {
       <CardHeader>
         <CardTitle>Login to your account</CardTitle>
         <CardDescription>
-          Enter your email below to login to your account
+          Enter your email below to login to your account '{callbackURL}'
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -147,7 +148,11 @@ function SignIn() {
 
             <div className="mt-4 text-center text-sm">
               Don&apos;t have an account?{' '}
-              <Link className="underline underline-offset-4" to="/sign-up">
+              <Link
+                className="underline underline-offset-4"
+                search={{ callbackURL }}
+                to="/sign-up"
+              >
                 Sign up
               </Link>
             </div>

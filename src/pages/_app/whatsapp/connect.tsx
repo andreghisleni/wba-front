@@ -1,71 +1,61 @@
-import { createFileRoute } from '@tanstack/react-router';
-
-import { Button } from "@/components/ui/button";
-import { Facebook } from "lucide-react";
-
+import { createFileRoute, Link } from '@tanstack/react-router';
+import { Facebook, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useGenerateWhatsappOauthLink } from '@/http/generated';
 
 export const Route = createFileRoute('/_app/whatsapp/connect')({
   component: WhatsAppConnectPage,
-})
-
-declare global {
-  interface Window {
-    fbAsyncInit: () => void;
-    FB: any;
-  }
-}
+});
 
 function WhatsAppConnectPage() {
-  const handleConnect = () => {
-    // 1. Configurações (Idealmente mover para variáveis de ambiente)
-    const FACEBOOK_APP_ID = "1592119725123894";
+  const { data, isLoading, error } = useGenerateWhatsappOauthLink(undefined, {
+    query: {
+      retry: false,
+    }
+  });
 
-    // IMPORTANTE: Essa URL deve ser EXATAMENTE igual à cadastrada no painel da Meta
-    // Use http://localhost:PORTA se estiver testando localmente sem HTTPS
-    const REDIRECT_URI = "https://webhooks.andreg.com.br/webhook/oauth/callback"//"http://localhost:5173/auth/callback";
+  if (isLoading) {
+    return (
+      <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center rounded-lg border p-6 shadow-sm">
+        <Loader2 className="mb-4 h-6 w-6 animate-spin text-gray-500" />
+        <p className="text-gray-500 text-sm">Gerando link de conexão...</p>
+      </div>
+    );
+  }
 
-    // Escopos necessários para Provedor de Tecnologia (Tech Provider)
-    // Ajuste conforme sua necessidade real
-    const SCOPE = [
-      "public_profile",
-      "email",
-      "whatsapp_business_management",
-      "whatsapp_business_messaging"
-    ].join(",");
+  if (error) {
+    return (
+      <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center rounded-lg border p-6 shadow-sm">
+        <h2 className="mb-4 font-bold text-xl">
+          Erro ao gerar link de conexão
+        </h2>
+        <p className="text-red-500 text-sm">
+          {error.response.data.error || error.message}
+        </p>
+      </div>
+    );
+  }
 
-    // Gera um estado aleatório para segurança (CSRF protection)
-    // No mundo real, você salvaria isso no localStorage/cookie para verificar na volta
-    const state = crypto.randomUUID();
-    localStorage.setItem("oauth_state", state);
-
-    // 2. Montagem da URL de Autorização Manual
-    const rootUrl = "https://www.facebook.com/v21.0/dialog/oauth";
-
-    const options = new URLSearchParams({
-      client_id: FACEBOOK_APP_ID,
-      redirect_uri: REDIRECT_URI,
-      state: state,
-      scope: SCOPE,
-      response_type: "code", // Queremos o 'code' para trocar no backend
-    });
-
-    // 3. Redirecionamento Total (Adeus erro de HTTPS/Pop-up bloqueado)
-    window.location.href = `${rootUrl}?${options.toString()}`;
-  };
+  if (!data) {
+    return null;
+  }
 
   return (
-    <div className="flex flex-col items-center justify-center p-6 border rounded-lg shadow-sm max-w-md mx-auto mt-10">
-      <h2 className="text-xl font-bold mb-4">Conectar WhatsApp Business</h2>
-      <p className="text-gray-500 mb-6 text-center text-sm">
-        Você será redirecionado para o Facebook para autorizar o acesso ao portfólio empresarial.
+    <div className="mx-auto mt-10 flex max-w-md flex-col items-center justify-center rounded-lg border p-6 shadow-sm">
+      <h2 className="mb-4 font-bold text-xl">Conectar WhatsApp Business</h2>
+      <p className="mb-6 text-center text-gray-500 text-sm">
+        Você será redirecionado para o Facebook para autorizar o acesso ao
+        portfólio empresarial.
       </p>
 
       <Button
-        onClick={handleConnect}
-        className="bg-[#1877F2] hover:bg-[#166fe5] text-white w-full flex gap-2"
+        asChild
+        className="flex w-full gap-2 bg-[#1877F2] text-white hover:bg-[#166fe5]"
       >
-        <Facebook className="w-5 h-5" />
-        Continuar com Facebook
+        <Link disabled={isLoading} href={data.url} to={data.url}>
+          <Facebook className="h-5 w-5" />
+          Continuar com Facebook
+        </Link>
       </Button>
     </div>
   );

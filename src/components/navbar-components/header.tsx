@@ -1,28 +1,30 @@
-import { Link } from "@tanstack/react-router";
-import InfoMenu from "@/components/navbar-components/info-menu";
-import Logo from "@/components/navbar-components/logo";
-import NotificationMenu from "@/components/navbar-components/notification-menu";
-import { ThemeSwitcher } from "@/components/navbar-components/theme-switcher";
-import UserMenu from "@/components/navbar-components/user-menu";
-import { Button } from "@/components/ui/button";
+import { Link } from '@tanstack/react-router';
+import InfoMenu from '@/components/navbar-components/info-menu';
+import Logo from '@/components/navbar-components/logo';
+import NotificationMenu from '@/components/navbar-components/notification-menu';
+import { ThemeSwitcher } from '@/components/navbar-components/theme-switcher';
+import UserMenu from '@/components/navbar-components/user-menu';
+import { Button } from '@/components/ui/button';
 import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-} from "@/components/ui/navigation-menu";
+} from '@/components/ui/navigation-menu';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import { MenuLink } from "./menu-link";
+} from '@/components/ui/popover';
+import { OrganizationSelect } from '../organization-select';
+import { MenuLink } from './menu-link';
 
 // Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/whatsapp/connect", label: "Conectar" },
-  { href: "/whatsapp/chat", label: "Chat" },
-  { href: "/whatsapp/templates", label: "Templates" },
+  { href: '/dashboard', label: 'Dashboard' },
+  { href: '/organization', label: 'Organização' },
+  { href: '/whatsapp/connect', label: 'Conectar' },
+  { href: '/whatsapp/chat', label: 'Chat' },
+  { href: '/whatsapp/templates', label: 'Templates' },
 ];
 
 export function Header() {
@@ -85,6 +87,7 @@ export function Header() {
               </NavigationMenu>
             </PopoverContent>
           </Popover>
+
           {/* Main nav */}
           <div className="flex items-center gap-6">
             <Link
@@ -93,6 +96,7 @@ export function Header() {
             >
               <Logo />
             </Link>
+            <OrganizationSelect />
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
@@ -112,6 +116,7 @@ export function Header() {
         </div>
         {/* Right side */}
         <div className="flex items-center gap-4">
+
           <div className="flex items-center gap-2">
             {/* Info menu */}
             <InfoMenu />

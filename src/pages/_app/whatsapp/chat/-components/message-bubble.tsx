@@ -1,4 +1,9 @@
-import { Download, FileText, Music, Play } from 'lucide-react'; // Ícones sugeridos
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
+/** biome-ignore-all lint/a11y/useMediaCaption: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/performance/noImgElement: <explanation> */
+/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: <explanation> */
+import { Download, FileText } from 'lucide-react'; // Ícones sugeridos
 import { MessageStatus } from './message-status';
 
 // Função auxiliar para renderizar o conteúdo baseado no tipo

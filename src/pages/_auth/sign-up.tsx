@@ -23,8 +23,17 @@ import {
 import { Input } from '@/components/ui/input';
 import { auth } from '@/lib/auth';
 
+// Esquema para os parâmetros de busca da URL
+const signUpSearchSchema = z.object({
+  callbackURL: z.string().url().optional(),
+});
+
 export const Route = createFileRoute('/_auth/sign-up')({
   component: SignUp,
+  validateSearch: (search) => signUpSearchSchema.parse(search),
+  head: () => ({
+    meta: [{ title: 'Sign Up' }],
+  }),
 });
 
 const signUpSchema = z
@@ -50,6 +59,7 @@ type SignUpSchema = z.infer<typeof signUpSchema>;
 // Mock Route definition
 function SignUp() {
   const navigate = Route.useNavigate();
+  const { callbackURL } = Route.useSearch();
   const [authError, setAuthError] = useState<string | null>(null);
 
   // Form setup with React Hook Form
@@ -78,7 +88,7 @@ function SignUp() {
 
     // toast.success is not defined, so we'll log to console
     toast.success('Account created successfully! Please sign in.');
-    navigate({ to: '/sign-in', search: { email: values.email } });
+    navigate({ to: '/sign-in', search: { email: values.email, callbackURL } });
   }
 
   return (
@@ -173,7 +183,11 @@ function SignUp() {
 
             <div className="mt-4 text-center text-sm">
               Already have an account?{' '}
-              <Link className="underline underline-offset-4" to="/sign-in">
+              <Link
+                className="underline underline-offset-4"
+                search={{ callbackURL }}
+                to="/sign-in"
+              >
                 Sign in
               </Link>
             </div>

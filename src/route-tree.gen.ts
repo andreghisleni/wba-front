@@ -16,9 +16,11 @@ import { Route as AuthSignUpRouteImport } from './pages/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './pages/_auth/sign-in'
 import { Route as AuthForgotPasswordRouteImport } from './pages/_auth/forgot-password'
 import { Route as AppSettingsRouteImport } from './pages/_app/settings'
+import { Route as AppOrganizationRouteImport } from './pages/_app/organization'
 import { Route as AppDashboardRouteImport } from './pages/_app/dashboard'
 import { Route as WebhookOauthCallbackRouteImport } from './pages/webhook/oauth/callback'
 import { Route as AuthResetPasswordTokenRouteImport } from './pages/_auth/reset-password.$token'
+import { Route as AuthAcceptInvitationInvitationIdRouteImport } from './pages/_auth/accept-invitation.$invitationId'
 import { Route as AppWhatsappConnectRouteImport } from './pages/_app/whatsapp/connect'
 import { Route as AppWhatsappTemplatesIndexRouteImport } from './pages/_app/whatsapp/templates/index'
 import { Route as AppWhatsappChatIndexRouteImport } from './pages/_app/whatsapp/chat/index'
@@ -56,6 +58,11 @@ const AppSettingsRoute = AppSettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => AppLayoutRoute,
 } as any)
+const AppOrganizationRoute = AppOrganizationRouteImport.update({
+  id: '/organization',
+  path: '/organization',
+  getParentRoute: () => AppLayoutRoute,
+} as any)
 const AppDashboardRoute = AppDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -71,6 +78,12 @@ const AuthResetPasswordTokenRoute = AuthResetPasswordTokenRouteImport.update({
   path: '/reset-password/$token',
   getParentRoute: () => AuthLayoutRoute,
 } as any)
+const AuthAcceptInvitationInvitationIdRoute =
+  AuthAcceptInvitationInvitationIdRouteImport.update({
+    id: '/accept-invitation/$invitationId',
+    path: '/accept-invitation/$invitationId',
+    getParentRoute: () => AuthLayoutRoute,
+  } as any)
 const AppWhatsappConnectRoute = AppWhatsappConnectRouteImport.update({
   id: '/whatsapp/connect',
   path: '/whatsapp/connect',
@@ -91,11 +104,13 @@ const AppWhatsappChatIndexRoute = AppWhatsappChatIndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/organization': typeof AppOrganizationRoute
   '/settings': typeof AppSettingsRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
@@ -104,11 +119,13 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof AppDashboardRoute
+  '/organization': typeof AppOrganizationRoute
   '/settings': typeof AppSettingsRoute
   '/forgot-password': typeof AuthForgotPasswordRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/whatsapp/chat': typeof AppWhatsappChatIndexRoute
@@ -120,11 +137,13 @@ export interface FileRoutesById {
   '/_app': typeof AppLayoutRouteWithChildren
   '/_auth': typeof AuthLayoutRouteWithChildren
   '/_app/dashboard': typeof AppDashboardRoute
+  '/_app/organization': typeof AppOrganizationRoute
   '/_app/settings': typeof AppSettingsRoute
   '/_auth/forgot-password': typeof AuthForgotPasswordRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_app/whatsapp/connect': typeof AppWhatsappConnectRoute
+  '/_auth/accept-invitation/$invitationId': typeof AuthAcceptInvitationInvitationIdRoute
   '/_auth/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/_app/whatsapp/chat/': typeof AppWhatsappChatIndexRoute
@@ -135,11 +154,13 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/dashboard'
+    | '/organization'
     | '/settings'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
     | '/whatsapp/connect'
+    | '/accept-invitation/$invitationId'
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/whatsapp/chat'
@@ -148,11 +169,13 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/dashboard'
+    | '/organization'
     | '/settings'
     | '/forgot-password'
     | '/sign-in'
     | '/sign-up'
     | '/whatsapp/connect'
+    | '/accept-invitation/$invitationId'
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/whatsapp/chat'
@@ -163,11 +186,13 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_auth'
     | '/_app/dashboard'
+    | '/_app/organization'
     | '/_app/settings'
     | '/_auth/forgot-password'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/_app/whatsapp/connect'
+    | '/_auth/accept-invitation/$invitationId'
     | '/_auth/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/_app/whatsapp/chat/'
@@ -232,6 +257,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsRouteImport
       parentRoute: typeof AppLayoutRoute
     }
+    '/_app/organization': {
+      id: '/_app/organization'
+      path: '/organization'
+      fullPath: '/organization'
+      preLoaderRoute: typeof AppOrganizationRouteImport
+      parentRoute: typeof AppLayoutRoute
+    }
     '/_app/dashboard': {
       id: '/_app/dashboard'
       path: '/dashboard'
@@ -251,6 +283,13 @@ declare module '@tanstack/react-router' {
       path: '/reset-password/$token'
       fullPath: '/reset-password/$token'
       preLoaderRoute: typeof AuthResetPasswordTokenRouteImport
+      parentRoute: typeof AuthLayoutRoute
+    }
+    '/_auth/accept-invitation/$invitationId': {
+      id: '/_auth/accept-invitation/$invitationId'
+      path: '/accept-invitation/$invitationId'
+      fullPath: '/accept-invitation/$invitationId'
+      preLoaderRoute: typeof AuthAcceptInvitationInvitationIdRouteImport
       parentRoute: typeof AuthLayoutRoute
     }
     '/_app/whatsapp/connect': {
@@ -279,6 +318,7 @@ declare module '@tanstack/react-router' {
 
 interface AppLayoutRouteChildren {
   AppDashboardRoute: typeof AppDashboardRoute
+  AppOrganizationRoute: typeof AppOrganizationRoute
   AppSettingsRoute: typeof AppSettingsRoute
   AppWhatsappConnectRoute: typeof AppWhatsappConnectRoute
   AppWhatsappChatIndexRoute: typeof AppWhatsappChatIndexRoute
@@ -287,6 +327,7 @@ interface AppLayoutRouteChildren {
 
 const AppLayoutRouteChildren: AppLayoutRouteChildren = {
   AppDashboardRoute: AppDashboardRoute,
+  AppOrganizationRoute: AppOrganizationRoute,
   AppSettingsRoute: AppSettingsRoute,
   AppWhatsappConnectRoute: AppWhatsappConnectRoute,
   AppWhatsappChatIndexRoute: AppWhatsappChatIndexRoute,
@@ -301,6 +342,7 @@ interface AuthLayoutRouteChildren {
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthAcceptInvitationInvitationIdRoute: typeof AuthAcceptInvitationInvitationIdRoute
   AuthResetPasswordTokenRoute: typeof AuthResetPasswordTokenRoute
 }
 
@@ -308,6 +350,7 @@ const AuthLayoutRouteChildren: AuthLayoutRouteChildren = {
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
+  AuthAcceptInvitationInvitationIdRoute: AuthAcceptInvitationInvitationIdRoute,
   AuthResetPasswordTokenRoute: AuthResetPasswordTokenRoute,
 }
 

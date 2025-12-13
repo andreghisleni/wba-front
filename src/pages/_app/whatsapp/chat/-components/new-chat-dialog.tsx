@@ -1,14 +1,24 @@
-import { useState } from "react";
-import { Plus, UserPlus, Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
+/** biome-ignore-all lint/style/useTemplate: <explanation> */
+/** biome-ignore-all lint/suspicious/noConsole: <explanation> */
+import { useQueryClient } from '@tanstack/react-query';
+import { Loader2, Plus, UserPlus } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Button } from '@/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 // Hook gerado pelo Kubb (ajuste o import)
-import { getWhatsappContactsQueryKey, useCreateWhatsappContact } from "@/http/generated/hooks";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  getWhatsappContactsQueryKey,
+  useCreateWhatsappContact,
+} from '@/http/generated/hooks';
 
 interface NewChatDialogProps {
   onContactCreated: (contactId: string) => void;
@@ -16,57 +26,58 @@ interface NewChatDialogProps {
 
 export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [name, setName] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState('');
   const queryClient = useQueryClient();
 
   const { mutateAsync: createContact, isPending } = useCreateWhatsappContact({
     mutation: {
       onSuccess: async (data) => {
-        await queryClient.invalidateQueries({ queryKey: getWhatsappContactsQueryKey() });
+        await queryClient.invalidateQueries({
+          queryKey: getWhatsappContactsQueryKey(),
+        });
         // Sucesso tratado na função handleCreate
 
         // O backend retorna o objeto contato. Pegamos o ID.
         // Dependendo do gerador (Eden/Kubb), pode ser result.data.id ou result.id
         const newContactId = data.id || data.data?.id;
 
-        toast.success("Contato criado!");
+        toast.success('Contato criado!');
         setIsOpen(false);
-        setPhoneNumber("");
-        setName("");
+        setPhoneNumber('');
+        setName('');
 
         // Callback para a página pai selecionar esse contato imediatamente
         if (newContactId) {
           onContactCreated(newContactId);
         }
-
       },
       onError: (error) => {
         console.error(error);
-        toast.error("Erro ao criar contato.");
-      }
-    }
+        toast.error('Erro ao criar contato.');
+      },
+    },
   });
 
   const handleCreate = async () => {
     if (!phoneNumber || phoneNumber.length < 8) {
-      toast.error("Digite um número válido.");
+      toast.error('Digite um número válido.');
       return;
     }
 
     // Cria o contato
     await createContact({
       data: {
-        phoneNumber: "55" + phoneNumber.replace(/\D/g, ""), // Força 55 ou deixe o usuario digitar
-        name: name
-      }
+        phoneNumber: '55' + phoneNumber.replace(/\D/g, ''), // Força 55 ou deixe o usuario digitar
+        name,
+      },
     });
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button size="icon" variant="outline" title="Nova Conversa">
+        <Button size="icon" title="Nova Conversa" variant="outline">
           <Plus className="h-4 w-4" />
         </Button>
       </DialogTrigger>
@@ -80,14 +91,14 @@ export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <Label>Telefone (DDD + Número)</Label>
-            <div className="flex items-center border rounded-md px-3">
-              <span className="text-sm text-muted-foreground mr-1">+55</span>
+            <div className='flex items-center rounded-md border px-3'>
+              <span className='mr-1 text-muted-foreground text-sm'>+55</span>
               <Input
-                className="border-0 p-0 h-9 focus-visible:ring-0"
+                autoFocus
+                className='h-9 border-0 p-0 focus-visible:ring-0'
+                onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="49 99999-9999"
                 value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                autoFocus
               />
             </div>
           </div>
@@ -95,16 +106,16 @@ export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
           <div className="space-y-2">
             <Label>Nome do Contato</Label>
             <Input
+              onChange={(e) => setName(e.target.value)}
               placeholder="Ex: João da Silva"
               value={name}
-              onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           <Button
             className="w-full"
-            onClick={handleCreate}
             disabled={isPending}
+            onClick={handleCreate}
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Criar Contato
