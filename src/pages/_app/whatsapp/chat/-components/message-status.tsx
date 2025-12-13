@@ -3,9 +3,10 @@ import { AlertCircle, Check, CheckCheck, Clock } from 'lucide-react';
 interface MessageStatusProps {
   status: string; // 'SENT', 'DELIVERED', 'READ', 'FAILED', 'PENDING'
   isUser: boolean; // Só mostramos status nas mensagens QUE EU ENVIEI
+  errorDesc?: string; // Descrição do erro, se houver
 }
 
-export function MessageStatus({ status, isUser }: MessageStatusProps) {
+export function MessageStatus({ status, isUser, errorDesc }: MessageStatusProps) {
   // Se a mensagem não fui eu que mandei, não mostra check (não faz sentido ver se eu li minha própria msg recebida aqui)
   if (!isUser) {
     return null;
@@ -17,9 +18,10 @@ export function MessageStatus({ status, isUser }: MessageStatusProps) {
   switch (normalizedStatus) {
     case 'FAILED':
       return (
-        <span title="Falha ao enviar">
-          <AlertCircle className="text-red-500" size={14} />
-        </span>
+        <div className='mt-1 flex items-center gap-1 text-[10px] text-red-600'>
+          <AlertCircle size={10} />
+          {errorDesc || 'Falha no envio'}
+        </div>
       );
 
     case 'read': // Caso venha minúsculo

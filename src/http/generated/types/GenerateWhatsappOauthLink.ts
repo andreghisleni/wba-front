@@ -22,10 +22,17 @@ export type GenerateWhatsappOauthLink200 = {
     state: string;
 };
 
+export type GenerateWhatsappOauthLink400 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
+
 export type GenerateWhatsappOauthLinkQueryResponse = GenerateWhatsappOauthLink200;
 
 export type GenerateWhatsappOauthLinkQuery = {
     Response: GenerateWhatsappOauthLink200;
     QueryParams: GenerateWhatsappOauthLinkQueryParams;
-    Errors: any;
+    Errors: GenerateWhatsappOauthLink400;
 };

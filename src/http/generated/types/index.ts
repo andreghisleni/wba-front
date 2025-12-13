@@ -1,6 +1,7 @@
 export type { CreateWhatsappContact200, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./CreateWhatsappTemplates.ts";
-export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./GenerateWhatsappOauthLink.ts";
+export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLink400, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./GenerateWhatsappOauthLink.ts";
+export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
 export type { GetWhatsappContacts200, GetWhatsappContactsQueryResponse, GetWhatsappContactsQuery } from "./GetWhatsappContacts.ts";
 export type { GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages200, GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesQuery } from "./GetWhatsappContactsContactIdMessages.ts";
 export type { GetWhatsappTemplates200, GetWhatsappTemplatesQueryResponse, GetWhatsappTemplatesQuery } from "./GetWhatsappTemplates.ts";

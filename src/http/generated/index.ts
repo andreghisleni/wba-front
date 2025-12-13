@@ -2,6 +2,8 @@ export type { CreateWhatsappContactMutationKey } from "./hooks/useCreateWhatsapp
 export type { CreateWhatsappTemplatesMutationKey } from "./hooks/useCreateWhatsappTemplates.ts";
 export type { GenerateWhatsappOauthLinkQueryKey } from "./hooks/useGenerateWhatsappOauthLink.ts";
 export type { GenerateWhatsappOauthLinkSuspenseQueryKey } from "./hooks/useGenerateWhatsappOauthLinkSuspense.ts";
+export type { GetDashboardDataQueryKey } from "./hooks/useGetDashboardData.ts";
+export type { GetDashboardDataSuspenseQueryKey } from "./hooks/useGetDashboardDataSuspense.ts";
 export type { GetWhatsappContactsQueryKey } from "./hooks/useGetWhatsappContacts.ts";
 export type { GetWhatsappContactsContactIdMessagesQueryKey } from "./hooks/useGetWhatsappContactsContactIdMessages.ts";
 export type { GetWhatsappContactsContactIdMessagesSuspenseQueryKey } from "./hooks/useGetWhatsappContactsContactIdMessagesSuspense.ts";
@@ -19,7 +21,8 @@ export type { PostWhatsappWebhookMutationKey } from "./hooks/usePostWhatsappWebh
 export type { WhatsappOnboardMutationKey } from "./hooks/useWhatsappOnboard.ts";
 export type { CreateWhatsappContact200, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./types/CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./types/CreateWhatsappTemplates.ts";
-export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./types/GenerateWhatsappOauthLink.ts";
+export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLink400, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./types/GenerateWhatsappOauthLink.ts";
+export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./types/GetDashboardData.ts";
 export type { GetWhatsappContacts200, GetWhatsappContactsQueryResponse, GetWhatsappContactsQuery } from "./types/GetWhatsappContacts.ts";
 export type { GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages200, GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesQuery } from "./types/GetWhatsappContactsContactIdMessages.ts";
 export type { GetWhatsappTemplates200, GetWhatsappTemplatesQueryResponse, GetWhatsappTemplatesQuery } from "./types/GetWhatsappTemplates.ts";
@@ -34,6 +37,8 @@ export { createWhatsappContactMutationKey, createWhatsappContact, useCreateWhats
 export { createWhatsappTemplatesMutationKey, createWhatsappTemplates, useCreateWhatsappTemplates } from "./hooks/useCreateWhatsappTemplates.ts";
 export { generateWhatsappOauthLinkQueryKey, generateWhatsappOauthLink, generateWhatsappOauthLinkQueryOptions, useGenerateWhatsappOauthLink } from "./hooks/useGenerateWhatsappOauthLink.ts";
 export { generateWhatsappOauthLinkSuspenseQueryKey, generateWhatsappOauthLinkSuspense, generateWhatsappOauthLinkSuspenseQueryOptions, useGenerateWhatsappOauthLinkSuspense } from "./hooks/useGenerateWhatsappOauthLinkSuspense.ts";
+export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./hooks/useGetDashboardData.ts";
+export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./hooks/useGetDashboardDataSuspense.ts";
 export { getWhatsappContactsQueryKey, getWhatsappContacts, getWhatsappContactsQueryOptions, useGetWhatsappContacts } from "./hooks/useGetWhatsappContacts.ts";
 export { getWhatsappContactsContactIdMessagesQueryKey, getWhatsappContactsContactIdMessages, getWhatsappContactsContactIdMessagesQueryOptions, useGetWhatsappContactsContactIdMessages } from "./hooks/useGetWhatsappContactsContactIdMessages.ts";
 export { getWhatsappContactsContactIdMessagesSuspenseQueryKey, getWhatsappContactsContactIdMessagesSuspense, getWhatsappContactsContactIdMessagesSuspenseQueryOptions, useGetWhatsappContactsContactIdMessagesSuspense } from "./hooks/useGetWhatsappContactsContactIdMessagesSuspense.ts";

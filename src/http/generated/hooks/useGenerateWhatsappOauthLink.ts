@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQueryParams } from "../types/GenerateWhatsappOauthLink.ts";
+import type { GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink400 } from "../types/GenerateWhatsappOauthLink.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from "@tanstack/react-query";
 import { queryOptions, useQuery } from "@tanstack/react-query";
@@ -20,13 +20,13 @@ export type GenerateWhatsappOauthLinkQueryKey = ReturnType<typeof generateWhatsa
 export async function generateWhatsappOauthLink(params?: GenerateWhatsappOauthLinkQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config  
   
-  const res = await request<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, unknown>({ method : "GET", url : `/whatsapp/oauth/link`, params, ... requestConfig })  
+  const res = await request<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, unknown>({ method : "GET", url : `/whatsapp/oauth/link`, params, ... requestConfig })  
   return res.data
 }
 
 export function generateWhatsappOauthLinkQueryOptions(params?: GenerateWhatsappOauthLinkQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const queryKey = generateWhatsappOauthLinkQueryKey(params)
-  return queryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, GenerateWhatsappOauthLinkQueryResponse, typeof queryKey>({
+  return queryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, GenerateWhatsappOauthLinkQueryResponse, typeof queryKey>({
  
    queryKey,
    queryFn: async ({ signal }) => {
@@ -42,7 +42,7 @@ export function generateWhatsappOauthLinkQueryOptions(params?: GenerateWhatsappO
  */
 export function useGenerateWhatsappOauthLink<TData = GenerateWhatsappOauthLinkQueryResponse, TQueryData = GenerateWhatsappOauthLinkQueryResponse, TQueryKey extends QueryKey = GenerateWhatsappOauthLinkQueryKey>(params?: GenerateWhatsappOauthLinkQueryParams, options: 
 {
-  query?: Partial<QueryObserverOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, TData, TQueryData, TQueryKey>> & { client?: QueryClient },
+  query?: Partial<QueryObserverOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, TData, TQueryData, TQueryKey>> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: typeof fetch }
 }
  = {}) {
@@ -54,7 +54,7 @@ export function useGenerateWhatsappOauthLink<TData = GenerateWhatsappOauthLinkQu
    ...generateWhatsappOauthLinkQueryOptions(params, config),
    queryKey,
    ...queryOptions
-  } as unknown as QueryObserverOptions, queryClient) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey }
+  } as unknown as QueryObserverOptions, queryClient) as UseQueryResult<TData, ResponseErrorConfig<GenerateWhatsappOauthLink400>> & { queryKey: TQueryKey }
 
   query.queryKey = queryKey as TQueryKey
 

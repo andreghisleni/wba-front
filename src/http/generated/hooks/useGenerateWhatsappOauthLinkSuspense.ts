@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQueryParams } from "../types/GenerateWhatsappOauthLink.ts";
+import type { GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink400 } from "../types/GenerateWhatsappOauthLink.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { QueryKey, QueryClient, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
@@ -20,13 +20,13 @@ export type GenerateWhatsappOauthLinkSuspenseQueryKey = ReturnType<typeof genera
 export async function generateWhatsappOauthLinkSuspense(params?: GenerateWhatsappOauthLinkQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config  
   
-  const res = await request<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, unknown>({ method : "GET", url : `/whatsapp/oauth/link`, params, ... requestConfig })  
+  const res = await request<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, unknown>({ method : "GET", url : `/whatsapp/oauth/link`, params, ... requestConfig })  
   return res.data
 }
 
 export function generateWhatsappOauthLinkSuspenseQueryOptions(params?: GenerateWhatsappOauthLinkQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const queryKey = generateWhatsappOauthLinkSuspenseQueryKey(params)
-  return queryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, GenerateWhatsappOauthLinkQueryResponse, typeof queryKey>({
+  return queryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, GenerateWhatsappOauthLinkQueryResponse, typeof queryKey>({
  
    queryKey,
    queryFn: async ({ signal }) => {
@@ -42,7 +42,7 @@ export function generateWhatsappOauthLinkSuspenseQueryOptions(params?: GenerateW
  */
 export function useGenerateWhatsappOauthLinkSuspense<TData = GenerateWhatsappOauthLinkQueryResponse, TQueryKey extends QueryKey = GenerateWhatsappOauthLinkSuspenseQueryKey>(params?: GenerateWhatsappOauthLinkQueryParams, options: 
 {
-  query?: Partial<UseSuspenseQueryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<Error>, TData, TQueryKey>> & { client?: QueryClient },
+  query?: Partial<UseSuspenseQueryOptions<GenerateWhatsappOauthLinkQueryResponse, ResponseErrorConfig<GenerateWhatsappOauthLink400>, TData, TQueryKey>> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: typeof fetch }
 }
  = {}) {
@@ -54,7 +54,7 @@ export function useGenerateWhatsappOauthLinkSuspense<TData = GenerateWhatsappOau
    ...generateWhatsappOauthLinkSuspenseQueryOptions(params, config),
    queryKey,
    ...queryOptions
-  } as unknown as UseSuspenseQueryOptions, queryClient) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey }
+  } as unknown as UseSuspenseQueryOptions, queryClient) as UseSuspenseQueryResult<TData, ResponseErrorConfig<GenerateWhatsappOauthLink400>> & { queryKey: TQueryKey }
 
   query.queryKey = queryKey as TQueryKey
 

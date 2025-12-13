@@ -34,6 +34,7 @@ export const Route = createFileRoute('/_app/whatsapp/chat/')({
   component: RouteComponent,
 });
 
+// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
 function RouteComponent() {
   const [selectedContactId, setSelectedContactId] = useState<string | null>(
     null
@@ -98,6 +99,7 @@ function RouteComponent() {
   };
 
   // Efeito para rolar quando as mensagens mudam ou troca de contato
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     scrollToBottom();
   }, [messages, selectedContactId, isLoadingMessages]);
