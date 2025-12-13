@@ -9,4 +9,5 @@ export type { ImportWhatsappTemplates200, ImportWhatsappTemplates400, ImportWhat
 export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./PostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessages200, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";
 export type { PostWhatsappWebhook200, PostWhatsappWebhookMutationResponse, PostWhatsappWebhookMutation } from "./PostWhatsappWebhook.ts";
+export type { UpdateWhatsappTemplatePathParams, UpdateWhatsappTemplate200, UpdateWhatsappTemplateMutationRequest, UpdateWhatsappTemplateMutationResponse, UpdateWhatsappTemplateMutation } from "./UpdateWhatsappTemplate.ts";
 export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./WhatsappOnboard.ts";

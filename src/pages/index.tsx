@@ -12,9 +12,9 @@ export function Home() {
     return <div>Loading...</div>;
   }
 
-  // if (!data) {
-  //   return <Navigate replace to="/sign-in" />;
-  // }
+  if (!data) {
+    return <Navigate replace to="/sign-in" />;
+  }
 
   // biome-ignore lint/suspicious/noExplicitAny: typing is incomplete
   // const lastUserEventId = (data.user as any).lastUserEventId as

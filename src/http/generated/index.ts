@@ -14,6 +14,7 @@ export type { ImportWhatsappTemplatesMutationKey } from "./hooks/useImportWhatsa
 export type { PostWhatsappMediaCallbackMutationKey } from "./hooks/usePostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessagesMutationKey } from "./hooks/usePostWhatsappMessages.ts";
 export type { PostWhatsappWebhookMutationKey } from "./hooks/usePostWhatsappWebhook.ts";
+export type { UpdateWhatsappTemplateMutationKey } from "./hooks/useUpdateWhatsappTemplate.ts";
 export type { WhatsappOnboardMutationKey } from "./hooks/useWhatsappOnboard.ts";
 export type { CreateWhatsappContact200, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./types/CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./types/CreateWhatsappTemplates.ts";
@@ -26,6 +27,7 @@ export type { ImportWhatsappTemplates200, ImportWhatsappTemplates400, ImportWhat
 export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./types/PostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessages200, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./types/PostWhatsappMessages.ts";
 export type { PostWhatsappWebhook200, PostWhatsappWebhookMutationResponse, PostWhatsappWebhookMutation } from "./types/PostWhatsappWebhook.ts";
+export type { UpdateWhatsappTemplatePathParams, UpdateWhatsappTemplate200, UpdateWhatsappTemplateMutationRequest, UpdateWhatsappTemplateMutationResponse, UpdateWhatsappTemplateMutation } from "./types/UpdateWhatsappTemplate.ts";
 export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./types/WhatsappOnboard.ts";
 export { createWhatsappContactMutationKey, createWhatsappContact, useCreateWhatsappContact } from "./hooks/useCreateWhatsappContact.ts";
 export { createWhatsappTemplatesMutationKey, createWhatsappTemplates, useCreateWhatsappTemplates } from "./hooks/useCreateWhatsappTemplates.ts";
@@ -43,4 +45,5 @@ export { importWhatsappTemplatesMutationKey, importWhatsappTemplates, useImportW
 export { postWhatsappMediaCallbackMutationKey, postWhatsappMediaCallback, usePostWhatsappMediaCallback } from "./hooks/usePostWhatsappMediaCallback.ts";
 export { postWhatsappMessagesMutationKey, postWhatsappMessages, usePostWhatsappMessages } from "./hooks/usePostWhatsappMessages.ts";
 export { postWhatsappWebhookMutationKey, postWhatsappWebhook, usePostWhatsappWebhook } from "./hooks/usePostWhatsappWebhook.ts";
+export { updateWhatsappTemplateMutationKey, updateWhatsappTemplate, useUpdateWhatsappTemplate } from "./hooks/useUpdateWhatsappTemplate.ts";
 export { whatsappOnboardMutationKey, whatsappOnboard, useWhatsappOnboard } from "./hooks/useWhatsappOnboard.ts";

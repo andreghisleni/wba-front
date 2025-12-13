@@ -1,45 +1,52 @@
-import { FileText, Download, Play, Music } from "lucide-react"; // Ícones sugeridos
+import { Download, FileText, Music, Play } from 'lucide-react'; // Ícones sugeridos
+import { MessageStatus } from './message-status';
 
 // Função auxiliar para renderizar o conteúdo baseado no tipo
 const RenderMessageContent = ({ message }: { message: any }) => {
   // Se não tiver URL de mídia e não for texto, retorna nulo ou placeholder
-  if (!message.mediaUrl && message.type !== "text") return null;
+  if (!message.mediaUrl && message.type !== 'text') { return null; }
 
-  const mediaUrl = String(message.mediaUrl).replace('https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/', 'http://localhost:8787/');
+  const mediaUrl = `https://pub-bf29d6f6bf764b1982512ad9a0b5c9c0.r2.dev/${message.mediaFileName}`;
+  // String(message.mediaUrl).replace(
+  //   'https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/',
+  //   'http://localhost:8787/'
+  // );
 
   switch (message.type) {
-    case "image":
-    case "sticker":
+    case 'image':
+    case 'sticker':
       return (
         <div className="mb-1">
           <img
-            src={mediaUrl}
             alt="Imagem"
-            className={`rounded-lg object-cover cursor-pointer hover:opacity-90 ${message.type === "sticker" ? "w-32 h-32 bg-transparent" : "max-h-64 w-auto"
+            className={`cursor-pointer rounded-lg object-cover hover:opacity-90 ${message.type === 'sticker'
+              ? 'h-32 w-32 bg-transparent'
+              : 'max-h-64 w-auto'
               }`}
-            onClick={() => window.open(mediaUrl, "_blank")}
+            onClick={() => window.open(mediaUrl, '_blank')}
+            src={mediaUrl}
           />
         </div>
       );
 
-    case "video":
+    case 'video':
       return (
         <div className="mb-1 max-w-[300px]">
-          <video controls className="w-full rounded-lg bg-black">
+          <video className="w-full rounded-lg bg-black" controls>
             <source src={mediaUrl} type="video/mp4" />
             Seu navegador não suporta vídeos.
           </video>
         </div>
       );
 
-    case "audio":
-    case "ptt": // "ptt" é o formato de áudio de voz do WhatsApp (Push To Talk)
+    case 'audio':
+    case 'ptt': // "ptt" é o formato de áudio de voz do WhatsApp (Push To Talk)
       return (
-        <div className="flex items-center gap-2 min-w-[200px] mb-1">
+        <div className='mb-1 flex min-w-[200px] items-center gap-2'>
           {/* <div className="bg-gray-100 p-2 rounded-full text-gray-600">
             <Music size={20} />
           </div> */}
-          <audio controls className="h-8 w-full max-w-[320px]">
+          <audio className="h-8 w-full max-w-[320px]" controls>
             <source src={mediaUrl} type="audio/mp4" />
             <source src={mediaUrl} type="audio/mpeg" />
             <source src={mediaUrl} type="audio/ogg" />
@@ -47,27 +54,27 @@ const RenderMessageContent = ({ message }: { message: any }) => {
         </div>
       );
 
-    case "document":
+    case 'document':
       return (
         <a
+          className='mb-1 flex min-w-[240px] items-center gap-3 rounded-lg bg-black/10 p-3 transition-colors hover:bg-black/20'
           href={mediaUrl}
-          target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-3 bg-black/10 p-3 rounded-lg hover:bg-black/20 transition-colors mb-1 min-w-[240px]"
+          target="_blank"
         >
-          <div className="bg-white p-2 rounded text-red-500">
+          <div className='rounded bg-white p-2 text-red-500'>
             <FileText size={24} />
           </div>
           <div className="flex-1 overflow-hidden">
             {/* Tenta mostrar o nome do arquivo, ou usa um genérico */}
-            <p className="text-sm font-medium truncate">
-              {message.fileName || "Documento"}
+            <p className='truncate font-medium text-sm'>
+              {message.fileName || 'Documento'}
             </p>
-            <p className="text-xs opacity-70 uppercase">
+            <p className='text-xs uppercase opacity-70'>
               {mediaUrl.split('.').pop()} {/* Mostra a extensão (ex: PDF) */}
             </p>
           </div>
-          <Download size={20} className="opacity-70" />
+          <Download className="opacity-70" size={20} />
         </a>
       );
 
@@ -78,14 +85,16 @@ const RenderMessageContent = ({ message }: { message: any }) => {
 };
 
 export function MessageBubble({ message }: { message: any }) {
-  const isMe = message.direction === "OUTBOUND";
+  const isMe = message.direction === 'OUTBOUND';
 
   return (
-    <div className={`flex w-full ${isMe ? "justify-end" : "justify-start"} mb-4`}>
+    <div
+      className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'} mb-4`}
+    >
       <div
-        className={`relative max-w-[80%] md:max-w-[60%] p-3 rounded-lg shadow-sm ${isMe
-          ? "bg-green-600 text-white rounded-tr-none"
-          : "bg-white text-gray-900 border border-gray-200 rounded-tl-none"
+        className={`relative max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
+          ? 'rounded-tr-none bg-green-600 text-white'
+          : 'rounded-tl-none border border-gray-200 bg-white text-gray-900'
           }`}
       >
         {/* 1. Renderiza a Mídia (se houver) */}
@@ -93,17 +102,25 @@ export function MessageBubble({ message }: { message: any }) {
 
         {/* 2. Renderiza o Texto/Legenda (se houver) */}
         {message.body && (
-          <p className={`text-sm whitespace-pre-wrap ${message.type !== 'text' ? 'mt-2' : ''}`}>
+          <p
+            className={`whitespace-pre-wrap text-sm ${message.type !== 'text' ? 'mt-2' : ''}`}
+          >
             {message.body}
           </p>
         )}
 
-        {/* 3. Rodapé com Hora e Status */}
-        <div className={`flex justify-end items-center gap-1 mt-1 ${isMe ? "text-green-100" : "text-gray-400"}`}>
-          <span className="text-[10px] leading-none">
-            {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+        {/* RODAPÉ DA MENSAGEM */}
+        <div className='mt-1 flex select-none items-center justify-end gap-1'>
+          <span className='pt-0.5 text-[10px] text-gray-500 leading-none'>
+            {new Date(message.timestamp).toLocaleTimeString([], {
+              hour: '2-digit',
+              minute: '2-digit',
+            })}
           </span>
-          {/* Aqui você pode colocar os ícones de check (v, vv, azul) baseados no message.status */}
+
+          {/* O COMPONENTE DE STATUS ENTRA AQUI */}
+          {/* Ele só vai renderizar se isMe for true, pois configuramos isso dentro dele */}
+          <MessageStatus isUser={isMe} status={message.status} />
         </div>
       </div>
     </div>
