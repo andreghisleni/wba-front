@@ -23,6 +23,8 @@ import { Route as AuthAcceptInvitationInvitationIdRouteImport } from './pages/_a
 import { Route as AppOrganizationSlugSettingsRouteImport } from './pages/_app/$organizationSlug/settings'
 import { Route as AppOrganizationSlugOrganizationRouteImport } from './pages/_app/$organizationSlug/organization'
 import { Route as AppOrganizationSlugDashboardRouteImport } from './pages/_app/$organizationSlug/dashboard'
+import { Route as AppOrganizationSlugWebhooksIndexRouteImport } from './pages/_app/$organizationSlug/webhooks/index'
+import { Route as AppOrganizationSlugApiKeysIndexRouteImport } from './pages/_app/$organizationSlug/api-keys/index'
 import { Route as AppOrganizationSlugWhatsappConnectRouteImport } from './pages/_app/$organizationSlug/whatsapp/connect'
 import { Route as AppOrganizationSlugWhatsappTemplatesIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/templates/index'
 import { Route as AppOrganizationSlugWhatsappChatIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/chat/index'
@@ -99,6 +101,18 @@ const AppOrganizationSlugDashboardRoute =
     path: '/dashboard',
     getParentRoute: () => AppOrganizationSlugRoute,
   } as any)
+const AppOrganizationSlugWebhooksIndexRoute =
+  AppOrganizationSlugWebhooksIndexRouteImport.update({
+    id: '/webhooks/',
+    path: '/webhooks/',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
+const AppOrganizationSlugApiKeysIndexRoute =
+  AppOrganizationSlugApiKeysIndexRouteImport.update({
+    id: '/api-keys/',
+    path: '/api-keys/',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
 const AppOrganizationSlugWhatsappConnectRoute =
   AppOrganizationSlugWhatsappConnectRouteImport.update({
     id: '/whatsapp/connect',
@@ -132,6 +146,8 @@ export interface FileRoutesByFullPath {
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/$organizationSlug/api-keys': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/$organizationSlug/webhooks': typeof AppOrganizationSlugWebhooksIndexRoute
   '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
@@ -149,6 +165,8 @@ export interface FileRoutesByTo {
   '/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/$organizationSlug/api-keys': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/$organizationSlug/webhooks': typeof AppOrganizationSlugWebhooksIndexRoute
   '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
@@ -169,6 +187,8 @@ export interface FileRoutesById {
   '/_auth/reset-password/$token': typeof AuthResetPasswordTokenRoute
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/_app/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
+  '/_app/$organizationSlug/api-keys/': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/_app/$organizationSlug/webhooks/': typeof AppOrganizationSlugWebhooksIndexRoute
   '/_app/$organizationSlug/whatsapp/chat/': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/_app/$organizationSlug/whatsapp/templates/': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
@@ -188,6 +208,8 @@ export interface FileRouteTypes {
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/$organizationSlug/whatsapp/connect'
+    | '/$organizationSlug/api-keys'
+    | '/$organizationSlug/webhooks'
     | '/$organizationSlug/whatsapp/chat'
     | '/$organizationSlug/whatsapp/templates'
   fileRoutesByTo: FileRoutesByTo
@@ -205,6 +227,8 @@ export interface FileRouteTypes {
     | '/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/$organizationSlug/whatsapp/connect'
+    | '/$organizationSlug/api-keys'
+    | '/$organizationSlug/webhooks'
     | '/$organizationSlug/whatsapp/chat'
     | '/$organizationSlug/whatsapp/templates'
   id:
@@ -224,6 +248,8 @@ export interface FileRouteTypes {
     | '/_auth/reset-password/$token'
     | '/webhook/oauth/callback'
     | '/_app/$organizationSlug/whatsapp/connect'
+    | '/_app/$organizationSlug/api-keys/'
+    | '/_app/$organizationSlug/webhooks/'
     | '/_app/$organizationSlug/whatsapp/chat/'
     | '/_app/$organizationSlug/whatsapp/templates/'
   fileRoutesById: FileRoutesById
@@ -335,6 +361,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganizationSlugDashboardRouteImport
       parentRoute: typeof AppOrganizationSlugRoute
     }
+    '/_app/$organizationSlug/webhooks/': {
+      id: '/_app/$organizationSlug/webhooks/'
+      path: '/webhooks'
+      fullPath: '/$organizationSlug/webhooks'
+      preLoaderRoute: typeof AppOrganizationSlugWebhooksIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
+    '/_app/$organizationSlug/api-keys/': {
+      id: '/_app/$organizationSlug/api-keys/'
+      path: '/api-keys'
+      fullPath: '/$organizationSlug/api-keys'
+      preLoaderRoute: typeof AppOrganizationSlugApiKeysIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
     '/_app/$organizationSlug/whatsapp/connect': {
       id: '/_app/$organizationSlug/whatsapp/connect'
       path: '/whatsapp/connect'
@@ -364,6 +404,8 @@ interface AppOrganizationSlugRouteChildren {
   AppOrganizationSlugOrganizationRoute: typeof AppOrganizationSlugOrganizationRoute
   AppOrganizationSlugSettingsRoute: typeof AppOrganizationSlugSettingsRoute
   AppOrganizationSlugWhatsappConnectRoute: typeof AppOrganizationSlugWhatsappConnectRoute
+  AppOrganizationSlugApiKeysIndexRoute: typeof AppOrganizationSlugApiKeysIndexRoute
+  AppOrganizationSlugWebhooksIndexRoute: typeof AppOrganizationSlugWebhooksIndexRoute
   AppOrganizationSlugWhatsappChatIndexRoute: typeof AppOrganizationSlugWhatsappChatIndexRoute
   AppOrganizationSlugWhatsappTemplatesIndexRoute: typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
 }
@@ -374,6 +416,8 @@ const AppOrganizationSlugRouteChildren: AppOrganizationSlugRouteChildren = {
   AppOrganizationSlugSettingsRoute: AppOrganizationSlugSettingsRoute,
   AppOrganizationSlugWhatsappConnectRoute:
     AppOrganizationSlugWhatsappConnectRoute,
+  AppOrganizationSlugApiKeysIndexRoute: AppOrganizationSlugApiKeysIndexRoute,
+  AppOrganizationSlugWebhooksIndexRoute: AppOrganizationSlugWebhooksIndexRoute,
   AppOrganizationSlugWhatsappChatIndexRoute:
     AppOrganizationSlugWhatsappChatIndexRoute,
   AppOrganizationSlugWhatsappTemplatesIndexRoute:

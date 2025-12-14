@@ -136,7 +136,7 @@ function RouteComponent() {
     <div className="m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm">
       {/* --- SIDEBAR (Esquerda) --- */}
       <div className="flex w-80 flex-col border-r bg-muted/10">
-        <div className='flex flex-none flex-row gap-2 border-b p-4'>
+        <div className="flex flex-none flex-row gap-2 border-b p-4">
           <div className="relative">
             <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
             <Input className="pl-8" placeholder="Buscar conversas..." />
@@ -302,34 +302,43 @@ function RouteComponent() {
                   placeholder="Digite uma mensagem..."
                   value={inputMessage}
                 />
-                <Button
-                  className={
-                    isWindowClosed ? 'cursor-not-allowed opacity-50' : ''
-                  }
-                  disabled={!inputMessage.trim() || isSending || isWindowClosed}
-                  size="icon"
-                  type="submit"
-                >
-                  {isSending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <Send className="h-4 w-4" />
-                  )}
-                </Button>
+                {inputMessage.trim() ? (
+                  <Button
+                    className={
+                      isWindowClosed ? 'cursor-not-allowed opacity-50' : ''
+                    }
+                    disabled={
+                      !inputMessage.trim() || isSending || isWindowClosed
+                    }
+                    size="icon"
+                    type="submit"
+                  >
+                    {isSending ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <Send className="h-4 w-4" />
+                    )}
+                  </Button>
+                ) : (
+                  <SendTemplateDialog
+                    contactId={selectedContactId || ''}
+                    disabled={false} // Passamos true para ele renderizar como botão grande
+                  />
+                )}
               </form>
             </div>
           </>
         ) : (
           /* Estado Vazio */
-          (<div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
+          <div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Phone className="h-8 w-8 opacity-20" />
             </div>
             <h3 className="font-semibold text-lg">WhatsApp Web Integration</h3>
             <p>Selecione uma conversa ao lado para visualizar o histórico.</p>
-          </div>)
+          </div>
         )}
       </div>
     </div>
-  )
+  );
 }

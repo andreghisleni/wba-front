@@ -28,6 +28,8 @@ export function Header() {
     { href: `/${organizationSlug}/whatsapp/connect`, label: 'Conectar' },
     { href: `/${organizationSlug}/whatsapp/chat`, label: 'Chat' },
     { href: `/${organizationSlug}/whatsapp/templates`, label: 'Templates' },
+    { href: `/${organizationSlug}/api-keys`, label: 'Chaves de API' },
+    { href: `/${organizationSlug}/webhooks`, label: 'Webhooks' },
   ];
 
   return (
