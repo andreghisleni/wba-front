@@ -15,22 +15,51 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
+import { auth } from '@/lib/auth';
 import { OrganizationSelect } from '../organization-select';
 import { MenuLink } from './menu-link';
 
 export function Header() {
   const { organizationSlug } = useParams({ strict: false });
+  const { data } = auth.useActiveMember();
 
   // Navigation links array to be used in both desktop and mobile menus
   const navigationLinks = [
     { href: `/${organizationSlug}/dashboard`, label: 'Dashboard' },
-    { href: `/${organizationSlug}/organization`, label: 'Organização' },
-    { href: `/${organizationSlug}/whatsapp/connect`, label: 'Conectar' },
+    {
+      href: `/${organizationSlug}/organization`,
+      label: 'Organização',
+      role: ['owner'],
+    },
+    {
+      href: `/${organizationSlug}/whatsapp/connect`,
+      label: 'Conectar',
+      role: ['owner'],
+    },
     { href: `/${organizationSlug}/whatsapp/chat`, label: 'Chat' },
-    { href: `/${organizationSlug}/whatsapp/templates`, label: 'Templates' },
-    { href: `/${organizationSlug}/api-keys`, label: 'Chaves de API' },
-    { href: `/${organizationSlug}/webhooks`, label: 'Webhooks' },
+    {
+      href: `/${organizationSlug}/whatsapp/templates`,
+      label: 'Templates',
+      role: ['owner'],
+    },
+    {
+      href: `/${organizationSlug}/api-keys`,
+      label: 'Chaves de API',
+      role: ['owner'],
+    },
+    {
+      href: `/${organizationSlug}/webhooks`,
+      label: 'Webhooks',
+      role: ['owner'],
+    },
   ];
+
+  const nLinks = navigationLinks.filter((link) => {
+    if (link.role) {
+      return link.role.includes(data?.role || '');
+    }
+    return true;
+  });
 
   return (
     <header className="border-b px-4 md:px-6">
@@ -77,7 +106,7 @@ export function Header() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
+                  {nLinks.map((link, index) => (
                     <NavigationMenuItem
                       className="w-full"
                       key={index.toString()}
@@ -104,10 +133,11 @@ export function Header() {
               <Logo />
             </Link>
             <OrganizationSelect />
+            {data?.role}
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
+                {nLinks.map((link, index) => (
                   <NavigationMenuItem key={index.toString()}>
                     <MenuLink
                       className="py-1.5 font-medium text-muted-foreground hover:text-primary"

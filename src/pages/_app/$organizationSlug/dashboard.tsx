@@ -28,6 +28,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { useGetDashboardData } from '@/http/generated';
+import { auth } from '@/lib/auth';
 import { formatToBRL } from '@/utils/formatToBRL';
 
 export const Route = createFileRoute('/_app/$organizationSlug/dashboard')({
@@ -44,6 +45,7 @@ const CATEGORY_COLORS: Record<string, string> = {
 };
 
 export default function DashboardPage() {
+  const { data: memberData } = auth.useActiveMember();
   const { data, isLoading, isError, error } = useGetDashboardData();
 
   if (isError) {
@@ -51,6 +53,17 @@ export default function DashboardPage() {
       <div className="flex h-[50vh] items-center justify-center text-destructive">
         <AlertCircle className="mr-2 h-4 w-4" />
         <span>Erro ao carregar dados: {error?.message}</span>
+      </div>
+    );
+  }
+
+  if (!memberData?.role) {
+    return (
+      <div className="flex h-[50vh] flex-col items-center justify-center gap-4 text-center">
+        <AlertCircle className="h-10 w-10 text-destructive" />
+        <p className="text-destructive">
+          Você não tem permissão para acessar este dashboard.
+        </p>
       </div>
     );
   }
@@ -80,24 +93,26 @@ export default function DashboardPage() {
         ) : (
           <>
             {/* CARD CUSTO (Verde) */}
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="font-medium text-sm">
-                  Custo Estimado
-                </CardTitle>
-                <div className="rounded-lg bg-emerald-100 p-2 dark:bg-emerald-900/50">
-                  <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="font-bold text-2xl">
-                  {formatToBRL(data?.overview.estimatedCost || 0)}
-                </div>
-                <p className="text-muted-foreground text-xs">
-                  Ciclo atual de cobrança
-                </p>
-              </CardContent>
-            </Card>
+            {['owner', 'admin'].includes(memberData?.role) && (
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="font-medium text-sm">
+                    Custo Estimado
+                  </CardTitle>
+                  <div className="rounded-lg bg-emerald-100 p-2 dark:bg-emerald-900/50">
+                    <DollarSign className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                  </div>
+                </CardHeader>
+                <CardContent>
+                  <div className="font-bold text-2xl">
+                    {formatToBRL(data?.overview.estimatedCost || 0)}
+                  </div>
+                  <p className="text-muted-foreground text-xs">
+                    Ciclo atual de cobrança
+                  </p>
+                </CardContent>
+              </Card>
+            )}
 
             {/* CARD CONVERSAS (Azul) */}
             <Card>
@@ -144,7 +159,7 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* --- GRÁFICO --- */}
-        <Card className="col-span-4">
+        {['owner', 'admin'].includes(memberData?.role) ? (<Card className="col-span-4">
           <CardHeader>
             <CardTitle>Custo por Categoria</CardTitle>
             <CardDescription>
@@ -207,7 +222,7 @@ export default function DashboardPage() {
               </div>
             )}
           </CardContent>
-        </Card>
+        </Card>) : null}
 
         {/* --- TABELA DE ERROS --- */}
         <Card className="col-span-3">
@@ -256,7 +271,7 @@ export default function DashboardPage() {
                         <TableCell>
                           <Badge
                             // Adicionei um tom vermelho suave em vez do destructive padrão sólido
-                            className='border-none bg-red-100 font-mono text-red-700 text-xs hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400'
+                            className="border-none bg-red-100 font-mono text-red-700 text-xs hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400"
                           >
                             {err.errorCode || 'UNK'}
                           </Badge>
