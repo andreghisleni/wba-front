@@ -63,6 +63,7 @@
     "react-dropzone": "^14.3.8",
     "react-hook-form": "^7.60.0",
     "react-node-to-string": "^0.1.2",
+    "react-phone-number-input": "^3.4.14",
     "react-resizable-panels": "^3.0.3",
     "recharts": "^3.1.0",
     "shiki": "^3.13.0",
