@@ -28,6 +28,7 @@ import { cn } from '@/lib/utils';
 // O componente de mensagem que criamos anteriormente
 import { MessageBubble } from './-components/message-bubble';
 import { NewChatDialog } from './-components/new-chat-dialog';
+import { PhoneComponent } from './-components/phone';
 import { SendTemplateDialog } from './-components/send-template-dialog';
 
 export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
@@ -210,17 +211,17 @@ function RouteComponent() {
                     src={selectedContact.profilePicUrl || undefined}
                   />
                   <AvatarFallback>
-                    {(selectedContact.pushName || selectedContact.waId)
-                      ?.substring(0, 2)
-                      .toUpperCase()}
+                    {selectedContact.pushName?.substring(0, 2).toUpperCase() ||
+                      PhoneComponent(selectedContact.waId)}
                   </AvatarFallback>
                 </Avatar>
                 <div>
                   <h2 className="font-semibold text-sm">
-                    {selectedContact.pushName || selectedContact.waId}
+                    {selectedContact.pushName ||
+                      PhoneComponent(selectedContact.waId)}
                   </h2>
                   <p className="text-muted-foreground text-xs">
-                    +{selectedContact.waId}
+                    <PhoneComponent phone={selectedContact.waId} />
                   </p>
                 </div>
               </div>

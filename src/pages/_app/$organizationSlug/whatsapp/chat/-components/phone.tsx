@@ -5,9 +5,10 @@ type PhoneComponentProps = {
   phone: string;
 };
 
-export function PhoneComponent({ phone }: PhoneComponentProps) {
-  if (!phone) { return <span>-</span>; }
+export function PhoneComponent({ phone: p }: PhoneComponentProps) {
+  if (!p) { return <span>-</span>; }
 
+  const phone = p.startsWith('+') ? p : `+${p}`;
   const parsed = parsePhoneNumber(phone);
   if (!parsed) {
     return <span>{phone}{JSON.stringify({ parsed })}</span>;
