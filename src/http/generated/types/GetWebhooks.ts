@@ -22,6 +22,10 @@ export type GetWebhooks200 = {
     */
     events: string[];
     /**
+     * @type string | undefined
+    */
+    secret?: string;
+    /**
      * @type boolean
     */
     enabled: boolean;

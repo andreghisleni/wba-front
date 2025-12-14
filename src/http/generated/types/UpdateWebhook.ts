@@ -29,6 +29,10 @@ export type UpdateWebhook200 = {
     */
     events: string[];
     /**
+     * @type string | undefined
+    */
+    secret?: string;
+    /**
      * @type boolean
     */
     enabled: boolean;
@@ -68,6 +72,10 @@ export type UpdateWebhookMutationRequest = {
      * @type boolean
     */
     enabled: boolean;
+    /**
+     * @type string | undefined
+    */
+    secret?: string;
 };
 
 export type UpdateWebhookMutationResponse = UpdateWebhook200;

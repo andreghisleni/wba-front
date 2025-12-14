@@ -76,14 +76,11 @@ function WebhooksPage() {
     },
   });
 
-
-
   const handleDelete = async () => {
     if (!deletingId) {
       return;
     }
     await deleteWebhook({ id: deletingId });
-
   };
 
   const handleTest = async (id: string) => {
@@ -140,6 +137,7 @@ function WebhooksPage() {
                 <TableRow>
                   <TableHead>Nome</TableHead>
                   <TableHead>URL</TableHead>
+                  <TableHead>Segredo</TableHead>
                   <TableHead>Eventos</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead className="w-[50px]" />
@@ -159,8 +157,29 @@ function WebhooksPage() {
                   webhooks?.map((hook) => (
                     <TableRow key={hook.id}>
                       <TableCell className="font-medium">{hook.name}</TableCell>
-                      <TableCell className="max-w-[200px] truncate font-mono text-muted-foreground text-xs">
+                      <TableCell
+                        className="max-w-[200px] cursor-pointer truncate font-mono text-muted-foreground text-xs transition-colors hover:text-foreground"
+                        onDoubleClick={() => {
+                          navigator.clipboard.writeText(hook.url);
+                          toast.success('URL copiada!');
+                          window.getSelection()?.removeAllRanges();
+                        }}
+                        title="Clique duplo para copiar"
+                      >
                         {hook.url}
+                      </TableCell>
+                      <TableCell
+                        className="max-w-[150px] cursor-pointer truncate font-mono text-muted-foreground text-xs transition-colors hover:text-foreground"
+                        onDoubleClick={() => {
+                          if (hook.secret) {
+                            navigator.clipboard.writeText(hook.secret);
+                            toast.success('Segredo copiado!');
+                            window.getSelection()?.removeAllRanges();
+                          }
+                        }}
+                        title="Clique duplo para copiar"
+                      >
+                        {hook.secret || '-'}
                       </TableCell>
                       <TableCell>
                         <div className="flex flex-wrap gap-1">
@@ -201,7 +220,7 @@ function WebhooksPage() {
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             <DropdownMenuItem asChild>
-                              <WebhookForm webhookToEdit={hook} />
+                              <WebhookForm dropdown webhookToEdit={hook} />
                             </DropdownMenuItem>
                             <DropdownMenuItem
                               className="text-red-600 focus:text-red-600"

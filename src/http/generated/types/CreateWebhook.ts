@@ -22,6 +22,10 @@ export type CreateWebhook200 = {
     */
     events: string[];
     /**
+     * @type string | undefined
+    */
+    secret?: string;
+    /**
      * @type boolean
     */
     enabled: boolean;
@@ -51,6 +55,10 @@ export type CreateWebhookMutationRequest = {
      * @type array
     */
     events: (string | string | string)[];
+    /**
+     * @type string | undefined
+    */
+    secret?: string;
 };
 
 export type CreateWebhookMutationResponse = CreateWebhook200;

@@ -8,6 +8,12 @@ export const webhookSchema = z.object({
     .url('Insira uma URL válida (começando com http:// ou https://).'),
   events: z.array(z.string()).min(1, 'Selecione pelo menos um evento.'),
   enabled: z.boolean(),
+  secret: z
+    .string()
+    .optional()
+    .refine((val) => val === undefined || val.length >= 8, {
+      message: 'O segredo deve ter pelo menos 8 caracteres.',
+    }),
 });
 
 export type WebhookSchema = z.infer<typeof webhookSchema>;

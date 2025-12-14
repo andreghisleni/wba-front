@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
-import { Loader2 } from 'lucide-react';
+import { Edit, Loader2, RefreshCw } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
@@ -30,7 +30,6 @@ import {
   useCreateWebhook,
   useUpdateWebhook,
 } from '@/http/generated';
-
 import {
   EVENT_OPTIONS,
   type Webhook,
@@ -40,10 +39,12 @@ import {
 
 interface WebhookFormProps {
   webhookToEdit?: Webhook; // Se passado, entra em modo de edição
+  dropdown?: boolean;
 }
 
 export function WebhookForm({
   webhookToEdit,
+  dropdown = false,
 }: WebhookFormProps) {
   const [open, onOpenChange] = useState(false);
   const queryClient = useQueryClient();
@@ -66,7 +67,7 @@ export function WebhookForm({
             } webhook. Tente novamente mais tarde.`
           );
         },
-      }
+      },
     });
   const { mutateAsync: updateWebhook, isPending: isUpdating } =
     useUpdateWebhook({
@@ -87,7 +88,7 @@ export function WebhookForm({
             } webhook. Tente novamente mais tarde.`
           );
         },
-      }
+      },
     });
 
   const form = useForm<WebhookSchema>({
@@ -97,6 +98,7 @@ export function WebhookForm({
       url: '',
       events: [],
       enabled: true,
+      secret: undefined,
     },
   });
 
@@ -108,12 +110,12 @@ export function WebhookForm({
         url: webhookToEdit?.url || '',
         events: webhookToEdit?.events || [],
         enabled: webhookToEdit?.enabled ?? true,
+        secret: webhookToEdit?.secret || undefined,
       });
     }
   }, [open, webhookToEdit, form]);
 
   async function onSubmit(data: WebhookSchema) {
-
     if (webhookToEdit) {
       await updateWebhook({ id: webhookToEdit.id, data });
     } else {
@@ -125,13 +127,33 @@ export function WebhookForm({
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
-      <DialogTrigger asChild>
-        {webhookToEdit ? (
-          <Button variant="outline">Editar Webhook</Button>
-        ) : (
-          <Button>Novo Webhook</Button>
-        )}
-      </DialogTrigger>
+      {dropdown ? (
+        <DialogTrigger asChild>
+          {webhookToEdit ? (
+            <button
+              className='flex w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent focus:bg-accent'
+              type="button"
+            >
+              <Edit className="mr-2 h-4 w-4" /> Editar
+            </button>
+          ) : (
+            <button
+              className='flex w-full items-center justify-start gap-2 rounded-md px-2 py-1.5 hover:bg-accent focus:bg-accent'
+              type="button"
+            >
+              Novo Webhook
+            </button>
+          )}
+        </DialogTrigger>
+      ) : (
+        <DialogTrigger asChild>
+          {webhookToEdit ? (
+            <Button variant="outline"> Editar Webhook</Button>
+          ) : (
+            <Button>Novo Webhook</Button>
+          )}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>
@@ -169,6 +191,44 @@ export function WebhookForm({
                       {...field}
                     />
                   </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Secret */}
+            {/* button to generate a random secret with 32 characters */}
+            <FormField
+              control={form.control}
+              name="secret"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Segredo (opcional)</FormLabel>
+                  <div className="mb-2 flex items-center gap-2">
+                    <FormControl>
+                      <Input
+                        placeholder="Deixe em branco para não usar"
+                        {...field}
+                      />
+                    </FormControl>
+                    <Button
+                      onClick={() => {
+                        const randomSecret = Array.from({ length: 48 }, () =>
+                          Math.floor(Math.random() * 16).toString(16)
+                        ).join('');
+                        form.setValue('secret', randomSecret);
+                      }}
+                      size="icon"
+                      type="button"
+                      variant="outline"
+                    >
+                      <RefreshCw className="h-4 w-4" />
+                      <span className="sr-only">Gerar novo segredo</span>
+                    </Button>
+                  </div>
+                  <FormDescription>
+                    Se fornecido, o segredo será usado para assinar as cargas
+                    úteis enviadas a este webhook.
+                  </FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
