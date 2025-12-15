@@ -1,22 +1,26 @@
 /** biome-ignore-all lint/suspicious/noConsole: <explanation> */
 /** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: <explanation> */
+/** biome-ignore-all lint/correctness/useExhaustiveDependencies: <explanation> */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { format } from 'date-fns';
 import {
+  Filter, // <--- Importe o ícone Filter
   Loader2,
   MoreVertical,
   Paperclip,
   Phone,
   Search,
   Send,
+  X, // <--- Importe o X para limpar busca se quiser
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge'; // <--- IMPORTANTE: Importar Badge
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+// Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
   useGetWhatsappContacts,
@@ -40,12 +44,16 @@ function RouteComponent() {
     null
   );
   const [inputMessage, setInputMessage] = useState('');
-  const queryClient = useQueryClient();
 
+  // === NOVOS ESTADOS ===
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+
+  const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Hook para marcar como lida
-  const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead(); // <--- IMPORTANTE
+  // Hook de Marcar como Lida (Manual ou Gerado)
+  const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead();
 
   const {
     data: contacts = [],
@@ -55,6 +63,22 @@ function RouteComponent() {
     query: {
       refetchInterval: 10_000,
     },
+  });
+
+  // === LÓGICA DE FILTRAGEM COMBINADA ===
+  const filteredContacts = contacts.filter((contact) => {
+    // 1. Filtro de Texto (Nome ou Telefone)
+    const searchLower = searchTerm.toLowerCase();
+    const nameMatch = (contact.pushName || '')
+      .toLowerCase()
+      .includes(searchLower);
+    const phoneMatch = (contact.waId || '').includes(searchLower);
+    const matchesSearch = nameMatch || phoneMatch;
+
+    // 2. Filtro de "Não Lidas"
+    const matchesUnread = showUnreadOnly ? contact.unreadCount > 0 : true;
+
+    return matchesSearch && matchesUnread;
   });
 
   const { data: messages = [], isLoading: isLoadingMessages } =
@@ -93,17 +117,13 @@ function RouteComponent() {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     scrollToBottom();
   }, [messages, selectedContactId, isLoadingMessages]);
 
-  // NOVO: Efeito para marcar como lida ao selecionar contato
   useEffect(() => {
     if (selectedContactId && selectedContact?.unreadCount > 0) {
-      markAsRead({
-        contactId: selectedContactId,
-      });
+      markAsRead({ contactId: selectedContactId });
     }
   }, [selectedContactId, selectedContact?.unreadCount, markAsRead]);
 
@@ -111,7 +131,6 @@ function RouteComponent() {
     if (!(inputMessage.trim() && selectedContactId)) {
       return;
     }
-
     try {
       await sendMessage({
         data: {
@@ -137,17 +156,48 @@ function RouteComponent() {
     <div className="m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm">
       {/* --- SIDEBAR --- */}
       <div className="flex w-80 flex-col border-r bg-muted/10">
-        {/* ... Header da Sidebar ... */}
-        <div className="flex flex-none flex-row gap-2 border-b p-4">
-          <div className="relative">
+        {/* Header da Sidebar com Filtros */}
+        <div className="flex flex-none flex-row items-center gap-2 border-b p-4">
+          <div className="relative flex-1">
             <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
-            <Input className="pl-8" placeholder="Buscar conversas..." />
+            <Input
+              className='h-9 pl-8'
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder="Buscar..."
+              value={searchTerm}
+            />
+            {/* Botãozinho para limpar busca se tiver texto */}
+            {searchTerm && (
+              <button
+                className="absolute top-2.5 right-2 text-muted-foreground hover:text-foreground"
+                onClick={() => setSearchTerm('')}
+                type="button"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            )}
           </div>
+
+          {/* Botão de Filtro Não Lidas */}
+          <Button
+            className={cn(
+              'h-9 w-9',
+              showUnreadOnly && 'bg-primary/10 text-primary hover:bg-primary/20'
+            )}
+            onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+            size="icon"
+            title={showUnreadOnly ? 'Mostrar todos' : 'Filtrar não lidas'}
+            variant={showUnreadOnly ? 'secondary' : 'ghost'}
+          >
+            <Filter className="h-4 w-4" />
+          </Button>
+
           <NewChatDialog
             onContactCreated={(contactId) => setSelectedContactId(contactId)}
           />
         </div>
 
+        {/* Lista de Contatos */}
         <div className="w-full overflow-auto">
           <div className="flex flex-col">
             {isLoadingContacts && (
@@ -156,13 +206,23 @@ function RouteComponent() {
               </div>
             )}
 
-            {!isLoadingContacts && contacts.length === 0 && (
-              <div className="p-4 text-center text-muted-foreground text-sm">
-                Nenhuma conversa encontrada.
+            {!isLoadingContacts && filteredContacts.length === 0 && (
+              <div className='flex flex-col items-center justify-center gap-2 p-8 text-center text-muted-foreground text-sm'>
+                <Search className="h-8 w-8 opacity-20" />
+                <p>Nenhuma conversa encontrada.</p>
+                {showUnreadOnly && (
+                  <Button
+                    className="h-auto p-0 text-xs"
+                    onClick={() => setShowUnreadOnly(false)}
+                    variant="link"
+                  >
+                    Ver todas as conversas
+                  </Button>
+                )}
               </div>
             )}
 
-            {contacts.map((contact) => (
+            {filteredContacts.map((contact) => (
               <button
                 className={cn(
                   'flex w-full items-center gap-3 border-border/50 border-b p-4 text-left transition-colors hover:bg-accent',
@@ -194,13 +254,11 @@ function RouteComponent() {
                     </span>
                   </div>
 
-                  {/* Linha da Mensagem + Badge */}
                   <div className="mt-1 flex items-center justify-between gap-2">
                     <p className='h-4 flex-1 truncate text-muted-foreground text-xs'>
                       {contact.lastMessage}
                     </p>
 
-                    {/* --- BADGE DE NÃO LIDAS --- */}
                     {contact.unreadCount > 0 && (
                       <Badge
                         className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1 text-[10px]"
@@ -217,17 +275,12 @@ function RouteComponent() {
         </div>
       </div>
 
-      {/* --- RESTO DO CHAT (MANTÉM IGUAL) --- */}
+      {/* ... (O restante do componente: Área do Chat e Input permanecem iguais) ... */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50">
         {selectedContact ? (
           <>
-            {/* ... Header do Chat, Lista de Mensagens e Input ... */}
-            {/* O conteúdo aqui dentro permanece o mesmo do seu arquivo original */}
-            {/* Só incluí a Sidebar acima para mostrar onde a Badge entra */}
-
-            {/* Header */}
+            {/* HEADER DO CHAT */}
             <div className="z-10 flex flex-none items-center justify-between border-b bg-background p-3 px-6 shadow-sm">
-              {/* ... */}
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
                   <AvatarImage
@@ -258,7 +311,7 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* Messages Area */}
+            {/* MENSAGENS */}
             <div className="flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50">
               {isLoadingMessages ? (
                 <div className="flex h-full items-center justify-center p-4">
@@ -281,7 +334,7 @@ function RouteComponent() {
               )}
             </div>
 
-            {/* Input Area */}
+            {/* INPUT DE MENSAGEM */}
             <div className="flex-none border-t bg-background p-4">
               {isWindowClosed && (
                 <div className="flex flex-col items-center gap-3 rounded-lg border border-yellow-100 bg-yellow-50/50 p-4 py-2">
