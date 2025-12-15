@@ -15,7 +15,6 @@ import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ScrollArea } from '@/components/ui/scroll-area';
 
 // Seus hooks gerados
 import {
@@ -148,7 +147,7 @@ function RouteComponent() {
         </div>
 
         {/* ScrollArea é ok aqui na sidebar */}
-        <ScrollArea className="flex-1">
+        <div className="w-full overflow-auto">
           <div className="flex flex-col">
             {isLoadingContacts && (
               <div className="flex justify-center p-4">
@@ -197,7 +196,7 @@ function RouteComponent() {
               </button>
             ))}
           </div>
-        </ScrollArea>
+        </div>
       </div>
       {/* --- CHAT AREA (Direita) --- */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50">
