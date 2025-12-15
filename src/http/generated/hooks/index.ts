@@ -29,6 +29,7 @@ export type { GetWhatsappWebhookSuspenseQueryKey } from "./useGetWhatsappWebhook
 export type { HealthCheckQueryKey } from "./useHealthCheck.ts";
 export type { HealthCheckSuspenseQueryKey } from "./useHealthCheckSuspense.ts";
 export type { ImportWhatsappTemplatesMutationKey } from "./useImportWhatsappTemplates.ts";
+export type { MarkWhatsappMessagesAsReadMutationKey } from "./useMarkWhatsappMessagesAsRead.ts";
 export type { PostV1MessagesMutationKey } from "./usePostV1Messages.ts";
 export type { PostWhatsappMediaCallbackMutationKey } from "./usePostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessagesMutationKey } from "./usePostWhatsappMessages.ts";
@@ -68,6 +69,7 @@ export { getWhatsappWebhookSuspenseQueryKey, getWhatsappWebhookSuspense, getWhat
 export { healthCheckQueryKey, healthCheck, healthCheckQueryOptions, useHealthCheck } from "./useHealthCheck.ts";
 export { healthCheckSuspenseQueryKey, healthCheckSuspense, healthCheckSuspenseQueryOptions, useHealthCheckSuspense } from "./useHealthCheckSuspense.ts";
 export { importWhatsappTemplatesMutationKey, importWhatsappTemplates, useImportWhatsappTemplates } from "./useImportWhatsappTemplates.ts";
+export { markWhatsappMessagesAsReadMutationKey, markWhatsappMessagesAsRead, useMarkWhatsappMessagesAsRead } from "./useMarkWhatsappMessagesAsRead.ts";
 export { postV1MessagesMutationKey, postV1Messages, usePostV1Messages } from "./usePostV1Messages.ts";
 export { postWhatsappMediaCallbackMutationKey, postWhatsappMediaCallback, usePostWhatsappMediaCallback } from "./usePostWhatsappMediaCallback.ts";
 export { postWhatsappMessagesMutationKey, postWhatsappMessages, usePostWhatsappMessages } from "./usePostWhatsappMessages.ts";

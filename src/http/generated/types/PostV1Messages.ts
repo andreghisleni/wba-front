@@ -8,10 +8,21 @@ export type PostV1Messages200 = any;
 
 export type PostV1MessagesMutationRequest = {
     /**
-     * @description Número de telefone (ex: 554899998888)
-     * @type string
+     * @description Informações do contato destinatário
+     * @type object
     */
-    to: string;
+    to: {
+        /**
+         * @description Número de telefone (ex: 554899998888)
+         * @type string
+        */
+        number: string;
+        /**
+         * @description Nome do contato
+         * @type string | undefined
+        */
+        name?: string;
+    };
     /**
      * @description Nome do template na Meta
      * @type string

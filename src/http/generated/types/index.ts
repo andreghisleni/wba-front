@@ -17,6 +17,7 @@ export type { GetWhatsappTemplates200, GetWhatsappTemplatesQueryResponse, GetWha
 export type { GetWhatsappWebhook200, GetWhatsappWebhookQueryResponse, GetWhatsappWebhookQuery } from "./GetWhatsappWebhook.ts";
 export type { HealthCheck200, HealthCheckQueryResponse, HealthCheckQuery } from "./HealthCheck.ts";
 export type { ImportWhatsappTemplates200, ImportWhatsappTemplates400, ImportWhatsappTemplates404, ImportWhatsappTemplatesMutationResponse, ImportWhatsappTemplatesMutation } from "./ImportWhatsappTemplates.ts";
+export type { MarkWhatsappMessagesAsReadPathParams, MarkWhatsappMessagesAsRead200, MarkWhatsappMessagesAsReadMutationResponse, MarkWhatsappMessagesAsReadMutation } from "./MarkWhatsappMessagesAsRead.ts";
 export type { PostV1Messages200, PostV1MessagesMutationRequest, PostV1MessagesMutationResponse, PostV1MessagesMutation } from "./PostV1Messages.ts";
 export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./PostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessages200, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";

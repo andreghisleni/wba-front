@@ -1,4 +1,5 @@
 /** biome-ignore-all lint/suspicious/noConsole: <explanation> */
+/** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: <explanation> */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { format } from 'date-fns';
@@ -10,21 +11,21 @@ import {
   Search,
   Send,
 } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react'; // Adicionado useRef
+import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge'; // <--- IMPORTANTE: Importar Badge
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-
-// Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
   useGetWhatsappContacts,
   useGetWhatsappContactsContactIdMessages,
+  useMarkWhatsappMessagesAsRead,
   usePostWhatsappMessages,
 } from '@/http/generated/hooks';
 import { cn } from '@/lib/utils';
-// O componente de mensagem que criamos anteriormente
+
 import { MessageBubble } from './-components/message-bubble';
 import { NewChatDialog } from './-components/new-chat-dialog';
 import { PhoneComponent } from './-components/phone';
@@ -34,7 +35,6 @@ export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
   component: RouteComponent,
 });
 
-// biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
 function RouteComponent() {
   const [selectedContactId, setSelectedContactId] = useState<string | null>(
     null
@@ -42,22 +42,21 @@ function RouteComponent() {
   const [inputMessage, setInputMessage] = useState('');
   const queryClient = useQueryClient();
 
-  // Ref para o scroll automático
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // 2. Hook de Contatos (SEM refetchInterval)
+  // Hook para marcar como lida
+  const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead(); // <--- IMPORTANTE
+
   const {
     data: contacts = [],
     isLoading: isLoadingContacts,
     error: errorContacts,
   } = useGetWhatsappContacts({
     query: {
-      // Atualiza a lista a cada 10s para ver novos contatos/mensagens
       refetchInterval: 10_000,
     },
   });
 
-  // 3. Hook de Mensagens (SEM refetchInterval)
   const { data: messages = [], isLoading: isLoadingMessages } =
     useGetWhatsappContactsContactIdMessages(selectedContactId as string, {
       query: {
@@ -68,13 +67,10 @@ function RouteComponent() {
 
   const selectedContact = contacts.find((c) => c.id === selectedContactId);
 
-  // Verifica se a janela está fechada
-  // Se isWindowOpen for undefined (carregando), assumimos false por segurança ou true dependendo da UX
   const isWindowClosed = selectedContact
     ? !selectedContact.isWindowOpen
     : false;
 
-  // 3. Mutação de Envio
   const { mutateAsync: sendMessage, isPending: isSending } =
     usePostWhatsappMessages({
       mutation: {
@@ -93,16 +89,23 @@ function RouteComponent() {
       },
     });
 
-  // Função de scroll para o fundo
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Efeito para rolar quando as mensagens mudam ou troca de contato
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     scrollToBottom();
   }, [messages, selectedContactId, isLoadingMessages]);
+
+  // NOVO: Efeito para marcar como lida ao selecionar contato
+  useEffect(() => {
+    if (selectedContactId && selectedContact?.unreadCount > 0) {
+      markAsRead({
+        contactId: selectedContactId,
+      });
+    }
+  }, [selectedContactId, selectedContact?.unreadCount, markAsRead]);
 
   const handleSendMessage = async () => {
     if (!(inputMessage.trim() && selectedContactId)) {
@@ -117,7 +120,6 @@ function RouteComponent() {
           message: inputMessage,
         },
       });
-      // O scroll automático via useEffect cuidará da rolagem
     } catch {
       // Erro tratado no hook
     }
@@ -132,10 +134,10 @@ function RouteComponent() {
   }
 
   return (
-    // CONTAINER PRINCIPAL: Define altura fixa e esconde o scroll geral da página
     <div className="m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm">
-      {/* --- SIDEBAR (Esquerda) --- */}
+      {/* --- SIDEBAR --- */}
       <div className="flex w-80 flex-col border-r bg-muted/10">
+        {/* ... Header da Sidebar ... */}
         <div className="flex flex-none flex-row gap-2 border-b p-4">
           <div className="relative">
             <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
@@ -146,7 +148,6 @@ function RouteComponent() {
           />
         </div>
 
-        {/* ScrollArea é ok aqui na sidebar */}
         <div className="w-full overflow-auto">
           <div className="flex flex-col">
             {isLoadingContacts && (
@@ -171,14 +172,17 @@ function RouteComponent() {
                 onClick={() => setSelectedContactId(contact.id)}
                 type="button"
               >
-                <Avatar>
-                  <AvatarImage src={contact.profilePicUrl || undefined} />
-                  <AvatarFallback>
-                    {(contact.pushName || contact.waId)
-                      ?.substring(0, 2)
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <div className="relative">
+                  <Avatar>
+                    <AvatarImage src={contact.profilePicUrl || undefined} />
+                    <AvatarFallback>
+                      {(contact.pushName || contact.waId)
+                        ?.substring(0, 2)
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </div>
+
                 <div className="flex-1 overflow-hidden">
                   <div className="flex items-baseline justify-between">
                     <span className="truncate font-medium text-sm">
@@ -189,21 +193,41 @@ function RouteComponent() {
                         format(new Date(contact.lastMessageAt), 'HH:mm')}
                     </span>
                   </div>
-                  <p className="mt-1 h-4 truncate text-muted-foreground text-xs">
-                    {contact.lastMessage}
-                  </p>
+
+                  {/* Linha da Mensagem + Badge */}
+                  <div className="mt-1 flex items-center justify-between gap-2">
+                    <p className='h-4 flex-1 truncate text-muted-foreground text-xs'>
+                      {contact.lastMessage}
+                    </p>
+
+                    {/* --- BADGE DE NÃO LIDAS --- */}
+                    {contact.unreadCount > 0 && (
+                      <Badge
+                        className="flex h-5 min-w-[1.25rem] items-center justify-center rounded-full px-1 text-[10px]"
+                        variant="destructive"
+                      >
+                        {contact.unreadCount}
+                      </Badge>
+                    )}
+                  </div>
                 </div>
               </button>
             ))}
           </div>
         </div>
       </div>
-      {/* --- CHAT AREA (Direita) --- */}
+
+      {/* --- RESTO DO CHAT (MANTÉM IGUAL) --- */}
       <div className="relative flex flex-1 flex-col overflow-hidden bg-slate-50 dark:bg-slate-950/50">
         {selectedContact ? (
           <>
-            {/* 1. HEADER (Fixo, flex-none) */}
+            {/* ... Header do Chat, Lista de Mensagens e Input ... */}
+            {/* O conteúdo aqui dentro permanece o mesmo do seu arquivo original */}
+            {/* Só incluí a Sidebar acima para mostrar onde a Badge entra */}
+
+            {/* Header */}
             <div className="z-10 flex flex-none items-center justify-between border-b bg-background p-3 px-6 shadow-sm">
+              {/* ... */}
               <div className="flex items-center gap-3">
                 <Avatar className="h-9 w-9">
                   <AvatarImage
@@ -234,8 +258,7 @@ function RouteComponent() {
               </div>
             </div>
 
-            {/* 2. ÁREA DE MENSAGENS (flex-1, overflow-y-auto) */}
-            {/* Nota: Usando div nativa em vez de ScrollArea para controle mais fácil do scroll-to-bottom */}
+            {/* Messages Area */}
             <div className="flex-1 overflow-y-auto bg-slate-100/50 p-4 dark:bg-slate-900/50">
               {isLoadingMessages ? (
                 <div className="flex h-full items-center justify-center p-4">
@@ -253,15 +276,13 @@ function RouteComponent() {
                     <MessageBubble key={msg.id} message={msg} />
                   ))}
 
-                  {/* Elemento invisível para ancorar o scroll no fim */}
                   <div ref={messagesEndRef} />
                 </div>
               )}
             </div>
 
-            {/* 3. INPUT AREA (Fixo, flex-none) */}
+            {/* Input Area */}
             <div className="flex-none border-t bg-background p-4">
-              {/* AVISO VISUAL DE JANELA FECHADA */}
               {isWindowClosed && (
                 <div className="flex flex-col items-center gap-3 rounded-lg border border-yellow-100 bg-yellow-50/50 p-4 py-2">
                   <div className="flex items-center gap-2 text-sm text-yellow-700">
@@ -270,11 +291,9 @@ function RouteComponent() {
                       Você precisa usar um template para reabrir a conversa.
                     </span>
                   </div>
-
-                  {/* Aqui está o componente novo */}
                   <SendTemplateDialog
                     contactId={selectedContactId || ''}
-                    disabled={true} // Passamos true para ele renderizar como botão grande
+                    disabled={true}
                   />
                 </div>
               )}
@@ -322,14 +341,13 @@ function RouteComponent() {
                 ) : (
                   <SendTemplateDialog
                     contactId={selectedContactId || ''}
-                    disabled={false} // Passamos true para ele renderizar como botão grande
+                    disabled={false}
                   />
                 )}
               </form>
             </div>
           </>
         ) : (
-          /* Estado Vazio */
           <div className="flex flex-1 flex-col items-center justify-center bg-muted/5 p-8 text-center text-muted-foreground">
             <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
               <Phone className="h-8 w-8 opacity-20" />
