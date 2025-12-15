@@ -1,5 +1,19 @@
 import { format } from 'date-fns';
-import { Filter, Loader2, Search, X } from 'lucide-react';
+import {
+  AudioLines,
+  FileText,
+  Filter,
+  HelpCircle,
+  Image as ImageIcon,
+  LayoutTemplate,
+  Loader2,
+  type LucideProps,
+  MousePointer2,
+  Search,
+  Sticker,
+  Video,
+  X,
+} from 'lucide-react';
 import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
@@ -7,7 +21,35 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { GetWhatsappContactsQueryResponse } from '@/http/generated/types/GetWhatsappContacts';
 import { cn } from '@/lib/utils';
+import { MessageStatus } from './message-status';
 import { NewChatDialog } from './new-chat-dialog';
+
+const typeIcons: Record<
+  string,
+  React.ForwardRefExoticComponent<
+    Omit<LucideProps, 'ref'> & React.RefAttributes<SVGSVGElement>
+  >
+> = {
+  image: ImageIcon,
+  video: Video,
+  audio: AudioLines,
+  document: FileText,
+  sticker: Sticker,
+  interactive: MousePointer2,
+  template: LayoutTemplate,
+  unknown: HelpCircle,
+};
+
+const typeLabels: Record<string, string> = {
+  image: 'Imagem',
+  video: 'Vídeo',
+  audio: 'Áudio',
+  document: 'Documento',
+  sticker: 'Figurinha',
+  interactive: 'Interativo',
+  template: 'Modelo',
+  unknown: 'Desconhecido',
+};
 
 interface ChatSidebarProps {
   contacts: GetWhatsappContactsQueryResponse;
@@ -133,9 +175,39 @@ export function ChatSidebar({
                 </div>
 
                 <div className="mt-1 flex items-center justify-between gap-2">
-                  <p className="h-4 flex-1 truncate text-muted-foreground text-xs">
-                    {contact.lastMessage}
-                  </p>
+                  <div className="flex h-4 flex-1 items-center gap-1 text-muted-foreground text-xs">
+                    {contact.lastMessageStatus && (
+                      <MessageStatus
+                        isUser={true}
+                        status={contact.lastMessageStatus}
+                      />
+                    )}
+                    {(() => {
+                      const type = (
+                        contact.lastMessageType || ''
+                      ).toLowerCase();
+                      if (type === 'text') {
+                        return (
+                          <span className="truncate">
+                            {contact.lastMessage}
+                          </span>
+                        );
+                      }
+
+                      const Icon = typeIcons[type] || HelpCircle;
+                      const label =
+                        contact.lastMessage ||
+                        typeLabels[type] ||
+                        'Mensagem';
+
+                      return (
+                        <div className="flex items-center gap-1 overflow-hidden">
+                          <Icon className="h-3 w-3 shrink-0" />
+                          <span className="truncate">{label}</span>
+                        </div>
+                      );
+                    })()}
+                  </div>
 
                   {contact.unreadCount > 0 && (
                     <Badge

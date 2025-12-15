@@ -18,7 +18,7 @@ export function MessageStatus({ status, isUser, errorDesc }: MessageStatusProps)
   switch (normalizedStatus) {
     case 'FAILED':
       return (
-        <div className='mt-1 flex items-center gap-1 text-[10px] text-red-600'>
+        <div className='mt-1 flex items-center gap-1 text-[10px] text-red-600 dark:text-red-400'>
           <AlertCircle size={10} />
           {errorDesc || 'Falha no envio'}
         </div>
@@ -29,7 +29,7 @@ export function MessageStatus({ status, isUser, errorDesc }: MessageStatusProps)
       return (
         <span title="Lida">
           {/* Dois risquinhos AZUIS */}
-          <CheckCheck className="text-blue-500" size={16} />
+          <CheckCheck className="text-blue-500 dark:text-blue-400" size={16} />
         </span>
       );
 
@@ -38,7 +38,7 @@ export function MessageStatus({ status, isUser, errorDesc }: MessageStatusProps)
       return (
         <span title="Entregue">
           {/* Dois risquinhos CINZA */}
-          <CheckCheck className="text-gray-500" size={16} />
+          <CheckCheck className="text-gray-500 dark:text-gray-400" size={16} />
         </span>
       );
 
@@ -47,14 +47,14 @@ export function MessageStatus({ status, isUser, errorDesc }: MessageStatusProps)
       return (
         <span title="Enviado ao servidor">
           {/* Um risquinho CINZA */}
-          <Check className="text-gray-500" size={16} />
+          <Check className="text-gray-500 dark:text-gray-400" size={16} />
         </span>
       );
 
     default: // PENDING ou status desconhecido
       return (
         <span title="Aguardando envio">
-          <Clock className="text-gray-500" size={14} />
+          <Clock className="text-gray-500 dark:text-gray-400" size={14} />
         </span>
       );
   }

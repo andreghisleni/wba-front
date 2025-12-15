@@ -27,6 +27,10 @@ export type GetWhatsappContacts200 = {
     */
     lastMessage: string;
     /**
+     * @type string
+    */
+    lastMessageType: string;
+    /**
      * @type string | undefined
     */
     lastMessageStatus?: string;

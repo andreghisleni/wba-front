@@ -4,6 +4,7 @@
 /** biome-ignore-all lint/performance/noImgElement: <explanation> */
 /** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: <explanation> */
 import { Download, FileText } from 'lucide-react'; // Ícones sugeridos
+import { formatWhatsAppText } from '@/utils/whatsapp-formatter';
 import { MessageStatus } from './message-status';
 
 // Função auxiliar para renderizar o conteúdo baseado no tipo
@@ -27,8 +28,8 @@ const RenderMessageContent = ({ message }: { message: any }) => {
           <img
             alt="Imagem"
             className={`cursor-pointer rounded-lg object-cover hover:opacity-90 ${message.type === 'sticker'
-                ? 'h-32 w-32 bg-transparent'
-                : 'max-h-64 w-auto'
+              ? 'h-32 w-32 bg-transparent'
+              : 'max-h-64 w-auto'
               }`}
             onClick={() => window.open(mediaUrl, '_blank')}
             src={mediaUrl}
@@ -99,9 +100,9 @@ export function MessageBubble({ message }: { message: any }) {
       className={`flex w-full ${isMe ? 'justify-end' : 'justify-start'} mb-4`}
     >
       <div
-        className={`relative max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
-            ? 'rounded-tr-none bg-green-600 text-white'
-            : 'rounded-tl-none border border-gray-200 bg-white text-gray-900'
+        className={`relative min-w-48 max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
+          ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
+          : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
           }`}
       >
         {/* 1. Renderiza a Mídia (se houver) */}
@@ -112,13 +113,13 @@ export function MessageBubble({ message }: { message: any }) {
           <p
             className={`whitespace-pre-wrap text-sm ${message.type !== 'text' ? 'mt-2' : ''}`}
           >
-            {message.body}
+            {formatWhatsAppText(message.body)}
           </p>
         )}
 
         {/* RODAPÉ DA MENSAGEM */}
         <div className="mt-1 flex select-none items-center justify-end gap-1">
-          <span className="pt-0.5 text-[10px] text-gray-500 leading-none">
+          <span className="pt-0.5 text-[10px] text-gray-500 leading-none dark:text-gray-400">
             {new Date(message.timestamp).toLocaleTimeString([], {
               hour: '2-digit',
               minute: '2-digit',
