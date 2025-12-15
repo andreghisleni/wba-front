@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse } from "../types/CreateWhatsappContact.ts";
+import type { CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContact400 } from "../types/CreateWhatsappContact.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ export async function createWhatsappContact(data: CreateWhatsappContactMutationR
   
   const requestData = data  
   
-  const res = await request<CreateWhatsappContactMutationResponse, ResponseErrorConfig<Error>, CreateWhatsappContactMutationRequest>({ method : "POST", url : `/whatsapp/contacts`, data : requestData, ... requestConfig })  
+  const res = await request<CreateWhatsappContactMutationResponse, ResponseErrorConfig<CreateWhatsappContact400>, CreateWhatsappContactMutationRequest>({ method : "POST", url : `/whatsapp/contacts`, data : requestData, ... requestConfig })  
   return res.data
 }
 
@@ -30,7 +30,7 @@ export async function createWhatsappContact(data: CreateWhatsappContactMutationR
  */
 export function useCreateWhatsappContact<TContext>(options: 
 {
-  mutation?: UseMutationOptions<CreateWhatsappContactMutationResponse, ResponseErrorConfig<Error>, {data: CreateWhatsappContactMutationRequest}, TContext> & { client?: QueryClient },
+  mutation?: UseMutationOptions<CreateWhatsappContactMutationResponse, ResponseErrorConfig<CreateWhatsappContact400>, {data: CreateWhatsappContactMutationRequest}, TContext> & { client?: QueryClient },
   client?: Partial<RequestConfig<CreateWhatsappContactMutationRequest>> & { client?: typeof fetch },
 }
  = {}) {
@@ -38,7 +38,7 @@ export function useCreateWhatsappContact<TContext>(options:
   const { client: queryClient, ...mutationOptions } = mutation;
   const mutationKey = mutationOptions.mutationKey ?? createWhatsappContactMutationKey()
 
-  return useMutation<CreateWhatsappContactMutationResponse, ResponseErrorConfig<Error>, {data: CreateWhatsappContactMutationRequest}, TContext>({
+  return useMutation<CreateWhatsappContactMutationResponse, ResponseErrorConfig<CreateWhatsappContact400>, {data: CreateWhatsappContactMutationRequest}, TContext>({
     mutationFn: async({ data }) => {
       return createWhatsappContact(data, config)
     },

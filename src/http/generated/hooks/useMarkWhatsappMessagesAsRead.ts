@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { MarkWhatsappMessagesAsReadMutationResponse, MarkWhatsappMessagesAsReadPathParams } from "../types/MarkWhatsappMessagesAsRead.ts";
+import type { MarkWhatsappMessagesAsReadMutationResponse, MarkWhatsappMessagesAsReadPathParams, MarkWhatsappMessagesAsRead404 } from "../types/MarkWhatsappMessagesAsRead.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -20,7 +20,7 @@ export type MarkWhatsappMessagesAsReadMutationKey = ReturnType<typeof markWhatsa
 export async function markWhatsappMessagesAsRead(contactId: MarkWhatsappMessagesAsReadPathParams["contactId"], config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config  
   
-  const res = await request<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<Error>, unknown>({ method : "POST", url : `/whatsapp/contacts/${contactId}/read`, ... requestConfig })  
+  const res = await request<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<MarkWhatsappMessagesAsRead404>, unknown>({ method : "POST", url : `/whatsapp/contacts/${contactId}/read`, ... requestConfig })  
   return res.data
 }
 
@@ -30,7 +30,7 @@ export async function markWhatsappMessagesAsRead(contactId: MarkWhatsappMessages
  */
 export function useMarkWhatsappMessagesAsRead<TContext>(options: 
 {
-  mutation?: UseMutationOptions<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<Error>, {contactId: MarkWhatsappMessagesAsReadPathParams["contactId"]}, TContext> & { client?: QueryClient },
+  mutation?: UseMutationOptions<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<MarkWhatsappMessagesAsRead404>, {contactId: MarkWhatsappMessagesAsReadPathParams["contactId"]}, TContext> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: typeof fetch },
 }
  = {}) {
@@ -38,7 +38,7 @@ export function useMarkWhatsappMessagesAsRead<TContext>(options:
   const { client: queryClient, ...mutationOptions } = mutation;
   const mutationKey = mutationOptions.mutationKey ?? markWhatsappMessagesAsReadMutationKey()
 
-  return useMutation<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<Error>, {contactId: MarkWhatsappMessagesAsReadPathParams["contactId"]}, TContext>({
+  return useMutation<MarkWhatsappMessagesAsReadMutationResponse, ResponseErrorConfig<MarkWhatsappMessagesAsRead404>, {contactId: MarkWhatsappMessagesAsReadPathParams["contactId"]}, TContext>({
     mutationFn: async({ contactId }) => {
       return markWhatsappMessagesAsRead(contactId, config)
     },

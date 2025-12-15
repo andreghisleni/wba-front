@@ -11,12 +11,28 @@ export type MarkWhatsappMessagesAsReadPathParams = {
     contactId: string;
 };
 
-export type MarkWhatsappMessagesAsRead200 = any;
+export type MarkWhatsappMessagesAsRead200 = {
+    /**
+     * @type boolean
+    */
+    success: boolean;
+    /**
+     * @type number
+    */
+    readCount: number;
+};
+
+export type MarkWhatsappMessagesAsRead404 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
 export type MarkWhatsappMessagesAsReadMutationResponse = MarkWhatsappMessagesAsRead200;
 
 export type MarkWhatsappMessagesAsReadMutation = {
     Response: MarkWhatsappMessagesAsRead200;
     PathParams: MarkWhatsappMessagesAsReadPathParams;
-    Errors: any;
+    Errors: MarkWhatsappMessagesAsRead404;
 };

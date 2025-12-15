@@ -1,6 +1,6 @@
 export type { CreateDashboardApiKey200, CreateDashboardApiKey400, CreateDashboardApiKeyMutationRequest, CreateDashboardApiKeyMutationResponse, CreateDashboardApiKeyMutation } from "./CreateDashboardApiKey.ts";
 export type { CreateWebhook200, CreateWebhookMutationRequest, CreateWebhookMutationResponse, CreateWebhookMutation } from "./CreateWebhook.ts";
-export type { CreateWhatsappContact200, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
+export type { CreateWhatsappContact200, CreateWhatsappContact400, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./CreateWhatsappTemplates.ts";
 export type { DeleteDashboardApiKeyPathParams, DeleteDashboardApiKey200, DeleteDashboardApiKey404, DeleteDashboardApiKeyMutationResponse, DeleteDashboardApiKeyMutation } from "./DeleteDashboardApiKey.ts";
 export type { DeleteWebhookPathParams, DeleteWebhook200, DeleteWebhook404, DeleteWebhookMutationResponse, DeleteWebhookMutation } from "./DeleteWebhook.ts";
@@ -12,15 +12,16 @@ export type { GetWebhookLogDetailsPathParams, GetWebhookLogDetails200, GetWebhoo
 export type { GetWebhookLogsPathParams, GetWebhookLogs200, GetWebhookLogs404, GetWebhookLogsQueryResponse, GetWebhookLogsQuery } from "./GetWebhookLogs.ts";
 export type { GetWebhooks200, GetWebhooksQueryResponse, GetWebhooksQuery } from "./GetWebhooks.ts";
 export type { GetWhatsappContacts200, GetWhatsappContactsQueryResponse, GetWhatsappContactsQuery } from "./GetWhatsappContacts.ts";
-export type { GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages200, GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesQuery } from "./GetWhatsappContactsContactIdMessages.ts";
+export type { GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages200, GetWhatsappContactsContactIdMessages404, GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesQuery } from "./GetWhatsappContactsContactIdMessages.ts";
 export type { GetWhatsappTemplates200, GetWhatsappTemplatesQueryResponse, GetWhatsappTemplatesQuery } from "./GetWhatsappTemplates.ts";
 export type { GetWhatsappWebhook200, GetWhatsappWebhookQueryResponse, GetWhatsappWebhookQuery } from "./GetWhatsappWebhook.ts";
 export type { HealthCheck200, HealthCheckQueryResponse, HealthCheckQuery } from "./HealthCheck.ts";
 export type { ImportWhatsappTemplates200, ImportWhatsappTemplates400, ImportWhatsappTemplates404, ImportWhatsappTemplatesMutationResponse, ImportWhatsappTemplatesMutation } from "./ImportWhatsappTemplates.ts";
-export type { MarkWhatsappMessagesAsReadPathParams, MarkWhatsappMessagesAsRead200, MarkWhatsappMessagesAsReadMutationResponse, MarkWhatsappMessagesAsReadMutation } from "./MarkWhatsappMessagesAsRead.ts";
+export type { MarkWhatsappMessagesAsReadPathParams, MarkWhatsappMessagesAsRead200, MarkWhatsappMessagesAsRead404, MarkWhatsappMessagesAsReadMutationResponse, MarkWhatsappMessagesAsReadMutation } from "./MarkWhatsappMessagesAsRead.ts";
+export type { PostV1Contacts200, PostV1ContactsMutationRequest, PostV1ContactsMutationResponse, PostV1ContactsMutation } from "./PostV1Contacts.ts";
 export type { PostV1Messages200, PostV1MessagesMutationRequest, PostV1MessagesMutationResponse, PostV1MessagesMutation } from "./PostV1Messages.ts";
 export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./PostWhatsappMediaCallback.ts";
-export type { PostWhatsappMessages200, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";
+export type { PostWhatsappMessages200, PostWhatsappMessages403, PostWhatsappMessages500, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";
 export type { PostWhatsappWebhook200, PostWhatsappWebhookMutationResponse, PostWhatsappWebhookMutation } from "./PostWhatsappWebhook.ts";
 export type { TestWebhookPathParams, TestWebhook200, TestWebhook404, TestWebhookMutationResponse, TestWebhookMutation } from "./TestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus200, UpdateDashboardApiKeyStatus404, UpdateDashboardApiKeyStatusMutationRequest, UpdateDashboardApiKeyStatusMutationResponse, UpdateDashboardApiKeyStatusMutation } from "./UpdateDashboardApiKeyStatus.ts";

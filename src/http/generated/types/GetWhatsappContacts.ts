@@ -4,7 +4,38 @@
 */
 
 
-export type GetWhatsappContacts200 = any;
+export type GetWhatsappContacts200 = {
+    /**
+     * @type string
+    */
+    id: string;
+    /**
+     * @type string
+    */
+    pushName: string;
+    /**
+     * @type string
+    */
+    waId: string;
+    profilePicUrl: (string | null) | null;
+    /**
+     * @type number
+    */
+    unreadCount: number;
+    /**
+     * @type string
+    */
+    lastMessage: string;
+    /**
+     * @type string | undefined
+    */
+    lastMessageStatus?: string;
+    lastMessageAt: (string | string | number);
+    /**
+     * @type boolean
+    */
+    isWindowOpen: boolean;
+}[];
 
 export type GetWhatsappContactsQueryResponse = GetWhatsappContacts200;
 

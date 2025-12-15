@@ -4,7 +4,31 @@
 */
 
 
-export type CreateWhatsappContact200 = any;
+export type CreateWhatsappContact200 = {
+    /**
+     * @type string
+    */
+    id: string;
+    /**
+     * @type string
+    */
+    waId: string;
+    pushName: (string | null) | null;
+    profilePicUrl: (string | null) | null;
+    /**
+     * @type string
+    */
+    instanceId: string;
+    createdAt: (string | string | number);
+    updatedAt: (string | string | number);
+};
+
+export type CreateWhatsappContact400 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
 export type CreateWhatsappContactMutationRequest = {
     /**
@@ -22,5 +46,5 @@ export type CreateWhatsappContactMutationResponse = CreateWhatsappContact200;
 export type CreateWhatsappContactMutation = {
     Response: CreateWhatsappContact200;
     Request: CreateWhatsappContactMutationRequest;
-    Errors: any;
+    Errors: CreateWhatsappContact400;
 };

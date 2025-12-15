@@ -4,7 +4,63 @@
 */
 
 
-export type PostWhatsappMessages200 = any;
+export type PostWhatsappMessages200 = {
+    /**
+     * @type string
+    */
+    id: string;
+    /**
+     * @type string
+    */
+    wamid: string;
+    /**
+     * @type string
+    */
+    type: string;
+    /**
+     * @type string
+    */
+    direction: string;
+    /**
+     * @type string
+    */
+    status: string;
+    body: (string | null) | null;
+    mediaUrl: (string | null) | null;
+    mediaMimeType: (string | null) | null;
+    mediaCaption: (string | null) | null;
+    mediaFileName: (string | null) | null;
+    /**
+     * @type string
+    */
+    contactId: string;
+    /**
+     * @type string
+    */
+    instanceId: string;
+    createdAt: (string | string | number);
+    timestamp: (string | string | number);
+    /**
+     * @type string
+    */
+    processingStatus: string;
+    errorCode: (string | null) | null;
+    errorDesc: (string | null) | null;
+};
+
+export type PostWhatsappMessages403 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
+
+export type PostWhatsappMessages500 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
 export type PostWhatsappMessagesMutationRequest = {
     /**
@@ -54,5 +110,5 @@ export type PostWhatsappMessagesMutationResponse = PostWhatsappMessages200;
 export type PostWhatsappMessagesMutation = {
     Response: PostWhatsappMessages200;
     Request: PostWhatsappMessagesMutationRequest;
-    Errors: any;
+    Errors: PostWhatsappMessages403 | PostWhatsappMessages500;
 };

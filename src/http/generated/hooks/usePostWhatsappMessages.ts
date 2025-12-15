@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse } from "../types/PostWhatsappMessages.ts";
+import type { PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessages403, PostWhatsappMessages500 } from "../types/PostWhatsappMessages.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ export async function postWhatsappMessages(data: PostWhatsappMessagesMutationReq
   
   const requestData = data  
   
-  const res = await request<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<Error>, PostWhatsappMessagesMutationRequest>({ method : "POST", url : `/whatsapp/messages`, data : requestData, ... requestConfig })  
+  const res = await request<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<PostWhatsappMessages403 | PostWhatsappMessages500>, PostWhatsappMessagesMutationRequest>({ method : "POST", url : `/whatsapp/messages`, data : requestData, ... requestConfig })  
   return res.data
 }
 
@@ -30,7 +30,7 @@ export async function postWhatsappMessages(data: PostWhatsappMessagesMutationReq
  */
 export function usePostWhatsappMessages<TContext>(options: 
 {
-  mutation?: UseMutationOptions<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<Error>, {data: PostWhatsappMessagesMutationRequest}, TContext> & { client?: QueryClient },
+  mutation?: UseMutationOptions<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<PostWhatsappMessages403 | PostWhatsappMessages500>, {data: PostWhatsappMessagesMutationRequest}, TContext> & { client?: QueryClient },
   client?: Partial<RequestConfig<PostWhatsappMessagesMutationRequest>> & { client?: typeof fetch },
 }
  = {}) {
@@ -38,7 +38,7 @@ export function usePostWhatsappMessages<TContext>(options:
   const { client: queryClient, ...mutationOptions } = mutation;
   const mutationKey = mutationOptions.mutationKey ?? postWhatsappMessagesMutationKey()
 
-  return useMutation<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<Error>, {data: PostWhatsappMessagesMutationRequest}, TContext>({
+  return useMutation<PostWhatsappMessagesMutationResponse, ResponseErrorConfig<PostWhatsappMessages403 | PostWhatsappMessages500>, {data: PostWhatsappMessagesMutationRequest}, TContext>({
     mutationFn: async({ data }) => {
       return postWhatsappMessages(data, config)
     },

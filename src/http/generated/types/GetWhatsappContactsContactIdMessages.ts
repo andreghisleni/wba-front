@@ -11,12 +11,40 @@ export type GetWhatsappContactsContactIdMessagesPathParams = {
     contactId: string;
 };
 
-export type GetWhatsappContactsContactIdMessages200 = any;
+export type GetWhatsappContactsContactIdMessages200 = {
+    /**
+     * @type string
+    */
+    id: string;
+    body: (string | null) | null;
+    /**
+     * @type string
+    */
+    type: string;
+    mediaUrl: (string | null) | null;
+    mediaFileName: (string | null) | null;
+    /**
+     * @type string
+    */
+    direction: string;
+    /**
+     * @type string
+    */
+    status: string;
+    timestamp: (string | string | number);
+}[];
+
+export type GetWhatsappContactsContactIdMessages404 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
 export type GetWhatsappContactsContactIdMessagesQueryResponse = GetWhatsappContactsContactIdMessages200;
 
 export type GetWhatsappContactsContactIdMessagesQuery = {
     Response: GetWhatsappContactsContactIdMessages200;
     PathParams: GetWhatsappContactsContactIdMessagesPathParams;
-    Errors: any;
+    Errors: GetWhatsappContactsContactIdMessages404;
 };

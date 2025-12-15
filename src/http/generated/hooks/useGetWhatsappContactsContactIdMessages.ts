@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesPathParams } from "../types/GetWhatsappContactsContactIdMessages.ts";
+import type { GetWhatsappContactsContactIdMessagesQueryResponse, GetWhatsappContactsContactIdMessagesPathParams, GetWhatsappContactsContactIdMessages404 } from "../types/GetWhatsappContactsContactIdMessages.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { QueryKey, QueryClient, QueryObserverOptions, UseQueryResult } from "@tanstack/react-query";
 import { queryOptions, useQuery } from "@tanstack/react-query";
@@ -19,13 +19,13 @@ export type GetWhatsappContactsContactIdMessagesQueryKey = ReturnType<typeof get
 export async function getWhatsappContactsContactIdMessages(contactId: GetWhatsappContactsContactIdMessagesPathParams["contactId"], config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config  
   
-  const res = await request<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<Error>, unknown>({ method : "GET", url : `/whatsapp/contacts/${contactId}/messages`, ... requestConfig })  
+  const res = await request<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<GetWhatsappContactsContactIdMessages404>, unknown>({ method : "GET", url : `/whatsapp/contacts/${contactId}/messages`, ... requestConfig })  
   return res.data
 }
 
 export function getWhatsappContactsContactIdMessagesQueryOptions(contactId: GetWhatsappContactsContactIdMessagesPathParams["contactId"], config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const queryKey = getWhatsappContactsContactIdMessagesQueryKey(contactId)
-  return queryOptions<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<Error>, GetWhatsappContactsContactIdMessagesQueryResponse, typeof queryKey>({
+  return queryOptions<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<GetWhatsappContactsContactIdMessages404>, GetWhatsappContactsContactIdMessagesQueryResponse, typeof queryKey>({
    enabled: !!(contactId),
    queryKey,
    queryFn: async ({ signal }) => {
@@ -40,7 +40,7 @@ export function getWhatsappContactsContactIdMessagesQueryOptions(contactId: GetW
  */
 export function useGetWhatsappContactsContactIdMessages<TData = GetWhatsappContactsContactIdMessagesQueryResponse, TQueryData = GetWhatsappContactsContactIdMessagesQueryResponse, TQueryKey extends QueryKey = GetWhatsappContactsContactIdMessagesQueryKey>(contactId: GetWhatsappContactsContactIdMessagesPathParams["contactId"], options: 
 {
-  query?: Partial<QueryObserverOptions<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<Error>, TData, TQueryData, TQueryKey>> & { client?: QueryClient },
+  query?: Partial<QueryObserverOptions<GetWhatsappContactsContactIdMessagesQueryResponse, ResponseErrorConfig<GetWhatsappContactsContactIdMessages404>, TData, TQueryData, TQueryKey>> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: typeof fetch }
 }
  = {}) {
@@ -52,7 +52,7 @@ export function useGetWhatsappContactsContactIdMessages<TData = GetWhatsappConta
    ...getWhatsappContactsContactIdMessagesQueryOptions(contactId, config),
    queryKey,
    ...queryOptions
-  } as unknown as QueryObserverOptions, queryClient) as UseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey }
+  } as unknown as QueryObserverOptions, queryClient) as UseQueryResult<TData, ResponseErrorConfig<GetWhatsappContactsContactIdMessages404>> & { queryKey: TQueryKey }
 
   query.queryKey = queryKey as TQueryKey
 
