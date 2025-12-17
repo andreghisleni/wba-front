@@ -254,7 +254,7 @@ export default function DashboardPage() {
               </CardDescription>
             </CardHeader>
 
-            <Button
+            {['owner', 'admin'].includes(memberData?.role) && <Button
               className="mr-6"
               color="blue"
               disabled={resendErrorMessagesToWebhook.isPending}
@@ -263,7 +263,7 @@ export default function DashboardPage() {
               }}
             >
               {resendErrorMessagesToWebhook.isPending ? <Loader2 /> : 'ReSendWebhook'}
-            </Button>
+            </Button>}
           </div>
           <CardContent>
             {isLoading ? (
