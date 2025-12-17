@@ -35,6 +35,7 @@ export type { PostV1MessagesMutationKey } from "./usePostV1Messages.ts";
 export type { PostWhatsappMediaCallbackMutationKey } from "./usePostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessagesMutationKey } from "./usePostWhatsappMessages.ts";
 export type { PostWhatsappWebhookMutationKey } from "./usePostWhatsappWebhook.ts";
+export type { ResendErrorMessagesToWebhookMutationKey } from "./useResendErrorMessagesToWebhook.ts";
 export type { TestWebhookMutationKey } from "./useTestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusMutationKey } from "./useUpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookMutationKey } from "./useUpdateWebhook.ts";
@@ -76,6 +77,7 @@ export { postV1MessagesMutationKey, postV1Messages, usePostV1Messages } from "./
 export { postWhatsappMediaCallbackMutationKey, postWhatsappMediaCallback, usePostWhatsappMediaCallback } from "./usePostWhatsappMediaCallback.ts";
 export { postWhatsappMessagesMutationKey, postWhatsappMessages, usePostWhatsappMessages } from "./usePostWhatsappMessages.ts";
 export { postWhatsappWebhookMutationKey, postWhatsappWebhook, usePostWhatsappWebhook } from "./usePostWhatsappWebhook.ts";
+export { resendErrorMessagesToWebhookMutationKey, resendErrorMessagesToWebhook, useResendErrorMessagesToWebhook } from "./useResendErrorMessagesToWebhook.ts";
 export { testWebhookMutationKey, testWebhook, useTestWebhook } from "./useTestWebhook.ts";
 export { updateDashboardApiKeyStatusMutationKey, updateDashboardApiKeyStatus, useUpdateDashboardApiKeyStatus } from "./useUpdateDashboardApiKeyStatus.ts";
 export { updateWebhookMutationKey, updateWebhook, useUpdateWebhook } from "./useUpdateWebhook.ts";

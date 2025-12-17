@@ -23,6 +23,7 @@ export type { PostV1Messages200, PostV1MessagesMutationRequest, PostV1MessagesMu
 export type { PostWhatsappMediaCallback200, PostWhatsappMediaCallbackMutationRequest, PostWhatsappMediaCallbackMutationResponse, PostWhatsappMediaCallbackMutation } from "./PostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessages200, PostWhatsappMessages403, PostWhatsappMessages500, PostWhatsappMessagesMutationRequest, PostWhatsappMessagesMutationResponse, PostWhatsappMessagesMutation } from "./PostWhatsappMessages.ts";
 export type { PostWhatsappWebhook200, PostWhatsappWebhookMutationResponse, PostWhatsappWebhookMutation } from "./PostWhatsappWebhook.ts";
+export type { ResendErrorMessagesToWebhook200, ResendErrorMessagesToWebhook404, ResendErrorMessagesToWebhookMutationResponse, ResendErrorMessagesToWebhookMutation } from "./ResendErrorMessagesToWebhook.ts";
 export type { TestWebhookPathParams, TestWebhook200, TestWebhook404, TestWebhookMutationResponse, TestWebhookMutation } from "./TestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus200, UpdateDashboardApiKeyStatus404, UpdateDashboardApiKeyStatusMutationRequest, UpdateDashboardApiKeyStatusMutationResponse, UpdateDashboardApiKeyStatusMutation } from "./UpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, UpdateWebhookMutationRequest, UpdateWebhookMutationResponse, UpdateWebhookMutation } from "./UpdateWebhook.ts";

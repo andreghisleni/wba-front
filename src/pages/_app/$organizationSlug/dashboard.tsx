@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router';
-import { Activity, AlertCircle, DollarSign, MessageSquare } from 'lucide-react';
+import { Activity, AlertCircle, DollarSign, Loader2, MessageSquare } from 'lucide-react';
 import {
   Bar,
   BarChart,
@@ -10,7 +10,9 @@ import {
   XAxis,
   YAxis,
 } from 'recharts';
+import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -27,7 +29,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { useGetDashboardData } from '@/http/generated';
+import {
+  useGetDashboardData,
+  useResendErrorMessagesToWebhook,
+} from '@/http/generated';
 import { auth } from '@/lib/auth';
 import { formatToBRL } from '@/utils/formatToBRL';
 
@@ -47,6 +52,19 @@ const CATEGORY_COLORS: Record<string, string> = {
 export default function DashboardPage() {
   const { data: memberData } = auth.useActiveMember();
   const { data, isLoading, isError, error } = useGetDashboardData();
+
+  const resendErrorMessagesToWebhook = useResendErrorMessagesToWebhook({
+    mutation: {
+      onSuccess: (d) => {
+        toast.success(`${d.resended} mensagens reenviadas com sucesso!`);
+      },
+      onError: (err) => {
+        toast.error('Erro ao reenviar mensagens', {
+          description: err.message,
+        });
+      },
+    },
+  });
 
   if (isError) {
     return (
@@ -159,79 +177,94 @@ export default function DashboardPage() {
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         {/* --- GRÁFICO --- */}
-        {['owner', 'admin'].includes(memberData?.role) ? (<Card className="col-span-4">
-          <CardHeader>
-            <CardTitle>Custo por Categoria</CardTitle>
-            <CardDescription>
-              Distribuição dos gastos com a Meta API.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="pl-2">
-            {isLoading ? (
-              <Skeleton className="h-[300px] w-full" />
-            ) : (
-              <div className="h-[300px] w-full">
-                <ResponsiveContainer height="100%" width="100%">
-                  <BarChart data={data?.usageByType}>
-                    <CartesianGrid
-                      stroke="hsl(var(--border))"
-                      strokeDasharray="3 3"
-                      vertical={false}
-                    />
-                    <XAxis
-                      axisLine={false}
-                      dataKey="category"
-                      fontSize={12}
-                      stroke="#888888"
-                      tickLine={false}
-                    />
-                    <YAxis
-                      axisLine={false}
-                      fontSize={12}
-                      stroke="#888888"
-                      tickFormatter={(value) => `R$${value}`}
-                      tickLine={false}
-                    />
-                    <Tooltip
-                      contentStyle={{
-                        backgroundColor: 'hsl(var(--card))',
-                        borderColor: 'hsl(var(--border))',
-                        color: 'hsl(var(--foreground))',
-                        borderRadius: '8px',
-                      }}
-                      cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
-                      formatter={(value: number) => [
-                        formatToBRL(value),
-                        'Custo',
-                      ]}
-                    />
-                    <Bar dataKey="cost" radius={[4, 4, 0, 0]}>
-                      {/* Mapeia os dados e define a cor baseada na categoria */}
-                      {data?.usageByType.map((entry, index) => (
-                        <Cell
-                          fill={
-                            CATEGORY_COLORS[entry.category] ||
-                            CATEGORY_COLORS.UNKNOWN
-                          }
-                          key={`cell-${index.toString()}`}
-                        />
-                      ))}
-                    </Bar>
-                  </BarChart>
-                </ResponsiveContainer>
-              </div>
-            )}
-          </CardContent>
-        </Card>) : null}
+        {['owner', 'admin'].includes(memberData?.role) ? (
+          <Card className="col-span-4">
+            <CardHeader>
+              <CardTitle>Custo por Categoria</CardTitle>
+              <CardDescription>
+                Distribuição dos gastos com a Meta API.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="pl-2">
+              {isLoading ? (
+                <Skeleton className="h-[300px] w-full" />
+              ) : (
+                <div className="h-[300px] w-full">
+                  <ResponsiveContainer height="100%" width="100%">
+                    <BarChart data={data?.usageByType}>
+                      <CartesianGrid
+                        stroke="hsl(var(--border))"
+                        strokeDasharray="3 3"
+                        vertical={false}
+                      />
+                      <XAxis
+                        axisLine={false}
+                        dataKey="category"
+                        fontSize={12}
+                        stroke="#888888"
+                        tickLine={false}
+                      />
+                      <YAxis
+                        axisLine={false}
+                        fontSize={12}
+                        stroke="#888888"
+                        tickFormatter={(value) => `R$${value}`}
+                        tickLine={false}
+                      />
+                      <Tooltip
+                        contentStyle={{
+                          backgroundColor: 'hsl(var(--card))',
+                          borderColor: 'hsl(var(--border))',
+                          color: 'hsl(var(--foreground))',
+                          borderRadius: '8px',
+                        }}
+                        cursor={{ fill: 'hsl(var(--muted))', opacity: 0.4 }}
+                        formatter={(value: number) => [
+                          formatToBRL(value),
+                          'Custo',
+                        ]}
+                      />
+                      <Bar dataKey="cost" radius={[4, 4, 0, 0]}>
+                        {/* Mapeia os dados e define a cor baseada na categoria */}
+                        {data?.usageByType.map((entry, index) => (
+                          <Cell
+                            fill={
+                              CATEGORY_COLORS[entry.category] ||
+                              CATEGORY_COLORS.UNKNOWN
+                            }
+                            key={`cell-${index.toString()}`}
+                          />
+                        ))}
+                      </Bar>
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        ) : null}
 
         {/* --- TABELA DE ERROS --- */}
         <Card className="col-span-3">
-          <CardHeader>
-            <CardTitle>Falhas Recentes</CardTitle>
-            <CardDescription>
-              Últimas mensagens que não foram entregues.
-            </CardDescription>
-          </CardHeader>
+          <div className="flex justify-between">
+            <CardHeader className="flex-1">
+              <CardTitle>Falhas Recentes</CardTitle>
+              <CardDescription>
+                Últimas mensagens que não foram entregues.
+              </CardDescription>
+            </CardHeader>
+
+            <Button
+              className="mr-6"
+              color="blue"
+              disabled={resendErrorMessagesToWebhook.isPending}
+              onClick={() => {
+                resendErrorMessagesToWebhook.mutate();
+              }}
+            >
+              {resendErrorMessagesToWebhook.isPending ? <Loader2 /> : 'ReSendWebhook'}
+            </Button>
+          </div>
           <CardContent>
             {isLoading ? (
               <div className="space-y-2">
