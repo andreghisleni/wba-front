@@ -9,10 +9,11 @@ import { useSendRedded } from '@/contexts/send-redded';
 // Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
+  getWhatsappContactsQueryKey,
   useGetWhatsappContacts,
   useGetWhatsappContactsContactIdMessages,
   useMarkWhatsappMessagesAsRead,
-  usePostWhatsappMessages,
+  usePostWhatsappMessages
 } from '@/http/generated/hooks';
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
@@ -32,7 +33,15 @@ function RouteComponent() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Hook de Marcar como Lida (Manual ou Gerado)
-  const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead();
+  const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead({
+    mutation: {
+      onSuccess: async () => {
+        await queryClient.invalidateQueries({
+          queryKey: getWhatsappContactsQueryKey(),
+        });
+      }
+    }
+  });
 
   const {
     data: contacts = [],
