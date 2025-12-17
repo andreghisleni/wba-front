@@ -5,6 +5,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
+import { useSendRedded } from '@/contexts/send-redded';
 // Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
@@ -13,7 +14,6 @@ import {
   useMarkWhatsappMessagesAsRead,
   usePostWhatsappMessages,
 } from '@/http/generated/hooks';
-
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
 
@@ -22,6 +22,7 @@ export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
 });
 
 function RouteComponent() {
+  const { sendRedded } = useSendRedded();
   const [selectedContactId, setSelectedContactId] = useState<string | null>(
     null
   );
@@ -84,10 +85,15 @@ function RouteComponent() {
   }, [messages, selectedContactId, isLoadingMessages]);
 
   useEffect(() => {
-    if (selectedContactId && selectedContact && selectedContact?.unreadCount > 0) {
+    if (
+      selectedContactId &&
+      selectedContact &&
+      selectedContact?.unreadCount > 0 &&
+      sendRedded
+    ) {
       markAsRead({ contactId: selectedContactId });
     }
-  }, [selectedContactId, selectedContact?.unreadCount, markAsRead]);
+  }, [selectedContactId, selectedContact?.unreadCount, markAsRead, sendRedded]);
 
   const handleSendMessage = async () => {
     if (!(inputMessage.trim() && selectedContactId)) {
@@ -116,6 +122,7 @@ function RouteComponent() {
 
   return (
     <div className="m-4 flex h-[calc(100vh-120px)] overflow-hidden rounded-lg border bg-background shadow-sm">
+      {/* {sendRedded ? 'Não marcar como lido' : 'Marcar como lido'} */}
       <ChatSidebar
         contacts={contacts}
         isLoadingContacts={isLoadingContacts}

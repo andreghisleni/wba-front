@@ -1,15 +1,9 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate } from '@tanstack/react-router';
 
-import {
-  BookOpenIcon,
-  Layers2Icon,
-  LogOutIcon,
-  PinIcon,
-  UserPenIcon,
-} from "lucide-react";
+import { BookOpenIcon, LogOutIcon, PinIcon, UserPenIcon } from 'lucide-react';
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,9 +12,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { auth } from "@/lib/auth";
-import { getNameInitials } from "@/utils/get-name-initials";
+} from '@/components/ui/dropdown-menu';
+import { useSendRedded } from '@/contexts/send-redded';
+import { auth } from '@/lib/auth';
+import { getNameInitials } from '@/utils/get-name-initials';
 
 export default function UserMenu() {
   // const { eventId } = useParams({
@@ -32,13 +27,16 @@ export default function UserMenu() {
   async function handleLogout() {
     await auth.signOut();
     navigate({
-      to: "/sign-in",
+      to: '/sign-in',
       replace: true,
     });
   }
 
-  // biome-ignore lint/style/useBlockStatements: <explanation>
-  if (!data) return <div>Loading...</div>;
+  const { sendRedded, setSendRedded } = useSendRedded();
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   const user = data.user;
 
@@ -49,7 +47,7 @@ export default function UserMenu() {
       <DropdownMenuTrigger asChild>
         <Button className="h-auto p-0 hover:bg-transparent" variant="ghost">
           <Avatar>
-            <AvatarImage alt={user.name} src={user.image || ""} />
+            <AvatarImage alt={user.name} src={user.image || ''} />
             <AvatarFallback className="rounded-lg">{initials}</AvatarFallback>
           </Avatar>
         </Button>
@@ -71,9 +69,16 @@ export default function UserMenu() {
               <span>Evento</span>
             </Link>
           </DropdownMenuItem>)} */}
-          <DropdownMenuItem>
-            <Layers2Icon aria-hidden="true" className="opacity-60" size={16} />
-            <span>Option 2</span>
+          <DropdownMenuItem onClick={() => setSendRedded((old) => !old)}>
+            <WhatsAppTicks
+              aria-hidden="true"
+              className={`${sendRedded ? '' : 'text-destructive'} opacity-60`}
+              disabled={!sendRedded}
+              size={16}
+            />
+            <span>
+              {sendRedded ? 'Marcar como lido' : 'Não marcar como lido'}
+            </span>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <BookOpenIcon aria-hidden="true" className="opacity-60" size={16} />
@@ -98,5 +103,52 @@ export default function UserMenu() {
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function WhatsAppTicks({
+  size = 16,
+  disabled = false,
+  className = '',
+  ...props
+}: {
+  size?: number;
+  disabled?: boolean;
+  className?: string;
+} & React.SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      className={className}
+      fill="none"
+      height={size}
+      viewBox="0 0 20 20"
+      width={size}
+      xmlns="http://www.w3.org/2000/svg"
+      {...props}
+    >
+      <title>WhatsApp Ticks</title>
+      <path
+        d="M3 11l2 2l5-6"
+        stroke="#34B7F1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+      <path
+        d="M7 11l2 2l6-7"
+        stroke="#34B7F1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="2"
+      />
+      {disabled ? (
+        <path
+          d="M3 3l14 14"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeWidth="2"
+        />
+      ) : null}
+    </svg>
   );
 }

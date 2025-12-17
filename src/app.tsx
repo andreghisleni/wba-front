@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { createRouter, RouterProvider } from '@tanstack/react-router';
 import { ThemeProvider } from './components/theme-provider';
 import { Toaster } from './components/ui/sonner';
+import { SendReddedProvider } from './contexts/send-redded';
 import { routeTree } from './route-tree.gen';
 
 const router = createRouter({
@@ -24,7 +25,9 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <RouterProvider router={router} />
+        <SendReddedProvider>
+          <RouterProvider router={router} />
+        </SendReddedProvider>
         <Toaster />
       </ThemeProvider>
     </QueryClientProvider>
