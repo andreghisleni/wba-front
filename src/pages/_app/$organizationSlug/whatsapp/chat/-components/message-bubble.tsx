@@ -1,11 +1,12 @@
-/** biome-ignore-all lint/a11y/useKeyWithClickEvents: <explanation> */
-/** biome-ignore-all lint/a11y/useMediaCaption: <explanation> */
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-/** biome-ignore-all lint/performance/noImgElement: <explanation> */
-/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: <explanation> */
-import { Download, FileText } from 'lucide-react'; // Ícones sugeridos
+/** biome-ignore-all lint/a11y/useKeyWithClickEvents: necessário para click em imagem */
+/** biome-ignore-all lint/a11y/useMediaCaption: áudio/vídeo com controles */
+/** biome-ignore-all lint/suspicious/noExplicitAny: tipos dinâmicos de mensagem */
+/** biome-ignore-all lint/performance/noImgElement: necessário para mídia */
+/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: clique em imagem */
+import { Download, FileText } from 'lucide-react';
 import { formatWhatsAppText } from '@/utils/whatsapp-formatter';
 import { MessageStatus } from './message-status';
+import { TemplateMessageBubble } from './template-message-bubble';
 
 // Função auxiliar para renderizar o conteúdo baseado no tipo
 const RenderMessageContent = ({ message }: { message: any }) => {
@@ -94,6 +95,11 @@ const RenderMessageContent = ({ message }: { message: any }) => {
 
 export function MessageBubble({ message }: { message: any }) {
   const isMe = message.direction === 'OUTBOUND';
+
+  // Se for mensagem de template, usa o componente específico
+  if (message.type === 'template') {
+    return <TemplateMessageBubble message={message} />;
+  }
 
   return (
     <div

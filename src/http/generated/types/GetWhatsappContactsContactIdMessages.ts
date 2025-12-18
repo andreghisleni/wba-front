@@ -32,6 +32,50 @@ export type GetWhatsappContactsContactIdMessages200 = {
     */
     status: string;
     timestamp: (string | string | number);
+    templateParams?: ({
+        /**
+         * @type string
+        */
+        templateId: string;
+        /**
+         * @type string
+        */
+        templateName: string;
+        /**
+         * @type string
+        */
+        language: string;
+        /**
+         * @type object | undefined
+        */
+        headerParams?: {
+            /**
+             * @type string
+            */
+            type: string;
+            /**
+             * @type array | undefined
+            */
+            values?: string[];
+        };
+        /**
+         * @type array | undefined
+        */
+        bodyParams?: string[];
+        /**
+         * @type array | undefined
+        */
+        buttonParams?: {
+            /**
+             * @type number
+            */
+            index: number;
+            /**
+             * @type string
+            */
+            value: string;
+        }[];
+    } | null) | null;
 }[];
 
 export type GetWhatsappContactsContactIdMessages404 = {

@@ -3,7 +3,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
 import { Eye, FileText, Loader2, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
-import { ShowJson } from '@/components/show-json';
 import { Button } from '@/components/ui/button';
 import {
   Card,
