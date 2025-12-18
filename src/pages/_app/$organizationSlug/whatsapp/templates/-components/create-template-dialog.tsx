@@ -1,13 +1,18 @@
-/** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
+/** biome-ignore-all lint/suspicious/noExplicitAny: tipos dinâmicos do form */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useQueryClient } from '@tanstack/react-query';
 import {
+  Ban,
   ClipboardPaste,
+  FileText,
+  ImageIcon,
   Info,
   Link as LinkIcon,
   Loader2,
   Plus,
   Trash2,
+  Type,
+  VideoIcon,
 } from 'lucide-react';
 import { type ClipboardEvent, useEffect, useState } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
@@ -51,9 +56,14 @@ const formSchema = z.object({
     .min(1, 'Nome é obrigatório')
     .regex(/^[a-z0-9_]+$/, 'Apenas letras minúsculas e underline'),
   category: z.enum(['MARKETING', 'UTILITY', 'AUTHENTICATION']),
+  headerType: z
+    .enum(['NONE', 'TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT'])
+    .default('NONE').optional(),
+  headerText: z.string().optional(),
   bodyText: z.string().min(1, 'Texto da mensagem é obrigatório'),
   footerText: z.string().optional(),
   bodyExamples: z.array(z.string().min(1, 'Exemplo obrigatório')),
+  headerExamples: z.array(z.string()).optional(),
   buttons: z
     .array(
       z.object({
@@ -84,6 +94,7 @@ type FormValues = z.infer<typeof formSchema>;
 export function CreateTemplateDialog() {
   const [open, setOpen] = useState(false);
   const [detectedVars, setDetectedVars] = useState<string[]>([]);
+  const [detectedHeaderVars, setDetectedHeaderVars] = useState<string[]>([]);
   const queryClient = useQueryClient();
 
   const form = useForm<FormValues>({
@@ -91,9 +102,12 @@ export function CreateTemplateDialog() {
     defaultValues: {
       name: '',
       category: 'MARKETING',
+      headerType: 'NONE',
+      headerText: '',
       bodyText: '',
       footerText: '',
       bodyExamples: [],
+      headerExamples: [],
       buttons: [],
     },
   });
@@ -129,6 +143,8 @@ export function CreateTemplateDialog() {
   );
 
   const bodyText = form.watch('bodyText');
+  const headerType = form.watch('headerType');
+  const headerText = form.watch('headerText');
 
   useEffect(() => {
     const matches = bodyText?.match(/{{\d+}}/g) || [];
@@ -136,10 +152,20 @@ export function CreateTemplateDialog() {
     setDetectedVars(unique);
   }, [bodyText]);
 
+  useEffect(() => {
+    if (headerType === 'TEXT' && headerText) {
+      const matches = headerText.match(/{{\d+}}/g) || [];
+      const unique = Array.from(new Set(matches)).sort();
+      setDetectedHeaderVars(unique);
+    } else {
+      setDetectedHeaderVars([]);
+    }
+  }, [headerType, headerText]);
+
   const watchedButtons = form.watch('buttons');
 
   // --- LÓGICA DE IMPORTAÇÃO (PASTE) ---
-  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: <explanation>
+  // biome-ignore lint/complexity/noExcessiveCognitiveComplexity: paste handler
   const handlePaste = (e: ClipboardEvent<HTMLFormElement>) => {
     try {
       const clipboardText = e.clipboardData.getData('text');
@@ -175,6 +201,9 @@ export function CreateTemplateDialog() {
       }
 
       // 2. Mapear Componentes
+      const headerComponent = data.components.find(
+        (c: any) => c.type === 'HEADER'
+      );
       const bodyComponent = data.components.find((c: any) => c.type === 'BODY');
       const footerComponent = data.components.find(
         (c: any) => c.type === 'FOOTER'
@@ -182,6 +211,25 @@ export function CreateTemplateDialog() {
       const buttonsComponent = data.components.find(
         (c: any) => c.type === 'BUTTONS'
       );
+
+      // Mapear Header
+      if (headerComponent) {
+        const format = headerComponent.format?.toUpperCase() || 'TEXT';
+        if (['TEXT', 'IMAGE', 'VIDEO', 'DOCUMENT'].includes(format)) {
+          form.setValue(
+            'headerType',
+            format as 'TEXT' | 'IMAGE' | 'VIDEO' | 'DOCUMENT'
+          );
+        }
+        if (format === 'TEXT' && headerComponent.text) {
+          form.setValue('headerText', headerComponent.text);
+          // Extrair exemplos do header
+          const headerExamples = headerComponent.example?.header_text || [];
+          form.setValue('headerExamples', headerExamples);
+        }
+      } else {
+        form.setValue('headerType', 'NONE');
+      }
 
       if (bodyComponent) {
         form.setValue('bodyText', bodyComponent.text || '');
@@ -228,6 +276,12 @@ export function CreateTemplateDialog() {
     const payload = {
       name: data.name,
       category: data.category,
+      headerType: data.headerType,
+      headerText: data.headerType === 'TEXT' ? data.headerText : undefined,
+      headerExamples:
+        data.headerType === 'TEXT' && data.headerExamples?.length
+          ? data.headerExamples
+          : undefined,
       bodyText: data.bodyText,
       footerText: data.footerText,
       bodyExamples: data.bodyExamples,
@@ -305,6 +359,125 @@ export function CreateTemplateDialog() {
                 )}
               />
             </div>
+
+            {/* Tipo de Cabeçalho */}
+            <FormField
+              control={form.control}
+              name="headerType"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Cabeçalho (Opcional)</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Selecione o tipo de cabeçalho" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="NONE">
+                        <span className="flex items-center gap-2">
+                          <Ban className="h-4 w-4" />
+                          Nenhum
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="TEXT">
+                        <span className="flex items-center gap-2">
+                          <Type className="h-4 w-4" />
+                          Texto
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="IMAGE">
+                        <span className="flex items-center gap-2">
+                          <ImageIcon className="h-4 w-4" />
+                          Imagem
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="VIDEO">
+                        <span className="flex items-center gap-2">
+                          <VideoIcon className="h-4 w-4" />
+                          Vídeo
+                        </span>
+                      </SelectItem>
+                      <SelectItem value="DOCUMENT">
+                        <span className="flex items-center gap-2">
+                          <FileText className="h-4 w-4" />
+                          Documento
+                        </span>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Input condicional para Header de Texto */}
+            {headerType === 'TEXT' && (
+              <FormField
+                control={form.control}
+                name="headerText"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Texto do Cabeçalho</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Olá {{1}}! Confira nossa promoção"
+                        {...field}
+                      />
+                    </FormControl>
+                    <div className="flex items-center gap-2 text-[11px] text-muted-foreground">
+                      <Info size={12} />
+                      Você pode usar variáveis como {'{{1}}'} no cabeçalho.
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )}
+
+            {/* Exemplos das Variáveis do Header */}
+            {headerType === 'TEXT' && detectedHeaderVars.length > 0 && (
+              <div className="space-y-3 rounded-md border border-blue-200 bg-blue-50/50 p-3 text-sm dark:border-blue-900 dark:bg-blue-950/20">
+                <span className="flex items-center gap-2 font-semibold text-blue-700 dark:text-blue-300">
+                  <Info size={14} /> Exemplos das Variáveis do Cabeçalho
+                </span>
+                <div className="grid grid-cols-2 gap-3">
+                  {detectedHeaderVars.map((v, idx) => (
+                    <div key={v}>
+                      <Label className="mb-1 block text-blue-600 text-xs dark:text-blue-400">
+                        Exemplo para {v}
+                      </Label>
+                      <Input
+                        className="h-8 border-blue-200 dark:border-blue-800"
+                        placeholder={v === '{{1}}' ? 'João' : 'exemplo'}
+                        {...form.register(`headerExamples.${idx}`)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Aviso para Header de mídia */}
+            {(headerType === 'IMAGE' ||
+              headerType === 'VIDEO' ||
+              headerType === 'DOCUMENT') && (
+                <div className="flex items-start gap-3 rounded-md border border-amber-200 bg-amber-50 p-3 text-sm dark:border-amber-900 dark:bg-amber-950/20">
+                  <Info className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                  <div className="text-amber-800 dark:text-amber-200">
+                    <p className="font-medium">
+                      {headerType === 'IMAGE' && 'Template com Imagem'}
+                      {headerType === 'VIDEO' && 'Template com Vídeo'}
+                      {headerType === 'DOCUMENT' && 'Template com Documento'}
+                    </p>
+                    <p className='mt-1 text-amber-700 text-xs dark:text-amber-300'>
+                      A mídia real será enviada no momento do disparo. Aqui
+                      estamos apenas definindo que este template aceita mídia como
+                      cabeçalho.
+                    </p>
+                  </div>
+                </div>
+              )}
 
             {/* Corpo */}
             <FormField
@@ -464,7 +637,7 @@ export function CreateTemplateDialog() {
                           URL Completa de Exemplo (Obrigatório)
                         </Label>
                         <Input
-                          className='h-8 border-blue-200 text-blue-800'
+                          className="h-8 border-blue-200 text-blue-800"
                           placeholder="https://site.com/pedido/12345"
                           {...form.register(`buttons.${index}.example`)}
                         />

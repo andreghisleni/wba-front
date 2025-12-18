@@ -28,6 +28,7 @@ export type CreateWhatsappTemplates200 = {
     status: string;
     structure: ({
         type: (string | string | string | string);
+        format?: (string | string | string | string | string);
         /**
          * @type string | undefined
         */
@@ -40,6 +41,14 @@ export type CreateWhatsappTemplates200 = {
              * @type array | undefined
             */
             body_text?: string[][];
+            /**
+             * @type array | undefined
+            */
+            header_text?: string[];
+            /**
+             * @type array | undefined
+            */
+            header_handle?: string[];
         };
         /**
          * @type array | undefined
@@ -93,6 +102,16 @@ export type CreateWhatsappTemplatesMutationRequest = {
     */
     name: string;
     category: (string | string | string);
+    headerFormat?: (string | string | string | string | string);
+    /**
+     * @maxLength 60
+     * @type string | undefined
+    */
+    headerText?: string;
+    /**
+     * @type array | undefined
+    */
+    exampleHeader?: string[];
     /**
      * @minLength 1
      * @type string

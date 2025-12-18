@@ -1,29 +1,35 @@
-import { Badge } from "@/components/ui/badge";
-import { CheckCircle2, XCircle, Clock, AlertTriangle } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Clock, XCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 
 export function TemplateStatusBadge({ status }: { status: string }) {
   switch (status) {
     case 'APPROVED':
       return (
-        <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200 gap-1">
+        <Badge
+          className='gap-1 border-green-200 bg-green-50 text-green-700'
+          variant="outline"
+        >
           <CheckCircle2 size={12} /> Aprovado
         </Badge>
       );
     case 'REJECTED':
       return (
-        <Badge variant="destructive" className="gap-1">
+        <Badge className="gap-1" variant="destructive">
           <XCircle size={12} /> Rejeitado
         </Badge>
       );
     case 'PENDING':
       return (
-        <Badge variant="outline" className="bg-yellow-50 text-yellow-700 border-yellow-200 gap-1">
+        <Badge
+          className='gap-1 border-yellow-200 bg-yellow-50 text-yellow-700'
+          variant="outline"
+        >
           <Clock size={12} /> Em Análise
         </Badge>
       );
     default:
       return (
-        <Badge variant="outline" className="gap-1">
+        <Badge className="gap-1" variant="outline">
           <AlertTriangle size={12} /> {status}
         </Badge>
       );

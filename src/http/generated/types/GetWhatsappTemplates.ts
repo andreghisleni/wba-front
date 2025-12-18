@@ -28,6 +28,7 @@ export type GetWhatsappTemplates200 = {
     status: string;
     structure: ({
         type: (string | string | string | string);
+        format?: (string | string | string | string | string);
         /**
          * @type string | undefined
         */
@@ -40,6 +41,14 @@ export type GetWhatsappTemplates200 = {
              * @type array | undefined
             */
             body_text?: string[][];
+            /**
+             * @type array | undefined
+            */
+            header_text?: string[];
+            /**
+             * @type array | undefined
+            */
+            header_handle?: string[];
         };
         /**
          * @type array | undefined
