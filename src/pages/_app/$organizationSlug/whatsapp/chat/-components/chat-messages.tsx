@@ -1,7 +1,8 @@
-import { Loader2 } from 'lucide-react';
-import type { RefObject } from 'react';
-import type { GetWhatsappContactsContactIdMessagesQueryResponse } from '@/http/generated/types/GetWhatsappContactsContactIdMessages';
-import { MessageBubble } from './message-bubble';
+import { Loader2 } from "lucide-react";
+import type { RefObject } from "react";
+import type { GetWhatsappContactsContactIdMessagesQueryResponse } from "@/http/generated/types/GetWhatsappContactsContactIdMessages";
+import { MessageBubble } from "./message-bubble";
+import { formatChatDay } from "@/utils/formatChatDay";
 
 interface ChatMessagesProps {
   messages: GetWhatsappContactsContactIdMessagesQueryResponse;
@@ -28,9 +29,31 @@ export function ChatMessages({
             </div>
           )}
 
-          {messages.map((msg) => (
-            <MessageBubble key={msg.id} message={msg} />
-          ))}
+          {/* Renderiza mensagens com separadores de data */}
+          {messages.reduce<React.ReactNode[]>((acc, msg, idx, arr) => {
+            const msgDate = new Date(msg.timestamp);
+            const prevMsg = arr[idx - 1];
+            const prevDate = prevMsg ? new Date(prevMsg.timestamp) : null;
+            const isNewDay =
+              !prevDate ||
+              msgDate.getFullYear() !== prevDate.getFullYear() ||
+              msgDate.getMonth() !== prevDate.getMonth() ||
+              msgDate.getDate() !== prevDate.getDate();
+            if (isNewDay) {
+              acc.push(
+                <div
+                  className="my-4 flex items-center justify-center"
+                  key={`day-separator-${msg.id}`}
+                >
+                  <span className="rounded-full bg-slate-200 px-4 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                    {formatChatDay(msgDate)}
+                  </span>
+                </div>
+              );
+            }
+            acc.push(<MessageBubble key={msg.id} message={msg} />);
+            return acc;
+          }, [])}
 
           <div ref={messagesEndRef} />
         </div>
