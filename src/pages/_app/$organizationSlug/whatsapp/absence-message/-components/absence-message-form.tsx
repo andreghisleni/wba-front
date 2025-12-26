@@ -40,7 +40,7 @@ export function AbsenceMessageForm({ initialMessage = '', setEditing }: AbsenceM
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 border rounded p-4 bg-white">
+    <form onSubmit={handleSubmit} className="space-y-4 border rounded p-4">
       <h2 className="font-bold text-lg mb-2">Cadastrar Mensagem de Ausência</h2>
       <Textarea
         value={message}

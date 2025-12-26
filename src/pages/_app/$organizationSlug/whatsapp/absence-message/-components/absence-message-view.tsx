@@ -30,7 +30,7 @@ export function AbsenceMessageView({ message, active, setEditing }: AbsenceMessa
   }
 
   return (
-    <div className="space-y-4 border rounded p-4 bg-white">
+    <div className="space-y-4 border rounded p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <h2 className="font-bold text-lg">Mensagem de Ausência</h2>
@@ -47,7 +47,7 @@ export function AbsenceMessageView({ message, active, setEditing }: AbsenceMessa
           </span>
         </div>
       </div>
-      <div className="border rounded p-3 bg-slate-50 text-gray-700 whitespace-pre-line min-h-[60px]">
+      <div className="border rounded p-3 bg-slate-50 text-gray-700 dark:bg-slate-800 dark:text-gray-300 whitespace-pre-line min-h-[60px]">
         {message}
       </div>
     </div>
