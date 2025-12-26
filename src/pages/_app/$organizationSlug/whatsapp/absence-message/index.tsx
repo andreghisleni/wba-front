@@ -4,7 +4,15 @@ import { AbsenceMessageView } from './-components/absence-message-view';
 import { AbsenceMessageForm } from './-components/absence-message-form';
 import { useGetAbsenceMessage } from '@/http/generated';
 
-export default function AbsenceMessagePage() {
+import { createFileRoute } from '@tanstack/react-router'
+
+export const Route = createFileRoute(
+  '/_app/$organizationSlug/whatsapp/absence-message/',
+)({
+  component: RouteComponent,
+})
+
+function RouteComponent() {
   const [editing, setEditing] = useState(false);
   const { data: absence, isLoading } = useGetAbsenceMessage();
 
