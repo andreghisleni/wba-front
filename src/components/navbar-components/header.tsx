@@ -52,6 +52,11 @@ export function Header() {
       label: 'Webhooks',
       role: ['owner'],
     },
+    {
+      href: `/${organizationSlug}/whatsapp/absence-message`,
+      label: 'Mensagem de Ausência',
+      role: ['owner'],
+    }
   ];
 
   const nLinks = navigationLinks.filter((link) => {
