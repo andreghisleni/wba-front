@@ -1,10 +1,13 @@
+export type { ActivateAbsenceMessage200, ActivateAbsenceMessageMutationRequest, ActivateAbsenceMessageMutationResponse, ActivateAbsenceMessageMutation } from "./ActivateAbsenceMessage.ts";
 export type { CreateDashboardApiKey200, CreateDashboardApiKey400, CreateDashboardApiKeyMutationRequest, CreateDashboardApiKeyMutationResponse, CreateDashboardApiKeyMutation } from "./CreateDashboardApiKey.ts";
+export type { CreateOrUpdateAbsenceMessage200, CreateOrUpdateAbsenceMessageMutationRequest, CreateOrUpdateAbsenceMessageMutationResponse, CreateOrUpdateAbsenceMessageMutation } from "./CreateOrUpdateAbsenceMessage.ts";
 export type { CreateWebhook200, CreateWebhookMutationRequest, CreateWebhookMutationResponse, CreateWebhookMutation } from "./CreateWebhook.ts";
 export type { CreateWhatsappContact200, CreateWhatsappContact400, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./CreateWhatsappTemplates.ts";
 export type { DeleteDashboardApiKeyPathParams, DeleteDashboardApiKey200, DeleteDashboardApiKey404, DeleteDashboardApiKeyMutationResponse, DeleteDashboardApiKeyMutation } from "./DeleteDashboardApiKey.ts";
 export type { DeleteWebhookPathParams, DeleteWebhook200, DeleteWebhook404, DeleteWebhookMutationResponse, DeleteWebhookMutation } from "./DeleteWebhook.ts";
 export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLink400, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./GenerateWhatsappOauthLink.ts";
+export type { GetAbsenceMessage200, GetAbsenceMessageQueryResponse, GetAbsenceMessageQuery } from "./GetAbsenceMessage.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./GetV1Status.ts";

@@ -1,4 +1,6 @@
+export type { ActivateAbsenceMessageMutationKey } from "./useActivateAbsenceMessage.ts";
 export type { CreateDashboardApiKeyMutationKey } from "./useCreateDashboardApiKey.ts";
+export type { CreateOrUpdateAbsenceMessageMutationKey } from "./useCreateOrUpdateAbsenceMessage.ts";
 export type { CreateWebhookMutationKey } from "./useCreateWebhook.ts";
 export type { CreateWhatsappContactMutationKey } from "./useCreateWhatsappContact.ts";
 export type { CreateWhatsappTemplatesMutationKey } from "./useCreateWhatsappTemplates.ts";
@@ -6,6 +8,8 @@ export type { DeleteDashboardApiKeyMutationKey } from "./useDeleteDashboardApiKe
 export type { DeleteWebhookMutationKey } from "./useDeleteWebhook.ts";
 export type { GenerateWhatsappOauthLinkQueryKey } from "./useGenerateWhatsappOauthLink.ts";
 export type { GenerateWhatsappOauthLinkSuspenseQueryKey } from "./useGenerateWhatsappOauthLinkSuspense.ts";
+export type { GetAbsenceMessageQueryKey } from "./useGetAbsenceMessage.ts";
+export type { GetAbsenceMessageSuspenseQueryKey } from "./useGetAbsenceMessageSuspense.ts";
 export type { GetDashboardApiKeysQueryKey } from "./useGetDashboardApiKeys.ts";
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./useGetDashboardData.ts";
@@ -40,7 +44,9 @@ export type { TestWebhookMutationKey } from "./useTestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusMutationKey } from "./useUpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookMutationKey } from "./useUpdateWebhook.ts";
 export type { WhatsappOnboardMutationKey } from "./useWhatsappOnboard.ts";
+export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./useActivateAbsenceMessage.ts";
 export { createDashboardApiKeyMutationKey, createDashboardApiKey, useCreateDashboardApiKey } from "./useCreateDashboardApiKey.ts";
+export { createOrUpdateAbsenceMessageMutationKey, createOrUpdateAbsenceMessage, useCreateOrUpdateAbsenceMessage } from "./useCreateOrUpdateAbsenceMessage.ts";
 export { createWebhookMutationKey, createWebhook, useCreateWebhook } from "./useCreateWebhook.ts";
 export { createWhatsappContactMutationKey, createWhatsappContact, useCreateWhatsappContact } from "./useCreateWhatsappContact.ts";
 export { createWhatsappTemplatesMutationKey, createWhatsappTemplates, useCreateWhatsappTemplates } from "./useCreateWhatsappTemplates.ts";
@@ -48,6 +54,8 @@ export { deleteDashboardApiKeyMutationKey, deleteDashboardApiKey, useDeleteDashb
 export { deleteWebhookMutationKey, deleteWebhook, useDeleteWebhook } from "./useDeleteWebhook.ts";
 export { generateWhatsappOauthLinkQueryKey, generateWhatsappOauthLink, generateWhatsappOauthLinkQueryOptions, useGenerateWhatsappOauthLink } from "./useGenerateWhatsappOauthLink.ts";
 export { generateWhatsappOauthLinkSuspenseQueryKey, generateWhatsappOauthLinkSuspense, generateWhatsappOauthLinkSuspenseQueryOptions, useGenerateWhatsappOauthLinkSuspense } from "./useGenerateWhatsappOauthLinkSuspense.ts";
+export { getAbsenceMessageQueryKey, getAbsenceMessage, getAbsenceMessageQueryOptions, useGetAbsenceMessage } from "./useGetAbsenceMessage.ts";
+export { getAbsenceMessageSuspenseQueryKey, getAbsenceMessageSuspense, getAbsenceMessageSuspenseQueryOptions, useGetAbsenceMessageSuspense } from "./useGetAbsenceMessageSuspense.ts";
 export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQueryOptions, useGetDashboardApiKeys } from "./useGetDashboardApiKeys.ts";
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./useGetDashboardData.ts";
