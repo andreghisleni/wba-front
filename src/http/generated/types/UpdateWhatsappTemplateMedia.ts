@@ -4,7 +4,14 @@
 */
 
 
-export type GetWhatsappTemplates200 = {
+export type UpdateWhatsappTemplateMediaPathParams = {
+    /**
+     * @type string
+    */
+    id: string;
+};
+
+export type UpdateWhatsappTemplateMedia200 = {
     /**
      * @type string
     */
@@ -80,11 +87,31 @@ export type GetWhatsappTemplates200 = {
     */
     language: string;
     headerMediaUrl: (string | null) | null;
-}[];
+};
 
-export type GetWhatsappTemplatesQueryResponse = GetWhatsappTemplates200;
+export type UpdateWhatsappTemplateMedia403 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
-export type GetWhatsappTemplatesQuery = {
-    Response: GetWhatsappTemplates200;
-    Errors: any;
+export type UpdateWhatsappTemplateMedia404 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
+
+export type UpdateWhatsappTemplateMediaMutationRequest = {
+    headerMediaUrl: (string | null) | null;
+};
+
+export type UpdateWhatsappTemplateMediaMutationResponse = UpdateWhatsappTemplateMedia200;
+
+export type UpdateWhatsappTemplateMediaMutation = {
+    Response: UpdateWhatsappTemplateMedia200;
+    Request: UpdateWhatsappTemplateMediaMutationRequest;
+    PathParams: UpdateWhatsappTemplateMediaPathParams;
+    Errors: UpdateWhatsappTemplateMedia403 | UpdateWhatsappTemplateMedia404;
 };

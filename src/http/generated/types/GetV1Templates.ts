@@ -4,7 +4,7 @@
 */
 
 
-export type GetWhatsappTemplates200 = {
+export type GetV1Templates200 = {
     /**
      * @type string
     */
@@ -82,9 +82,9 @@ export type GetWhatsappTemplates200 = {
     headerMediaUrl: (string | null) | null;
 }[];
 
-export type GetWhatsappTemplatesQueryResponse = GetWhatsappTemplates200;
+export type GetV1TemplatesQueryResponse = GetV1Templates200;
 
-export type GetWhatsappTemplatesQuery = {
-    Response: GetWhatsappTemplates200;
+export type GetV1TemplatesQuery = {
+    Response: GetV1Templates200;
     Errors: any;
 };

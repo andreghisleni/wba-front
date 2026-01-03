@@ -79,6 +79,7 @@ export type CreateWhatsappTemplates200 = {
      * @type string
     */
     language: string;
+    headerMediaUrl: (string | null) | null;
 };
 
 export type CreateWhatsappTemplates400 = {

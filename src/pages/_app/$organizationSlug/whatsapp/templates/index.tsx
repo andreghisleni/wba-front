@@ -25,6 +25,7 @@ import {
   useImportWhatsappTemplates,
 } from '@/http/generated/hooks';
 import { CreateTemplateDialog } from './-components/create-template-dialog';
+import { EditHeaderMediaDialog } from './-components/edit-header-media-dialog';
 import { TemplateStatusBadge } from './-components/status-badge';
 import { type Template, TemplatePreview } from './-components/template-preview';
 
@@ -148,58 +149,62 @@ function TemplatesPage() {
                 <span>
                   Atualizado: {new Date(tpl.updatedAt).toLocaleDateString()}
                 </span>
-                {/* Botão Visualizar */}
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      className="h-7 gap-1 px-2"
-                      size="sm"
-                      variant="ghost"
-                    >
-                      <Eye className="h-3.5 w-3.5" />
-                      <span className="text-xs">Ver</span>
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[420px]">
-                    <DialogHeader>
-                      <DialogTitle className="flex items-center gap-2 text-base">
-                        <span>Preview: {tpl.name}</span>
-                      </DialogTitle>
-                    </DialogHeader>
+                <div className="flex gap-1">
+                  {/* Botão Editar Mídia (só aparece se tem header de vídeo) */}
+                  <EditHeaderMediaDialog template={tpl as Template} />
+                  {/* Botão Visualizar */}
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        className="h-7 gap-1 px-2"
+                        size="sm"
+                        variant="ghost"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        <span className="text-xs">Ver</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[420px]">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-base">
+                          <span>Preview: {tpl.name}</span>
+                        </DialogTitle>
+                      </DialogHeader>
 
-                    {/* Background simulando WhatsApp */}
-                    <div
-                      className="rounded-lg p-4"
-                      style={{
-                        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-                        backgroundColor: '#e5ddd5',
-                      }}
-                    >
-                      <TemplatePreview template={tpl as Template} />
-                    </div>
+                      {/* Background simulando WhatsApp */}
+                      <div
+                        className="rounded-lg p-4"
+                        style={{
+                          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
+                          backgroundColor: '#e5ddd5',
+                        }}
+                      >
+                        <TemplatePreview template={tpl as Template} />
+                      </div>
 
-                    {/* Info adicional */}
-                    <div className="mt-2 grid grid-cols-2 gap-2 text-muted-foreground text-xs">
-                      <div>
-                        <span className="font-medium">Categoria:</span>{' '}
-                        {tpl.category.toLowerCase()}
+                      {/* Info adicional */}
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-muted-foreground text-xs">
+                        <div>
+                          <span className="font-medium">Categoria:</span>{' '}
+                          {tpl.category.toLowerCase()}
+                        </div>
+                        <div>
+                          <span className="font-medium">Idioma:</span>{' '}
+                          {tpl.language}
+                        </div>
+                        <div>
+                          <span className="font-medium">Status:</span>{' '}
+                          {tpl.status}
+                        </div>
+                        <div>
+                          <span className="font-medium">Atualizado:</span>{' '}
+                          {new Date(tpl.updatedAt).toLocaleDateString('pt-BR')}
+                        </div>
                       </div>
-                      <div>
-                        <span className="font-medium">Idioma:</span>{' '}
-                        {tpl.language}
-                      </div>
-                      <div>
-                        <span className="font-medium">Status:</span>{' '}
-                        {tpl.status}
-                      </div>
-                      <div>
-                        <span className="font-medium">Atualizado:</span>{' '}
-                        {new Date(tpl.updatedAt).toLocaleDateString('pt-BR')}
-                      </div>
-                    </div>
-                    {/* <ShowJson data={tpl} /> */}
-                  </DialogContent>
-                </Dialog>
+                      {/* <ShowJson data={tpl} /> */}
+                    </DialogContent>
+                  </Dialog>
+                </div>
               </CardFooter>
             </Card>
           ))}

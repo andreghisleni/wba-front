@@ -22,6 +22,12 @@ export type PostV1MessagesMutationRequest = {
          * @type string | undefined
         */
         name?: string;
+        /**
+         * @description Salvar nome se não existir
+         * @default false
+         * @type boolean | undefined
+        */
+        saveNameIfNotExists?: boolean;
     };
     /**
      * @description Nome do template na Meta

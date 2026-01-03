@@ -16,6 +16,8 @@ export type { GetDashboardDataQueryKey } from "./useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./useGetDashboardDataSuspense.ts";
 export type { GetV1StatusQueryKey } from "./useGetV1Status.ts";
 export type { GetV1StatusSuspenseQueryKey } from "./useGetV1StatusSuspense.ts";
+export type { GetV1TemplatesQueryKey } from "./useGetV1Templates.ts";
+export type { GetV1TemplatesSuspenseQueryKey } from "./useGetV1TemplatesSuspense.ts";
 export type { GetWebhookLogDetailsQueryKey } from "./useGetWebhookLogDetails.ts";
 export type { GetWebhookLogDetailsSuspenseQueryKey } from "./useGetWebhookLogDetailsSuspense.ts";
 export type { GetWebhookLogsQueryKey } from "./useGetWebhookLogs.ts";
@@ -43,6 +45,7 @@ export type { ResendErrorMessagesToWebhookMutationKey } from "./useResendErrorMe
 export type { TestWebhookMutationKey } from "./useTestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusMutationKey } from "./useUpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookMutationKey } from "./useUpdateWebhook.ts";
+export type { UpdateWhatsappTemplateMediaMutationKey } from "./useUpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboardMutationKey } from "./useWhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./useActivateAbsenceMessage.ts";
 export { createDashboardApiKeyMutationKey, createDashboardApiKey, useCreateDashboardApiKey } from "./useCreateDashboardApiKey.ts";
@@ -62,6 +65,8 @@ export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOption
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./useGetDashboardDataSuspense.ts";
 export { getV1StatusQueryKey, getV1Status, getV1StatusQueryOptions, useGetV1Status } from "./useGetV1Status.ts";
 export { getV1StatusSuspenseQueryKey, getV1StatusSuspense, getV1StatusSuspenseQueryOptions, useGetV1StatusSuspense } from "./useGetV1StatusSuspense.ts";
+export { getV1TemplatesQueryKey, getV1Templates, getV1TemplatesQueryOptions, useGetV1Templates } from "./useGetV1Templates.ts";
+export { getV1TemplatesSuspenseQueryKey, getV1TemplatesSuspense, getV1TemplatesSuspenseQueryOptions, useGetV1TemplatesSuspense } from "./useGetV1TemplatesSuspense.ts";
 export { getWebhookLogDetailsQueryKey, getWebhookLogDetails, getWebhookLogDetailsQueryOptions, useGetWebhookLogDetails } from "./useGetWebhookLogDetails.ts";
 export { getWebhookLogDetailsSuspenseQueryKey, getWebhookLogDetailsSuspense, getWebhookLogDetailsSuspenseQueryOptions, useGetWebhookLogDetailsSuspense } from "./useGetWebhookLogDetailsSuspense.ts";
 export { getWebhookLogsQueryKey, getWebhookLogs, getWebhookLogsQueryOptions, useGetWebhookLogs } from "./useGetWebhookLogs.ts";
@@ -89,4 +94,5 @@ export { resendErrorMessagesToWebhookMutationKey, resendErrorMessagesToWebhook, 
 export { testWebhookMutationKey, testWebhook, useTestWebhook } from "./useTestWebhook.ts";
 export { updateDashboardApiKeyStatusMutationKey, updateDashboardApiKeyStatus, useUpdateDashboardApiKeyStatus } from "./useUpdateDashboardApiKeyStatus.ts";
 export { updateWebhookMutationKey, updateWebhook, useUpdateWebhook } from "./useUpdateWebhook.ts";
+export { updateWhatsappTemplateMediaMutationKey, updateWhatsappTemplateMedia, useUpdateWhatsappTemplateMedia } from "./useUpdateWhatsappTemplateMedia.ts";
 export { whatsappOnboardMutationKey, whatsappOnboard, useWhatsappOnboard } from "./useWhatsappOnboard.ts";

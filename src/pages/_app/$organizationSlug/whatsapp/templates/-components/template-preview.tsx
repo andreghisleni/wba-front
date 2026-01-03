@@ -34,6 +34,7 @@ export type Template = {
   createdAt: string | number;
   updatedAt: string | number;
   language: string;
+  headerMediaUrl?: string | null;
 };
 
 export type TemplatePreviewProps = {
@@ -66,16 +67,19 @@ function highlightVariables(text: string) {
 function HeaderRenderer({
   component,
   compact,
+  headerMediaUrl,
 }: {
   component: TemplateComponent;
   compact?: boolean;
+  headerMediaUrl?: string | null;
 }) {
   const format = component.format?.toUpperCase();
 
   if (format === 'VIDEO') {
-    const headerHandle = component.example?.header_handle?.[0];
+    // Prioriza headerMediaUrl do banco, senão usa o header_handle original
+    const videoUrl = headerMediaUrl || component.example?.header_handle?.[0];
 
-    if (headerHandle) {
+    if (videoUrl) {
       return (
         <div
           className={cn(
@@ -90,7 +94,7 @@ function HeaderRenderer({
             playsInline
             poster=""
             preload="metadata"
-            src={headerHandle}
+            src={videoUrl}
           >
             <track kind="captions" />
           </video>
@@ -311,7 +315,11 @@ export function TemplatePreview({
           {hasStructure ? (
             <>
               {headerComponent && (
-                <HeaderRenderer compact={compact} component={headerComponent} />
+                <HeaderRenderer
+                  compact={compact}
+                  component={headerComponent}
+                  headerMediaUrl={template.headerMediaUrl}
+                />
               )}
               {bodyComponent && (
                 <BodyRenderer compact={compact} component={bodyComponent} />

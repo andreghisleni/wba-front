@@ -16,6 +16,8 @@ export type { GetDashboardDataQueryKey } from "./hooks/useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./hooks/useGetDashboardDataSuspense.ts";
 export type { GetV1StatusQueryKey } from "./hooks/useGetV1Status.ts";
 export type { GetV1StatusSuspenseQueryKey } from "./hooks/useGetV1StatusSuspense.ts";
+export type { GetV1TemplatesQueryKey } from "./hooks/useGetV1Templates.ts";
+export type { GetV1TemplatesSuspenseQueryKey } from "./hooks/useGetV1TemplatesSuspense.ts";
 export type { GetWebhookLogDetailsQueryKey } from "./hooks/useGetWebhookLogDetails.ts";
 export type { GetWebhookLogDetailsSuspenseQueryKey } from "./hooks/useGetWebhookLogDetailsSuspense.ts";
 export type { GetWebhookLogsQueryKey } from "./hooks/useGetWebhookLogs.ts";
@@ -43,6 +45,7 @@ export type { ResendErrorMessagesToWebhookMutationKey } from "./hooks/useResendE
 export type { TestWebhookMutationKey } from "./hooks/useTestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusMutationKey } from "./hooks/useUpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookMutationKey } from "./hooks/useUpdateWebhook.ts";
+export type { UpdateWhatsappTemplateMediaMutationKey } from "./hooks/useUpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboardMutationKey } from "./hooks/useWhatsappOnboard.ts";
 export type { ActivateAbsenceMessage200, ActivateAbsenceMessageMutationRequest, ActivateAbsenceMessageMutationResponse, ActivateAbsenceMessageMutation } from "./types/ActivateAbsenceMessage.ts";
 export type { CreateDashboardApiKey200, CreateDashboardApiKey400, CreateDashboardApiKeyMutationRequest, CreateDashboardApiKeyMutationResponse, CreateDashboardApiKeyMutation } from "./types/CreateDashboardApiKey.ts";
@@ -57,6 +60,7 @@ export type { GetAbsenceMessage200, GetAbsenceMessageQueryResponse, GetAbsenceMe
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./types/GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./types/GetDashboardData.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./types/GetV1Status.ts";
+export type { GetV1Templates200, GetV1TemplatesQueryResponse, GetV1TemplatesQuery } from "./types/GetV1Templates.ts";
 export type { GetWebhookLogDetailsPathParams, GetWebhookLogDetails200, GetWebhookLogDetails404, GetWebhookLogDetailsQueryResponse, GetWebhookLogDetailsQuery } from "./types/GetWebhookLogDetails.ts";
 export type { GetWebhookLogsPathParams, GetWebhookLogs200, GetWebhookLogs404, GetWebhookLogsQueryResponse, GetWebhookLogsQuery } from "./types/GetWebhookLogs.ts";
 export type { GetWebhooks200, GetWebhooksQueryResponse, GetWebhooksQuery } from "./types/GetWebhooks.ts";
@@ -76,6 +80,7 @@ export type { ResendErrorMessagesToWebhook200, ResendErrorMessagesToWebhook404, 
 export type { TestWebhookPathParams, TestWebhook200, TestWebhook404, TestWebhookMutationResponse, TestWebhookMutation } from "./types/TestWebhook.ts";
 export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus200, UpdateDashboardApiKeyStatus404, UpdateDashboardApiKeyStatusMutationRequest, UpdateDashboardApiKeyStatusMutationResponse, UpdateDashboardApiKeyStatusMutation } from "./types/UpdateDashboardApiKeyStatus.ts";
 export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, UpdateWebhookMutationRequest, UpdateWebhookMutationResponse, UpdateWebhookMutation } from "./types/UpdateWebhook.ts";
+export type { UpdateWhatsappTemplateMediaPathParams, UpdateWhatsappTemplateMedia200, UpdateWhatsappTemplateMedia403, UpdateWhatsappTemplateMedia404, UpdateWhatsappTemplateMediaMutationRequest, UpdateWhatsappTemplateMediaMutationResponse, UpdateWhatsappTemplateMediaMutation } from "./types/UpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./types/WhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./hooks/useActivateAbsenceMessage.ts";
 export { createDashboardApiKeyMutationKey, createDashboardApiKey, useCreateDashboardApiKey } from "./hooks/useCreateDashboardApiKey.ts";
@@ -95,6 +100,8 @@ export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOption
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./hooks/useGetDashboardDataSuspense.ts";
 export { getV1StatusQueryKey, getV1Status, getV1StatusQueryOptions, useGetV1Status } from "./hooks/useGetV1Status.ts";
 export { getV1StatusSuspenseQueryKey, getV1StatusSuspense, getV1StatusSuspenseQueryOptions, useGetV1StatusSuspense } from "./hooks/useGetV1StatusSuspense.ts";
+export { getV1TemplatesQueryKey, getV1Templates, getV1TemplatesQueryOptions, useGetV1Templates } from "./hooks/useGetV1Templates.ts";
+export { getV1TemplatesSuspenseQueryKey, getV1TemplatesSuspense, getV1TemplatesSuspenseQueryOptions, useGetV1TemplatesSuspense } from "./hooks/useGetV1TemplatesSuspense.ts";
 export { getWebhookLogDetailsQueryKey, getWebhookLogDetails, getWebhookLogDetailsQueryOptions, useGetWebhookLogDetails } from "./hooks/useGetWebhookLogDetails.ts";
 export { getWebhookLogDetailsSuspenseQueryKey, getWebhookLogDetailsSuspense, getWebhookLogDetailsSuspenseQueryOptions, useGetWebhookLogDetailsSuspense } from "./hooks/useGetWebhookLogDetailsSuspense.ts";
 export { getWebhookLogsQueryKey, getWebhookLogs, getWebhookLogsQueryOptions, useGetWebhookLogs } from "./hooks/useGetWebhookLogs.ts";
@@ -122,4 +129,5 @@ export { resendErrorMessagesToWebhookMutationKey, resendErrorMessagesToWebhook, 
 export { testWebhookMutationKey, testWebhook, useTestWebhook } from "./hooks/useTestWebhook.ts";
 export { updateDashboardApiKeyStatusMutationKey, updateDashboardApiKeyStatus, useUpdateDashboardApiKeyStatus } from "./hooks/useUpdateDashboardApiKeyStatus.ts";
 export { updateWebhookMutationKey, updateWebhook, useUpdateWebhook } from "./hooks/useUpdateWebhook.ts";
+export { updateWhatsappTemplateMediaMutationKey, updateWhatsappTemplateMedia, useUpdateWhatsappTemplateMedia } from "./hooks/useUpdateWhatsappTemplateMedia.ts";
 export { whatsappOnboardMutationKey, whatsappOnboard, useWhatsappOnboard } from "./hooks/useWhatsappOnboard.ts";
