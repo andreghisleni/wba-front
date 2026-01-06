@@ -191,7 +191,7 @@ export function ChatSidebar({
                 </div>
 
                 <div className="mt-1 flex items-center justify-between gap-2">
-                  <div className="flex h-4 flex-1 items-center gap-1 text-muted-foreground text-xs">
+                  <div className="flex h-4 min-w-0 flex-1 items-center gap-1 text-muted-foreground text-xs">
                     {contact.lastMessageStatus && (
                       <MessageStatus
                         isUser={true}
@@ -204,7 +204,7 @@ export function ChatSidebar({
                       ).toLowerCase();
                       if (type === 'text') {
                         return (
-                          <span className="truncate">
+                          <span className="min-w-0 flex-1 truncate">
                             {contact.lastMessage}
                           </span>
                         );
@@ -217,9 +217,9 @@ export function ChatSidebar({
                         'Mensagem';
 
                       return (
-                        <div className="flex items-center gap-1 overflow-hidden">
+                        <div className="flex min-w-0 flex-1 items-center gap-1">
                           <Icon className="h-3 w-3 shrink-0" />
-                          <span className="truncate">{label}</span>
+                          <span className="min-w-0 truncate">{label}</span>
                         </div>
                       );
                     })()}
