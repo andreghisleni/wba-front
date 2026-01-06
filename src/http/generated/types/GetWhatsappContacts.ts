@@ -4,46 +4,94 @@
 */
 
 
-export type GetWhatsappContacts200 = {
+export type GetWhatsappContactsQueryParams = {
     /**
-     * @type string
+     * @default 1
+     * @type number | undefined
     */
-    id: string;
+    page?: number;
     /**
-     * @type string
+     * @default 20
+     * @type number | undefined
     */
-    pushName: string;
-    /**
-     * @type string
-    */
-    waId: string;
-    profilePicUrl: (string | null) | null;
-    /**
-     * @type number
-    */
-    unreadCount: number;
-    /**
-     * @type string
-    */
-    lastMessage: string;
-    /**
-     * @type string
-    */
-    lastMessageType: string;
+    limit?: number;
     /**
      * @type string | undefined
     */
-    lastMessageStatus?: string;
-    lastMessageAt: (string | string | number);
+    search?: string;
     /**
-     * @type boolean
+     * @type string | undefined
     */
-    isWindowOpen: boolean;
-}[];
+    unreadOnly?: string;
+};
+
+export type GetWhatsappContacts200 = {
+    /**
+     * @type array
+    */
+    data: {
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        pushName: string;
+        /**
+         * @type string
+        */
+        waId: string;
+        profilePicUrl: (string | null) | null;
+        /**
+         * @type number
+        */
+        unreadCount: number;
+        /**
+         * @type string
+        */
+        lastMessage: string;
+        /**
+         * @type string
+        */
+        lastMessageType: string;
+        /**
+         * @type string | undefined
+        */
+        lastMessageStatus?: string;
+        lastMessageAt: (string | string | number);
+        /**
+         * @type boolean
+        */
+        isWindowOpen: boolean;
+    }[];
+    /**
+     * @type object
+    */
+    meta: {
+        /**
+         * @type number
+        */
+        total: number;
+        /**
+         * @type number
+        */
+        page: number;
+        /**
+         * @type number
+        */
+        limit: number;
+        /**
+         * @type number
+        */
+        totalPages: number;
+    };
+};
 
 export type GetWhatsappContactsQueryResponse = GetWhatsappContacts200;
 
 export type GetWhatsappContactsQuery = {
     Response: GetWhatsappContacts200;
+    QueryParams: GetWhatsappContactsQueryParams;
     Errors: any;
 };

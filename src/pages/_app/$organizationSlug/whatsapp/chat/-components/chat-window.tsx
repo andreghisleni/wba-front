@@ -7,7 +7,7 @@ import { ChatInput } from './chat-input';
 import { ChatMessages } from './chat-messages';
 
 interface ChatWindowProps {
-  selectedContact: GetWhatsappContactsQueryResponse[0] | undefined;
+  selectedContact: GetWhatsappContactsQueryResponse['data'][0] | undefined;
   messages: GetWhatsappContactsContactIdMessagesQueryResponse;
   isLoadingMessages: boolean;
   inputMessage: string;

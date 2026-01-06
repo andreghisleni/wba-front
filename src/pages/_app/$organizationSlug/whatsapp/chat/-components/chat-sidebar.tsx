@@ -1,6 +1,8 @@
 import { format } from 'date-fns';
 import {
   AudioLines,
+  ChevronLeft,
+  ChevronRight,
   FileText,
   Filter,
   HelpCircle,
@@ -14,12 +16,10 @@ import {
   Video,
   X,
 } from 'lucide-react';
-import { useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import type { GetWhatsappContactsQueryResponse } from '@/http/generated/types/GetWhatsappContacts';
 import { cn } from '@/lib/utils';
 import { MessageStatus } from './message-status';
 import { NewChatDialog } from './new-chat-dialog';
@@ -51,11 +51,34 @@ const typeLabels: Record<string, string> = {
   unknown: 'Desconhecido',
 };
 
+// Tipo do contato individual (vai ser atualizado pelo Kubb)
+type ContactItem = {
+  id: string;
+  pushName: string;
+  waId: string;
+  profilePicUrl: string | null;
+  unreadCount: number;
+  lastMessage: string;
+  lastMessageType: string;
+  lastMessageStatus?: string;
+  lastMessageAt: string | number;
+  isWindowOpen: boolean;
+};
+
 interface ChatSidebarProps {
-  contacts: GetWhatsappContactsQueryResponse;
+  contacts: ContactItem[];
   isLoadingContacts: boolean;
   selectedContactId: string | null;
   onSelectContact: (contactId: string) => void;
+  // Filtros controlados pelo pai
+  searchTerm: string;
+  onSearchChange: (value: string) => void;
+  showUnreadOnly: boolean;
+  onUnreadFilterChange: (value: boolean) => void;
+  // Paginação
+  page: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
 }
 
 export function ChatSidebar({
@@ -63,21 +86,14 @@ export function ChatSidebar({
   isLoadingContacts,
   selectedContactId,
   onSelectContact,
+  searchTerm,
+  onSearchChange,
+  showUnreadOnly,
+  onUnreadFilterChange,
+  page,
+  totalPages,
+  onPageChange,
 }: ChatSidebarProps) {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
-
-  const filteredContacts = contacts.filter((contact) => {
-    const searchLower = searchTerm.toLowerCase();
-    const nameMatch = (contact.pushName || '')
-      .toLowerCase()
-      .includes(searchLower);
-    const phoneMatch = (contact.waId || '').includes(searchLower);
-    const matchesSearch = nameMatch || phoneMatch;
-    const matchesUnread = showUnreadOnly ? contact.unreadCount > 0 : true;
-    return matchesSearch && matchesUnread;
-  });
-
   return (
     <div className="flex w-80 flex-col border-r bg-muted/10">
       <div className="flex flex-none flex-row items-center gap-2 border-b p-4">
@@ -85,14 +101,14 @@ export function ChatSidebar({
           <Search className="absolute top-2.5 left-2 h-4 w-4 text-muted-foreground" />
           <Input
             className="h-9 pl-8"
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Buscar..."
             value={searchTerm}
           />
           {searchTerm && (
             <button
               className="absolute top-2.5 right-2 text-muted-foreground hover:text-foreground"
-              onClick={() => setSearchTerm('')}
+              onClick={() => onSearchChange('')}
               type="button"
             >
               <X className="h-4 w-4" />
@@ -105,7 +121,7 @@ export function ChatSidebar({
             'h-9 w-9',
             showUnreadOnly && 'bg-primary/10 text-primary hover:bg-primary/20'
           )}
-          onClick={() => setShowUnreadOnly(!showUnreadOnly)}
+          onClick={() => onUnreadFilterChange(!showUnreadOnly)}
           size="icon"
           title={showUnreadOnly ? 'Mostrar todos' : 'Filtrar não lidas'}
           variant={showUnreadOnly ? 'secondary' : 'ghost'}
@@ -118,7 +134,7 @@ export function ChatSidebar({
         />
       </div>
 
-      <div className="w-full overflow-auto">
+      <div className="w-full flex-1 overflow-auto">
         <div className="flex flex-col">
           {isLoadingContacts && (
             <div className="flex justify-center p-4">
@@ -126,14 +142,14 @@ export function ChatSidebar({
             </div>
           )}
 
-          {!isLoadingContacts && filteredContacts.length === 0 && (
+          {!isLoadingContacts && contacts.length === 0 && (
             <div className="flex flex-col items-center justify-center gap-2 p-8 text-center text-muted-foreground text-sm">
               <Search className="h-8 w-8 opacity-20" />
               <p>Nenhuma conversa encontrada.</p>
               {showUnreadOnly && (
                 <Button
                   className="h-auto p-0 text-xs"
-                  onClick={() => setShowUnreadOnly(false)}
+                  onClick={() => onUnreadFilterChange(false)}
                   variant="link"
                 >
                   Ver todas as conversas
@@ -142,7 +158,7 @@ export function ChatSidebar({
             </div>
           )}
 
-          {filteredContacts.map((contact) => (
+          {contacts.map((contact) => (
             <button
               className={cn(
                 'flex w-full items-center gap-3 border-border/50 border-b p-4 text-left transition-colors hover:bg-accent',
@@ -223,6 +239,31 @@ export function ChatSidebar({
           ))}
         </div>
       </div>
+
+      {/* Paginação */}
+      {totalPages > 1 && (
+        <div className="flex flex-none items-center justify-between border-t px-4 py-2">
+          <Button
+            disabled={page <= 1}
+            onClick={() => onPageChange(page - 1)}
+            size="sm"
+            variant="ghost"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-muted-foreground text-xs">
+            {page} / {totalPages}
+          </span>
+          <Button
+            disabled={page >= totalPages}
+            onClick={() => onPageChange(page + 1)}
+            size="sm"
+            variant="ghost"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

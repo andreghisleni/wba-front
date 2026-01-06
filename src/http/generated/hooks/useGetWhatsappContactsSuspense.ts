@@ -4,33 +4,33 @@
 */
 
 import fetch from "@/lib/api";
-import type { GetWhatsappContactsQueryResponse } from "../types/GetWhatsappContacts.ts";
+import type { GetWhatsappContactsQueryResponse, GetWhatsappContactsQueryParams } from "../types/GetWhatsappContacts.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { QueryKey, QueryClient, UseSuspenseQueryOptions, UseSuspenseQueryResult } from "@tanstack/react-query";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 
-export const getWhatsappContactsSuspenseQueryKey = () => [{ url: '/whatsapp/contacts' }] as const
+export const getWhatsappContactsSuspenseQueryKey = (params?: GetWhatsappContactsQueryParams) => [{ url: '/whatsapp/contacts' }, ...(params ? [params] : [])] as const
 
 export type GetWhatsappContactsSuspenseQueryKey = ReturnType<typeof getWhatsappContactsSuspenseQueryKey>
 
 /**
  * {@link /whatsapp/contacts}
  */
-export async function getWhatsappContactsSuspense(config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
+export async function getWhatsappContactsSuspense(params?: GetWhatsappContactsQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
   const { client: request = fetch, ...requestConfig } = config  
   
-  const res = await request<GetWhatsappContactsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method : "GET", url : `/whatsapp/contacts`, ... requestConfig })  
+  const res = await request<GetWhatsappContactsQueryResponse, ResponseErrorConfig<Error>, unknown>({ method : "GET", url : `/whatsapp/contacts`, params, ... requestConfig })  
   return res.data
 }
 
-export function getWhatsappContactsSuspenseQueryOptions(config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
-  const queryKey = getWhatsappContactsSuspenseQueryKey()
+export function getWhatsappContactsSuspenseQueryOptions(params?: GetWhatsappContactsQueryParams, config: Partial<RequestConfig> & { client?: typeof fetch } = {}) {
+  const queryKey = getWhatsappContactsSuspenseQueryKey(params)
   return queryOptions<GetWhatsappContactsQueryResponse, ResponseErrorConfig<Error>, GetWhatsappContactsQueryResponse, typeof queryKey>({
  
    queryKey,
    queryFn: async ({ signal }) => {
       config.signal = signal
-      return getWhatsappContactsSuspense(config)
+      return getWhatsappContactsSuspense(params, config)
    },
   })
 }
@@ -38,7 +38,7 @@ export function getWhatsappContactsSuspenseQueryOptions(config: Partial<RequestC
 /**
  * {@link /whatsapp/contacts}
  */
-export function useGetWhatsappContactsSuspense<TData = GetWhatsappContactsQueryResponse, TQueryKey extends QueryKey = GetWhatsappContactsSuspenseQueryKey>(options: 
+export function useGetWhatsappContactsSuspense<TData = GetWhatsappContactsQueryResponse, TQueryKey extends QueryKey = GetWhatsappContactsSuspenseQueryKey>(params?: GetWhatsappContactsQueryParams, options: 
 {
   query?: Partial<UseSuspenseQueryOptions<GetWhatsappContactsQueryResponse, ResponseErrorConfig<Error>, TData, TQueryKey>> & { client?: QueryClient },
   client?: Partial<RequestConfig> & { client?: typeof fetch }
@@ -46,10 +46,10 @@ export function useGetWhatsappContactsSuspense<TData = GetWhatsappContactsQueryR
  = {}) {
   const { query: queryConfig = {}, client: config = {} } = options ?? {}
   const { client: queryClient, ...queryOptions } = queryConfig
-  const queryKey = queryOptions?.queryKey ?? getWhatsappContactsSuspenseQueryKey()
+  const queryKey = queryOptions?.queryKey ?? getWhatsappContactsSuspenseQueryKey(params)
 
   const query = useSuspenseQuery({
-   ...getWhatsappContactsSuspenseQueryOptions(config),
+   ...getWhatsappContactsSuspenseQueryOptions(params, config),
    queryKey,
    ...queryOptions
   } as unknown as UseSuspenseQueryOptions, queryClient) as UseSuspenseQueryResult<TData, ResponseErrorConfig<Error>> & { queryKey: TQueryKey }

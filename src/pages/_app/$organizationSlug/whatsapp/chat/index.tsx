@@ -6,6 +6,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useSendRedded } from '@/contexts/send-redded';
+import { useDebounce } from '@/hooks/use-debounce';
 // Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
@@ -13,7 +14,7 @@ import {
   useGetWhatsappContacts,
   useGetWhatsappContactsContactIdMessages,
   useMarkWhatsappMessagesAsRead,
-  usePostWhatsappMessages
+  usePostWhatsappMessages,
 } from '@/http/generated/hooks';
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
@@ -29,6 +30,15 @@ function RouteComponent() {
   );
   const [inputMessage, setInputMessage] = useState('');
 
+  // Estados para filtros e paginação
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  const [page, setPage] = useState(1);
+  const limit = 50;
+
+  // Debounce do termo de busca para não fazer requisições a cada tecla
+  const debouncedSearch = useDebounce(searchTerm, 300);
+
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -39,19 +49,49 @@ function RouteComponent() {
         await queryClient.invalidateQueries({
           queryKey: getWhatsappContactsQueryKey(),
         });
-      }
-    }
+      },
+    },
   });
 
   const {
-    data: contacts = [],
+    data: contactsResponse,
     isLoading: isLoadingContacts,
     error: errorContacts,
-  } = useGetWhatsappContacts({
-    query: {
-      refetchInterval: 10_000,
+  } = useGetWhatsappContacts(
+    {
+      page,
+      limit,
+      search: debouncedSearch || undefined,
+      unreadOnly: showUnreadOnly ? 'true' : undefined,
     },
-  });
+    {
+      query: {
+        refetchInterval: 10_000,
+      },
+    }
+  );
+
+  // Extrair dados e meta da resposta paginada
+  const contacts = contactsResponse?.data ?? [];
+  const totalPages = contactsResponse?.meta?.totalPages ?? 1;
+
+  // Reset página quando filtros mudam
+  useEffect(() => {
+    setPage(1);
+  }, [debouncedSearch, showUnreadOnly]);
+
+  // Handlers para filtros
+  const handleSearchChange = (value: string) => {
+    setSearchTerm(value);
+  };
+
+  const handleUnreadFilterChange = (value: boolean) => {
+    setShowUnreadOnly(value);
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+  };
 
   const { data: messages = [], isLoading: isLoadingMessages } =
     useGetWhatsappContactsContactIdMessages(selectedContactId as string, {
@@ -135,8 +175,15 @@ function RouteComponent() {
       <ChatSidebar
         contacts={contacts}
         isLoadingContacts={isLoadingContacts}
+        onPageChange={handlePageChange}
+        onSearchChange={handleSearchChange}
         onSelectContact={setSelectedContactId}
+        onUnreadFilterChange={handleUnreadFilterChange}
+        page={page}
+        searchTerm={searchTerm}
         selectedContactId={selectedContactId}
+        showUnreadOnly={showUnreadOnly}
+        totalPages={totalPages}
       />
 
       <ChatWindow

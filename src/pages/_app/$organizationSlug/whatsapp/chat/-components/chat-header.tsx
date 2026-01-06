@@ -5,7 +5,7 @@ import type { GetWhatsappContactsQueryResponse } from '@/http/generated/types/Ge
 import { PhoneComponent } from './phone';
 
 interface ChatHeaderProps {
-  selectedContact: GetWhatsappContactsQueryResponse[0];
+  selectedContact: GetWhatsappContactsQueryResponse['data'][0];
 }
 
 export function ChatHeader({ selectedContact }: ChatHeaderProps) {

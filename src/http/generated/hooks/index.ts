@@ -38,6 +38,7 @@ export type { ImportWhatsappTemplatesMutationKey } from "./useImportWhatsappTemp
 export type { MarkWhatsappMessagesAsReadMutationKey } from "./useMarkWhatsappMessagesAsRead.ts";
 export type { PostV1ContactsMutationKey } from "./usePostV1Contacts.ts";
 export type { PostV1MessagesMutationKey } from "./usePostV1Messages.ts";
+export type { PostV1ReprocessMessagesMutationKey } from "./usePostV1ReprocessMessages.ts";
 export type { PostWhatsappMediaCallbackMutationKey } from "./usePostWhatsappMediaCallback.ts";
 export type { PostWhatsappMessagesMutationKey } from "./usePostWhatsappMessages.ts";
 export type { PostWhatsappWebhookMutationKey } from "./usePostWhatsappWebhook.ts";
@@ -87,6 +88,7 @@ export { importWhatsappTemplatesMutationKey, importWhatsappTemplates, useImportW
 export { markWhatsappMessagesAsReadMutationKey, markWhatsappMessagesAsRead, useMarkWhatsappMessagesAsRead } from "./useMarkWhatsappMessagesAsRead.ts";
 export { postV1ContactsMutationKey, postV1Contacts, usePostV1Contacts } from "./usePostV1Contacts.ts";
 export { postV1MessagesMutationKey, postV1Messages, usePostV1Messages } from "./usePostV1Messages.ts";
+export { postV1ReprocessMessagesMutationKey, postV1ReprocessMessages, usePostV1ReprocessMessages } from "./usePostV1ReprocessMessages.ts";
 export { postWhatsappMediaCallbackMutationKey, postWhatsappMediaCallback, usePostWhatsappMediaCallback } from "./usePostWhatsappMediaCallback.ts";
 export { postWhatsappMessagesMutationKey, postWhatsappMessages, usePostWhatsappMessages } from "./usePostWhatsappMessages.ts";
 export { postWhatsappWebhookMutationKey, postWhatsappWebhook, usePostWhatsappWebhook } from "./usePostWhatsappWebhook.ts";
