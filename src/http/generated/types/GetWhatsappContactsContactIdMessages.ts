@@ -32,6 +32,20 @@ export type GetWhatsappContactsContactIdMessages200 = {
     */
     status: string;
     timestamp: (string | string | number);
+    errorCode: (string | null) | null;
+    errorDesc: (string | null) | null;
+    errorDefinition?: ({
+        /**
+         * @type string
+        */
+        id: string;
+        /**
+         * @type string
+        */
+        metaCode: string;
+        shortExplanation: (string | null) | null;
+        detailedExplanation: (string | null) | null;
+    } | null) | null;
     templateParams?: ({
         /**
          * @type string

@@ -29,8 +29,8 @@ const RenderMessageContent = ({ message }: { message: any }) => {
           <img
             alt="Imagem"
             className={`cursor-pointer rounded-lg object-cover hover:opacity-90 ${message.type === 'sticker'
-              ? 'h-32 w-32 bg-transparent'
-              : 'max-h-64 w-auto'
+                ? 'h-32 w-32 bg-transparent'
+                : 'max-h-64 w-auto'
               }`}
             onClick={() => window.open(mediaUrl, '_blank')}
             src={mediaUrl}
@@ -107,8 +107,8 @@ export function MessageBubble({ message }: { message: any }) {
     >
       <div
         className={`relative min-w-48 max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
-          ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
-          : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
+            ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
+            : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
           }`}
       >
         {/* 1. Renderiza a Mídia (se houver) */}
@@ -135,6 +135,7 @@ export function MessageBubble({ message }: { message: any }) {
           {/* O COMPONENTE DE STATUS ENTRA AQUI */}
           {/* Ele só vai renderizar se isMe for true, pois configuramos isso dentro dele */}
           <MessageStatus
+            errorDefinition={message.errorDefinition}
             errorDesc={message.errorDesc}
             isUser={isMe}
             status={message.status}

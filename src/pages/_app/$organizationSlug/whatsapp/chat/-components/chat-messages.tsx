@@ -1,8 +1,8 @@
-import { Loader2 } from "lucide-react";
-import type { RefObject } from "react";
-import type { GetWhatsappContactsContactIdMessagesQueryResponse } from "@/http/generated/types/GetWhatsappContactsContactIdMessages";
-import { MessageBubble } from "./message-bubble";
-import { formatChatDay } from "@/utils/formatChatDay";
+import { Loader2 } from 'lucide-react';
+import type { RefObject } from 'react';
+import type { GetWhatsappContactsContactIdMessagesQueryResponse } from '@/http/generated/types/GetWhatsappContactsContactIdMessages';
+import { formatChatDay } from '@/utils/formatChatDay';
+import { MessageBubble } from './message-bubble';
 
 interface ChatMessagesProps {
   messages: GetWhatsappContactsContactIdMessagesQueryResponse;
@@ -45,7 +45,7 @@ export function ChatMessages({
                   className="my-4 flex items-center justify-center"
                   key={`day-separator-${msg.id}`}
                 >
-                  <span className="rounded-full bg-slate-200 px-4 py-1 text-xs font-semibold text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                  <span className='rounded-full bg-slate-200 px-4 py-1 font-semibold text-slate-600 text-xs dark:bg-slate-800 dark:text-slate-300'>
                     {formatChatDay(msgDate)}
                   </span>
                 </div>
