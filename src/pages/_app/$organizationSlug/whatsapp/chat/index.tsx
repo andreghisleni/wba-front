@@ -7,6 +7,7 @@ import { useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useSendRedded } from '@/contexts/send-redded';
 import { useDebounce } from '@/hooks/use-debounce';
+import type { GetWhatsappContacts200 } from '@/http/generated';
 // Seus hooks gerados
 import {
   getWhatsappContactsContactIdMessagesQueryKey,
@@ -25,9 +26,12 @@ export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
 
 function RouteComponent() {
   const { sendRedded } = useSendRedded();
-  const [selectedContactId, setSelectedContactId] = useState<string | null>(
-    null
-  );
+  // const [selectedContactId, setSelectedContactId] = useState<string | null>(
+  //   null
+  // );
+  const [selectedContact, setSelectedContact] = useState<
+    GetWhatsappContacts200['data'][0] | null
+  >(null);
   const [inputMessage, setInputMessage] = useState('');
 
   // Estados para filtros e paginação
@@ -94,14 +98,14 @@ function RouteComponent() {
   };
 
   const { data: messages = [], isLoading: isLoadingMessages } =
-    useGetWhatsappContactsContactIdMessages(selectedContactId as string, {
+    useGetWhatsappContactsContactIdMessages(selectedContact?.id as string, {
       query: {
-        enabled: !!selectedContactId,
+        enabled: !!selectedContact?.id,
         refetchInterval: 5000,
       },
     });
 
-  const selectedContact = contacts.find((c) => c.id === selectedContactId);
+  // const selectedContact = contacts.find((c) => c.id === selectedContactId);
 
   const isWindowClosed = selectedContact
     ? !selectedContact.isWindowOpen
@@ -114,7 +118,7 @@ function RouteComponent() {
           setInputMessage('');
           await queryClient.invalidateQueries({
             queryKey: getWhatsappContactsContactIdMessagesQueryKey(
-              selectedContactId as string
+              selectedContact?.id as string
             ),
           });
         },
@@ -131,28 +135,33 @@ function RouteComponent() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages, selectedContactId, isLoadingMessages]);
+  }, [messages, selectedContact?.id, isLoadingMessages]);
 
   useEffect(() => {
     if (
-      selectedContactId &&
+      selectedContact?.id &&
       selectedContact &&
       selectedContact?.unreadCount > 0 &&
       sendRedded
     ) {
-      markAsRead({ contactId: selectedContactId });
+      markAsRead({ contactId: selectedContact?.id });
     }
-  }, [selectedContactId, selectedContact?.unreadCount, markAsRead, sendRedded]);
+  }, [
+    selectedContact?.id,
+    selectedContact?.unreadCount,
+    markAsRead,
+    sendRedded,
+  ]);
 
   const handleSendMessage = async () => {
-    if (!(inputMessage.trim() && selectedContactId)) {
+    if (!(inputMessage.trim() && selectedContact?.id)) {
       return;
     }
     try {
       await sendMessage({
         data: {
           type: 'text',
-          contactId: selectedContactId,
+          contactId: selectedContact?.id,
           message: inputMessage,
         },
       });
@@ -177,11 +186,11 @@ function RouteComponent() {
         isLoadingContacts={isLoadingContacts}
         onPageChange={handlePageChange}
         onSearchChange={handleSearchChange}
-        onSelectContact={setSelectedContactId}
+        onSelectContact={setSelectedContact}
         onUnreadFilterChange={handleUnreadFilterChange}
         page={page}
         searchTerm={searchTerm}
-        selectedContactId={selectedContactId}
+        selectedContactId={selectedContact?.id || null}
         showUnreadOnly={showUnreadOnly}
         totalPages={totalPages}
       />
@@ -194,7 +203,7 @@ function RouteComponent() {
         isWindowClosed={isWindowClosed}
         messages={messages}
         messagesEndRef={messagesEndRef}
-        selectedContact={selectedContact}
+        selectedContact={selectedContact || undefined}
         setInputMessage={setInputMessage}
       />
     </div>

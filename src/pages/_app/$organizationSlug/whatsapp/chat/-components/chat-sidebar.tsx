@@ -20,6 +20,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import type { GetWhatsappContacts200 } from '@/http/generated';
 import { cn } from '@/lib/utils';
 import { MessageStatus } from './message-status';
 import { NewChatDialog } from './new-chat-dialog';
@@ -69,7 +70,7 @@ interface ChatSidebarProps {
   contacts: ContactItem[];
   isLoadingContacts: boolean;
   selectedContactId: string | null;
-  onSelectContact: (contactId: string) => void;
+  onSelectContact: (contact: GetWhatsappContacts200['data'][0]) => void;
   // Filtros controlados pelo pai
   searchTerm: string;
   onSearchChange: (value: string) => void;
@@ -130,7 +131,7 @@ export function ChatSidebar({
         </Button>
 
         <NewChatDialog
-          onContactCreated={(contactId) => onSelectContact(contactId)}
+          onContactCreated={(contact) => onSelectContact(contact)}
         />
       </div>
 
@@ -165,7 +166,7 @@ export function ChatSidebar({
                 selectedContactId === contact.id && 'bg-accent'
               )}
               key={contact.id}
-              onClick={() => onSelectContact(contact.id)}
+              onClick={() => onSelectContact(contact)}
               type="button"
             >
               <div className="relative">
@@ -212,9 +213,7 @@ export function ChatSidebar({
 
                       const Icon = typeIcons[type] || HelpCircle;
                       const label =
-                        contact.lastMessage ||
-                        typeLabels[type] ||
-                        'Mensagem';
+                        contact.lastMessage || typeLabels[type] || 'Mensagem';
 
                       return (
                         <div className="flex min-w-0 flex-1 items-center gap-1">

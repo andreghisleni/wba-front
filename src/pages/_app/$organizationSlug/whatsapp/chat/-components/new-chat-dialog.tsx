@@ -14,6 +14,7 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import type { GetWhatsappContacts200 } from '@/http/generated';
 // Hook gerado pelo Kubb (ajuste o import)
 import {
   getWhatsappContactsQueryKey,
@@ -21,7 +22,7 @@ import {
 } from '@/http/generated/hooks';
 
 interface NewChatDialogProps {
-  onContactCreated: (contactId: string) => void;
+  onContactCreated: (contact: GetWhatsappContacts200['data'][0]) => void;
 }
 
 export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
@@ -40,7 +41,7 @@ export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
 
         // O backend retorna o objeto contato. Pegamos o ID.
         // Dependendo do gerador (Eden/Kubb), pode ser result.data.id ou result.id
-        const newContactId = data.id || data.data?.id;
+        const newContact = data;
 
         toast.success('Contato criado!');
         setIsOpen(false);
@@ -48,8 +49,9 @@ export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
         setName('');
 
         // Callback para a página pai selecionar esse contato imediatamente
-        if (newContactId) {
-          onContactCreated(newContactId);
+        if (newContact) {
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          onContactCreated(newContact as any);
         }
       },
       onError: (error) => {
@@ -91,11 +93,11 @@ export function NewChatDialog({ onContactCreated }: NewChatDialogProps) {
         <div className="space-y-4 py-4">
           <div className="space-y-2">
             <Label>Telefone (DDD + Número)</Label>
-            <div className='flex items-center rounded-md border px-3'>
-              <span className='mr-1 text-muted-foreground text-sm'>+55</span>
+            <div className="flex items-center rounded-md border px-3">
+              <span className="mr-1 text-muted-foreground text-sm">+55</span>
               <Input
                 autoFocus
-                className='h-9 border-0 p-0 focus-visible:ring-0'
+                className="h-9 border-0 p-0 focus-visible:ring-0"
                 onChange={(e) => setPhoneNumber(e.target.value)}
                 placeholder="49 99999-9999"
                 value={phoneNumber}
