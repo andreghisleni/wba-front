@@ -1,38 +1,42 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: <explanation> */
-import type { UseFormReturn } from "react-hook-form";
-import z from "zod";
-import { formatDateWithTimeToLocalInput } from "@/utils/format-date-with-time-to-local-input";
+
+import { X } from 'lucide-react';
+import type { UseFormReturn } from 'react-hook-form';
+import z from 'zod';
+import { formatDateWithTimeToLocalInput } from '@/utils/format-date-with-time-to-local-input';
+import { Button } from './ui/button';
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "./ui/form";
-import { Input } from "./ui/input";
+} from './ui/form';
+import { Input } from './ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "./ui/select";
-import { Switch } from "./ui/switch";
+} from './ui/select';
+import { Switch } from './ui/switch';
 
 type extraFieldOptions = {
   values?: { value: string; label: string; disabled?: boolean }[] | undefined;
   loading: boolean;
-  type?: "datetime-local" | "date" | "array";
+  type?: 'datetime-local' | 'date' | 'array';
 };
 
 export function generateFormFieldsFromZodSchema<T extends z.ZodTypeAny>(
   schema: T,
   form: UseFormReturn<z.infer<T>>,
-  values: Record<string, extraFieldOptions> = {}
+  values: Record<string, extraFieldOptions> = {},
+  fieldArrays: Record<string, { fields: Array<{ id: string;[key: string]: any }>; append: (value: any) => void; remove: (index: number) => void }> = {}
 ) {
   return Object.entries((schema as any).shape).map(
     ([fieldName, fieldSchema]) => {
-      return renderField(fieldName, fieldSchema as any, form, values);
+      return renderField(fieldName, fieldSchema as any, form, values, undefined, fieldArrays);
     }
   );
 }
@@ -41,7 +45,8 @@ function renderField<T extends z.ZodTypeAny>(
   fieldSchema: T,
   form: UseFormReturn<z.infer<T>>,
   values: Record<string, extraFieldOptions> = {},
-  overrideDescription?: string // 1. Novo parâmetro opcional
+  overrideDescription?: string,
+  fieldArrays: Record<string, { fields: Array<{ id: string;[key: string]: any }>; append: (value: any) => void; remove: (index: number) => void }> = {}
 ) {
   const description =
     overrideDescription || fieldSchema.description || fieldName;
@@ -106,14 +111,14 @@ function renderField<T extends z.ZodTypeAny>(
                   id={field.name}
                   onChange={(e) => {
                     const value =
-                      typeName === "ZodNumber"
+                      typeName === 'ZodNumber'
                         ? e.target.valueAsNumber
                         : e.target.value;
                     field.onChange(value);
                   }}
                   placeholder={description}
-                  type={typeName === "ZodNumber" ? "number" : "text"}
-                  value={field.value || ""}
+                  type={typeName === 'ZodNumber' ? 'number' : 'text'}
+                  value={field.value || ''}
                 />
               </FormControl>
               <FormMessage />
@@ -197,6 +202,65 @@ function renderField<T extends z.ZodTypeAny>(
     //       )}
     //     />
     //   );
+    case z.ZodFirstPartyTypeKind.ZodArray: {
+      const fieldArray = fieldArrays[fieldName];
+      if (fieldArray) {
+        return (
+          <FormItem key={fieldName}>
+            <FormLabel>{description}</FormLabel>
+            <FormControl>
+              <div className="space-y-2">
+                {fieldArray.fields.map((field, index) => (
+                  <div className="flex gap-2" key={field.id}>
+                    <FormField
+                      control={form.control}
+                      name={`${fieldName}.${index}` as never}
+                      render={({ field: inputField }) => (
+                        <FormControl>
+                          <Input
+                            {...inputField}
+                            placeholder={`${description} ${index + 1}`}
+                          />
+                        </FormControl>
+                      )}
+                    />
+                    <Button
+                      onClick={() => fieldArray.remove(index)}
+                      size="sm"
+                      type="button"
+                      variant="ghost"
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  onClick={() => fieldArray.append('')}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  Adicionar {description}
+                </Button>
+              </div>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
+        );
+      }
+
+      // Fallback se não houver fieldArray
+      return (
+        <div className="flex" key={fieldName}>
+          {/* <ShowJson
+              data={{ fieldSchema, fieldName, description, values, typeName }}
+            /> */}
+          <span>
+            Não sei renderizar o campo {fieldName} do tipo {typeName}
+          </span>
+        </div>
+      );
+    }
     case z.ZodFirstPartyTypeKind.ZodDate:
       return (
         <FormField
@@ -216,14 +280,14 @@ function renderField<T extends z.ZodTypeAny>(
                     field.onChange(date);
                   }}
                   placeholder={description}
-                  type={fieldValues?.type || "date"} // Usa o tipo definido (datetime-local ou date)
+                  type={fieldValues?.type || 'date'} // Usa o tipo definido (datetime-local ou date)
                   // CORREÇÃO AQUI:
                   value={
                     field.value
-                      ? fieldValues?.type === "datetime-local"
+                      ? fieldValues?.type === 'datetime-local'
                         ? formatDateWithTimeToLocalInput(new Date(field.value)) // YYYY-MM-DDTHH:mm
-                        : new Date(field.value).toISOString().split("T")[0] // YYYY-MM-DD
-                      : ""
+                        : new Date(field.value).toISOString().split('T')[0] // YYYY-MM-DD
+                      : ''
                   }
                 />
               </FormControl>
@@ -239,7 +303,8 @@ function renderField<T extends z.ZodTypeAny>(
         (fieldSchema as unknown as z.ZodOptional<z.ZodTypeAny>).unwrap(),
         form,
         values,
-        description
+        description,
+        fieldArrays
       );
     case z.ZodFirstPartyTypeKind.ZodUnion:
       {
@@ -248,7 +313,7 @@ function renderField<T extends z.ZodTypeAny>(
         )._def.options;
 
         // Se for uma união de literais, renderiza um select
-        if (options.every((opt) => opt._def.typeName === "ZodLiteral")) {
+        if (options.every((opt) => opt._def.typeName === 'ZodLiteral')) {
           const opts = options.map(
             (opt) => (opt as z.ZodLiteral<any>)._def.value
           );

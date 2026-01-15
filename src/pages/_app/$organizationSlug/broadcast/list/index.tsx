@@ -3,6 +3,7 @@ import z from 'zod';
 import { DataTable } from '@/components/data-table';
 import { useGetBroadcastLists } from '@/http/generated';
 import { columns } from './-components/columns';
+import { ListForm } from './-components/list-form';
 
 export const Route = createFileRoute('/_app/$organizationSlug/broadcast/list/')(
   {
@@ -19,9 +20,9 @@ function RouteComponent() {
 
   return (
     <div className="px-8 pt-8">
-      <h2 className="font-bold text-3xl tracking-tight">Membros</h2>
+      <h2 className="font-bold text-3xl tracking-tight">Listas de Transmissão</h2>
       <DataTable
-        // addComponent={<MemberForm />}
+        addComponent={<ListForm />}
         columns={columns({ organizationSlug })}
         data={data || []}
         loading={isLoading}

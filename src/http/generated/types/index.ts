@@ -15,6 +15,7 @@ export type { GetBroadcastListPathParams, GetBroadcastList200, GetBroadcastList4
 export type { GetBroadcastListMemberPathParams, GetBroadcastListMember200, GetBroadcastListMember400, GetBroadcastListMember404, GetBroadcastListMemberQueryResponse, GetBroadcastListMemberQuery } from "./GetBroadcastListMember.ts";
 export type { GetBroadcastListMembersPathParams, GetBroadcastListMembersQueryParams, GetBroadcastListMembers200, GetBroadcastListMembers400, GetBroadcastListMembers404, GetBroadcastListMembersQueryResponse, GetBroadcastListMembersQuery } from "./GetBroadcastListMembers.ts";
 export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQueryResponse, GetBroadcastListsQuery } from "./GetBroadcastLists.ts";
+export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./GetV1Status.ts";

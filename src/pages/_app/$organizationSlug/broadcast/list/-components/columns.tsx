@@ -1,9 +1,12 @@
+/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: <explanation> */
+/** biome-ignore-all lint/a11y/noStaticElementInteractions: <explanation> */
 import { Link } from '@tanstack/react-router';
 import type { ColumnDef } from '@tanstack/react-table';
 import { Eye } from 'lucide-react';
 import { tdb } from '@/components/table/TableDataButton';
 import { Button } from '@/components/ui/button';
 import type { GetBroadcastLists200 } from '@/http/generated';
+import { ListForm } from './list-form';
 
 export type List = GetBroadcastLists200[0];
 
@@ -19,10 +22,8 @@ export const columns = ({ organizationSlug }: { organizationSlug: string }): Col
     header: 'Ações',
     cell: ({ row }) => {
       return (
-        <div className="flex gap-2">
-          {/* <Button size="sm" variant="ghost">
-            Editar
-          </Button> */}
+        <div className="flex gap-2" onDoubleClick={e => e.stopPropagation()}>
+          <ListForm list={row.original} />
           <Button asChild size="sm" variant="outline">
             <Link
               params={{ listId: row.original.id, organizationSlug }}

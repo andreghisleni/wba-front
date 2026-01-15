@@ -21,6 +21,8 @@ export type { GetBroadcastListMemberSuspenseQueryKey } from "./useGetBroadcastLi
 export type { GetBroadcastListsQueryKey } from "./useGetBroadcastLists.ts";
 export type { GetBroadcastListsSuspenseQueryKey } from "./useGetBroadcastListsSuspense.ts";
 export type { GetBroadcastListSuspenseQueryKey } from "./useGetBroadcastListSuspense.ts";
+export type { GetContactsQueryKey } from "./useGetContacts.ts";
+export type { GetContactsSuspenseQueryKey } from "./useGetContactsSuspense.ts";
 export type { GetDashboardApiKeysQueryKey } from "./useGetDashboardApiKeys.ts";
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./useGetDashboardData.ts";
@@ -85,6 +87,8 @@ export { getBroadcastListMemberSuspenseQueryKey, getBroadcastListMemberSuspense,
 export { getBroadcastListsQueryKey, getBroadcastLists, getBroadcastListsQueryOptions, useGetBroadcastLists } from "./useGetBroadcastLists.ts";
 export { getBroadcastListsSuspenseQueryKey, getBroadcastListsSuspense, getBroadcastListsSuspenseQueryOptions, useGetBroadcastListsSuspense } from "./useGetBroadcastListsSuspense.ts";
 export { getBroadcastListSuspenseQueryKey, getBroadcastListSuspense, getBroadcastListSuspenseQueryOptions, useGetBroadcastListSuspense } from "./useGetBroadcastListSuspense.ts";
+export { getContactsQueryKey, getContacts, getContactsQueryOptions, useGetContacts } from "./useGetContacts.ts";
+export { getContactsSuspenseQueryKey, getContactsSuspense, getContactsSuspenseQueryOptions, useGetContactsSuspense } from "./useGetContactsSuspense.ts";
 export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQueryOptions, useGetDashboardApiKeys } from "./useGetDashboardApiKeys.ts";
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./useGetDashboardData.ts";

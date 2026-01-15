@@ -21,6 +21,8 @@ export type { GetBroadcastListMemberSuspenseQueryKey } from "./hooks/useGetBroad
 export type { GetBroadcastListsQueryKey } from "./hooks/useGetBroadcastLists.ts";
 export type { GetBroadcastListsSuspenseQueryKey } from "./hooks/useGetBroadcastListsSuspense.ts";
 export type { GetBroadcastListSuspenseQueryKey } from "./hooks/useGetBroadcastListSuspense.ts";
+export type { GetContactsQueryKey } from "./hooks/useGetContacts.ts";
+export type { GetContactsSuspenseQueryKey } from "./hooks/useGetContactsSuspense.ts";
 export type { GetDashboardApiKeysQueryKey } from "./hooks/useGetDashboardApiKeys.ts";
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./hooks/useGetDashboardData.ts";
@@ -79,6 +81,7 @@ export type { GetBroadcastListPathParams, GetBroadcastList200, GetBroadcastList4
 export type { GetBroadcastListMemberPathParams, GetBroadcastListMember200, GetBroadcastListMember400, GetBroadcastListMember404, GetBroadcastListMemberQueryResponse, GetBroadcastListMemberQuery } from "./types/GetBroadcastListMember.ts";
 export type { GetBroadcastListMembersPathParams, GetBroadcastListMembersQueryParams, GetBroadcastListMembers200, GetBroadcastListMembers400, GetBroadcastListMembers404, GetBroadcastListMembersQueryResponse, GetBroadcastListMembersQuery } from "./types/GetBroadcastListMembers.ts";
 export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQueryResponse, GetBroadcastListsQuery } from "./types/GetBroadcastLists.ts";
+export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./types/GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./types/GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./types/GetDashboardData.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./types/GetV1Status.ts";
@@ -131,6 +134,8 @@ export { getBroadcastListMemberSuspenseQueryKey, getBroadcastListMemberSuspense,
 export { getBroadcastListsQueryKey, getBroadcastLists, getBroadcastListsQueryOptions, useGetBroadcastLists } from "./hooks/useGetBroadcastLists.ts";
 export { getBroadcastListsSuspenseQueryKey, getBroadcastListsSuspense, getBroadcastListsSuspenseQueryOptions, useGetBroadcastListsSuspense } from "./hooks/useGetBroadcastListsSuspense.ts";
 export { getBroadcastListSuspenseQueryKey, getBroadcastListSuspense, getBroadcastListSuspenseQueryOptions, useGetBroadcastListSuspense } from "./hooks/useGetBroadcastListSuspense.ts";
+export { getContactsQueryKey, getContacts, getContactsQueryOptions, useGetContacts } from "./hooks/useGetContacts.ts";
+export { getContactsSuspenseQueryKey, getContactsSuspense, getContactsSuspenseQueryOptions, useGetContactsSuspense } from "./hooks/useGetContactsSuspense.ts";
 export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQueryOptions, useGetDashboardApiKeys } from "./hooks/useGetDashboardApiKeys.ts";
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./hooks/useGetDashboardData.ts";
