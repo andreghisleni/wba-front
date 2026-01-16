@@ -53,7 +53,7 @@ interface DataTableProps<TData, TValue> {
     total_items: number;
   };
   addFunction?: () => void;
-  addComponent?: React.ReactNode;
+  addComponent?: React.ReactNode | React.ReactNode[];
   noDataMessage?: string;
   onRowSelectionChange?: (selectedRows: TData[]) => void;
 
@@ -302,7 +302,7 @@ function DateTableContent({
   filterComponent: any;
   ifJustFilterComponent: any;
   addFunction: any;
-  addComponent: any;
+  addComponent: React.ReactNode | React.ReactNode[];
   noDataMessage: any;
   toggleFullScreen: any;
   isFullScreen: any;
@@ -365,7 +365,9 @@ function DateTableContent({
               Add
             </Button>
           )}
-          {addComponent && addComponent}
+
+          {addComponent && (<div className="flex gap-2">{addComponent}</div>)}
+
           {/** biome-ignore lint/complexity/useOptionalChain: <explanation> */}
           {actionComponent && actionComponent({ table })}
           <Button onClick={toggleFullScreen} variant="outline">
@@ -397,9 +399,9 @@ function DateTableContent({
                           {header.isPlaceholder
                             ? null
                             : flexRender(
-                                header.column.columnDef.header,
-                                header.getContext()
-                              )}
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
                         </TableHead>
                       );
                     })}
@@ -436,70 +438,70 @@ function DateTableContent({
                 </TableRow>
               ))
             ) : // biome-ignore lint/style/noNestedTernary: <explanation>
-            table.getRowModel().rows?.length ? (
-              table
-                .getRowModel()
-                .rows.map(
-                  (row: {
-                    getIsSelected: () => any;
-                    id: React.Key | null | undefined;
-                    toggleSelected: (arg0: boolean) => void;
-                    getVisibleCells: () => any[];
-                  }) => (
-                    <TableRow
-                      className={cn("group")}
-                      data-state={row.getIsSelected() ? "selected" : undefined}
-                      key={row.id}
-                      onDoubleClick={() =>
-                        row.toggleSelected(!row.getIsSelected())
-                      }
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <TableCell
-                          className={cn(
-                            // 'bg-white dark:bg-zinc-950',
-                            "group-hover:bg-zinc-100/50 dark:group-hover:bg-zinc-800/50",
-                            "group-data-[state=selected]:bg-zinc-200 dark:group-data-[state=selected]:bg-zinc-800/50",
-                            "group-data-[state=selected]:group-hover:bg-blue-200/70 dark:group-data-[state=selected]:group-hover:bg-blue-800/40",
-                            rowBgColor?.(row),
-                            cell.column.columnDef.meta?.className
-                          )}
-                          key={cell.id}
-                        >
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  )
-                )
-            ) : (
-              <TableRow>
-                {columns.length < 6 ? (
-                  <TableCell
-                    className="h-24 text-center"
-                    colSpan={columns.length}
-                  >
-                    {noDataMessage}
-                  </TableCell>
-                ) : (
-                  new Array(Math.ceil(columns.length / 3))
-                    .fill(null)
-                    .map((_, i) => i)
-                    .map((i) => (
-                      <TableCell
-                        className="h-24 text-center"
-                        colSpan={Math.ceil(columns.length / 3)}
-                        key={i}
+              table.getRowModel().rows?.length ? (
+                table
+                  .getRowModel()
+                  .rows.map(
+                    (row: {
+                      getIsSelected: () => any;
+                      id: React.Key | null | undefined;
+                      toggleSelected: (arg0: boolean) => void;
+                      getVisibleCells: () => any[];
+                    }) => (
+                      <TableRow
+                        className={cn("group")}
+                        data-state={row.getIsSelected() ? "selected" : undefined}
+                        key={row.id}
+                        onDoubleClick={() =>
+                          row.toggleSelected(!row.getIsSelected())
+                        }
                       >
-                        {noDataMessage}
-                      </TableCell>
-                    ))
-                )}
-              </TableRow>
-            )}
+                        {row.getVisibleCells().map((cell) => (
+                          <TableCell
+                            className={cn(
+                              // 'bg-white dark:bg-zinc-950',
+                              "group-hover:bg-zinc-100/50 dark:group-hover:bg-zinc-800/50",
+                              "group-data-[state=selected]:bg-zinc-200 dark:group-data-[state=selected]:bg-zinc-800/50",
+                              "group-data-[state=selected]:group-hover:bg-blue-200/70 dark:group-data-[state=selected]:group-hover:bg-blue-800/40",
+                              rowBgColor?.(row),
+                              cell.column.columnDef.meta?.className
+                            )}
+                            key={cell.id}
+                          >
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    )
+                  )
+              ) : (
+                <TableRow>
+                  {columns.length < 6 ? (
+                    <TableCell
+                      className="h-24 text-center"
+                      colSpan={columns.length}
+                    >
+                      {noDataMessage}
+                    </TableCell>
+                  ) : (
+                    new Array(Math.ceil(columns.length / 3))
+                      .fill(null)
+                      .map((_, i) => i)
+                      .map((i) => (
+                        <TableCell
+                          className="h-24 text-center"
+                          colSpan={Math.ceil(columns.length / 3)}
+                          key={i}
+                        >
+                          {noDataMessage}
+                        </TableCell>
+                      ))
+                  )}
+                </TableRow>
+              )}
           </TableBody>
         </Table>
         {/* <ScrollBar orientation="horizontal" />
@@ -509,11 +511,11 @@ function DateTableContent({
         {!!table
           .getAllColumns()
           .find((c: { id: string }) => c.id === "select") && (
-          <div className="flex-1 text-muted-foreground text-sm">
-            {table.getFilteredSelectedRowModel().rows.length} of{" "}
-            {table.getFilteredRowModel().rows.length} row(s) selected.
-          </div>
-        )}
+            <div className="flex-1 text-muted-foreground text-sm">
+              {table.getFilteredSelectedRowModel().rows.length} of{" "}
+              {table.getFilteredRowModel().rows.length} row(s) selected.
+            </div>
+          )}
         {pagination && (
           <div className="space-x-2">
             <Button
