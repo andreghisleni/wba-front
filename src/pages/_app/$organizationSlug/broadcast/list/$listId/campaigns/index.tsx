@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from '@tanstack/react-router';
+import { createFileRoute } from '@tanstack/react-router';
 
 import { parseAsInteger, parseAsString, useQueryStates } from 'nuqs';
 import { Suspense } from 'react';
@@ -6,17 +6,16 @@ import z from 'zod';
 import { DataTable } from '@/components/data-table';
 import { FilterBase } from '@/components/filter-base';
 import { Pagination } from '@/components/pagination';
-import { Button } from '@/components/ui/button';
 import { usePagination } from '@/hooks/use-pagination';
 import {
+  useGetBroadcastCampaigns,
   useGetBroadcastList,
-  useGetBroadcastListMembers,
 } from '@/http/generated';
+import { CampaignForm } from './-components/campaign-form';
 import { columns } from './-components/columns';
-import { MemberForm } from './-components/member-form';
 
 export const Route = createFileRoute(
-  '/_app/$organizationSlug/broadcast/list/$listId/members/'
+  '/_app/$organizationSlug/broadcast/list/$listId/campaigns/'
 )({
   component: RouteComponent,
   params: z.object({
@@ -25,73 +24,64 @@ export const Route = createFileRoute(
   }),
 });
 
+const filterSchema = z.object({
+  status: z.string().optional().describe('Status'),
+});
+
+const values = {
+  status: [
+    { value: 'DRAFT', label: 'Rascunho' },
+    { value: 'PROCESSING', label: 'Processando' },
+    { value: 'COMPLETED', label: 'Concluído' },
+    { value: 'PAUSED', label: 'Pausado' },
+    { value: 'FAILED', label: 'Falhou' },
+    { value: 'CANCELED', label: 'Cancelado' },
+  ]
+}
+
 function RouteComponent() {
   const { listId, organizationSlug } = Route.useParams();
   const { data: list, isLoading: isListLoading } = useGetBroadcastList(listId);
-  const [{ pageIndex, pageSize, filter }] = useQueryStates({
+  const [{ pageIndex, pageSize, filter, status }] = useQueryStates({
     pageIndex: parseAsInteger.withDefault(1),
-    // pageSize é uma string, com valor padrão '10' (pode ser parseAsInteger se preferir)
     pageSize: parseAsInteger.withDefault(10),
-    filter: parseAsString.withDefault(''), // Exemplo de filtro adicional
+    filter: parseAsString.withDefault(''),
+    status: parseAsString.withDefault(''),
   });
-  const { data: membersData, isLoading: isMembersLoading } =
-    useGetBroadcastListMembers(listId, {
+  const { data: campaignsData, isLoading: isCampaignsLoading } =
+    useGetBroadcastCampaigns(listId, {
       'f.filter': filter.length > 0 ? filter : undefined,
+      'f.status': status.length > 0 ? status : undefined,
       'p.page': pageIndex,
       'p.pageSize': pageSize,
     });
 
   const { totalPages, total, navigateToPage, setPageSize, showing } =
     usePagination({
-      total: membersData?.meta.total,
-      showing: membersData?.data.length,
+      total: campaignsData?.meta.total,
+      showing: campaignsData?.data.length,
     });
 
-  if (isListLoading || isMembersLoading) {
-    return <div>Loading list...</div>;
+  if (isListLoading || isCampaignsLoading) {
+    return <div>Carregando campanhas...</div>;
   }
 
   return (
     <div className="px-8 pt-8">
       <h2 className="font-bold text-3xl tracking-tight">
-        Membros da lista de transmissão: {list?.name}
+        Campanhas da lista de transmissão: {list?.name}
       </h2>
       <DataTable
-        addComponent={
-          <>
-            <MemberForm additionalParams={list?.additionalParams || []} />
-            <Button asChild color="yellow" key="import" variant="outline">
-              <Link
-                params={{
-                  listId,
-                  organizationSlug,
-                }}
-                to="/$organizationSlug/broadcast/list/$listId/members/import"
-              >
-                Importar
-              </Link>
-            </Button>
-            <Button asChild color="blue" variant="outline">
-              <Link
-                params={{
-                  listId,
-                  organizationSlug,
-                }}
-                to="/$organizationSlug/broadcast/list/$listId/campaigns"
-              >
-                Ver Campanhas
-              </Link>
-            </Button>
-          </>
-        }
+        addComponent={<CampaignForm listId={listId} />}
         columns={columns({
           organizationSlug,
-          additionalParams: list?.additionalParams || [],
         })}
-        data={membersData?.data || []}
-        filterComponent={<FilterBase />}
+        data={campaignsData?.data || []}
+        filterComponent={
+          <FilterBase additionalFieldsSchema={filterSchema} values={values} />
+        }
         ifJustFilterComponent
-        loading={isMembersLoading}
+        loading={isCampaignsLoading}
         paginationComponent={
           <Suspense fallback={null}>
             <Pagination

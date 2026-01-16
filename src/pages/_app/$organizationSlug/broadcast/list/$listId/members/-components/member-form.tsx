@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: show errors */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { useQueryClient } from '@tanstack/react-query';
@@ -106,7 +107,6 @@ export function MemberForm({
         toast.success(`${formName} criado com sucesso`);
       },
       onError(error) {
-        // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log(error);
         toast.error(`Erro ao criar o ${formName}`, {
           description: error.response?.data?.error || error.message,
@@ -126,7 +126,6 @@ export function MemberForm({
         toast.success(`${formName} atualizado com sucesso`);
       },
       onError(error) {
-        // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log(error);
         toast.error(`Erro ao atualizar o ${formName}`, {
           description: error.response?.data?.error || error.message,
@@ -137,17 +136,17 @@ export function MemberForm({
 
   async function onSubmit({
     contactId,
-    ...addp
+    ...addParameters
   }: z.infer<typeof memberCompleteSchema>) {
     if (member) {
       await updateMember.mutateAsync({
         id: member.id,
-        data: { additionalParams: addp },
+        data: { additionalParams: addParameters },
         listId,
       });
     } else {
       await createMember.mutateAsync({
-        data: { contactId, additionalParams: addp },
+        data: { contactId, additionalParams: addParameters },
         listId,
       });
     }

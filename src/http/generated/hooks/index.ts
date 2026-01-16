@@ -1,4 +1,5 @@
 export type { ActivateAbsenceMessageMutationKey } from "./useActivateAbsenceMessage.ts";
+export type { CreateBroadcastCampaignMutationKey } from "./useCreateBroadcastCampaign.ts";
 export type { CreateBroadcastListMutationKey } from "./useCreateBroadcastList.ts";
 export type { CreateBroadcastListMemberMutationKey } from "./useCreateBroadcastListMember.ts";
 export type { CreateDashboardApiKeyMutationKey } from "./useCreateDashboardApiKey.ts";
@@ -13,6 +14,10 @@ export type { GenerateWhatsappOauthLinkQueryKey } from "./useGenerateWhatsappOau
 export type { GenerateWhatsappOauthLinkSuspenseQueryKey } from "./useGenerateWhatsappOauthLinkSuspense.ts";
 export type { GetAbsenceMessageQueryKey } from "./useGetAbsenceMessage.ts";
 export type { GetAbsenceMessageSuspenseQueryKey } from "./useGetAbsenceMessageSuspense.ts";
+export type { GetBroadcastCampaignQueryKey } from "./useGetBroadcastCampaign.ts";
+export type { GetBroadcastCampaignsQueryKey } from "./useGetBroadcastCampaigns.ts";
+export type { GetBroadcastCampaignsSuspenseQueryKey } from "./useGetBroadcastCampaignsSuspense.ts";
+export type { GetBroadcastCampaignSuspenseQueryKey } from "./useGetBroadcastCampaignSuspense.ts";
 export type { GetBroadcastListQueryKey } from "./useGetBroadcastList.ts";
 export type { GetBroadcastListMemberQueryKey } from "./useGetBroadcastListMember.ts";
 export type { GetBroadcastListMembersQueryKey } from "./useGetBroadcastListMembers.ts";
@@ -65,6 +70,7 @@ export type { UpdateWebhookMutationKey } from "./useUpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaMutationKey } from "./useUpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboardMutationKey } from "./useWhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./useActivateAbsenceMessage.ts";
+export { createBroadcastCampaignMutationKey, createBroadcastCampaign, useCreateBroadcastCampaign } from "./useCreateBroadcastCampaign.ts";
 export { createBroadcastListMutationKey, createBroadcastList, useCreateBroadcastList } from "./useCreateBroadcastList.ts";
 export { createBroadcastListMemberMutationKey, createBroadcastListMember, useCreateBroadcastListMember } from "./useCreateBroadcastListMember.ts";
 export { createDashboardApiKeyMutationKey, createDashboardApiKey, useCreateDashboardApiKey } from "./useCreateDashboardApiKey.ts";
@@ -79,6 +85,10 @@ export { generateWhatsappOauthLinkQueryKey, generateWhatsappOauthLink, generateW
 export { generateWhatsappOauthLinkSuspenseQueryKey, generateWhatsappOauthLinkSuspense, generateWhatsappOauthLinkSuspenseQueryOptions, useGenerateWhatsappOauthLinkSuspense } from "./useGenerateWhatsappOauthLinkSuspense.ts";
 export { getAbsenceMessageQueryKey, getAbsenceMessage, getAbsenceMessageQueryOptions, useGetAbsenceMessage } from "./useGetAbsenceMessage.ts";
 export { getAbsenceMessageSuspenseQueryKey, getAbsenceMessageSuspense, getAbsenceMessageSuspenseQueryOptions, useGetAbsenceMessageSuspense } from "./useGetAbsenceMessageSuspense.ts";
+export { getBroadcastCampaignQueryKey, getBroadcastCampaign, getBroadcastCampaignQueryOptions, useGetBroadcastCampaign } from "./useGetBroadcastCampaign.ts";
+export { getBroadcastCampaignsQueryKey, getBroadcastCampaigns, getBroadcastCampaignsQueryOptions, useGetBroadcastCampaigns } from "./useGetBroadcastCampaigns.ts";
+export { getBroadcastCampaignsSuspenseQueryKey, getBroadcastCampaignsSuspense, getBroadcastCampaignsSuspenseQueryOptions, useGetBroadcastCampaignsSuspense } from "./useGetBroadcastCampaignsSuspense.ts";
+export { getBroadcastCampaignSuspenseQueryKey, getBroadcastCampaignSuspense, getBroadcastCampaignSuspenseQueryOptions, useGetBroadcastCampaignSuspense } from "./useGetBroadcastCampaignSuspense.ts";
 export { getBroadcastListQueryKey, getBroadcastList, getBroadcastListQueryOptions, useGetBroadcastList } from "./useGetBroadcastList.ts";
 export { getBroadcastListMemberQueryKey, getBroadcastListMember, getBroadcastListMemberQueryOptions, useGetBroadcastListMember } from "./useGetBroadcastListMember.ts";
 export { getBroadcastListMembersQueryKey, getBroadcastListMembers, getBroadcastListMembersQueryOptions, useGetBroadcastListMembers } from "./useGetBroadcastListMembers.ts";

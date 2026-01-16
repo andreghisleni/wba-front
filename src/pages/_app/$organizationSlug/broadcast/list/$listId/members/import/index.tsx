@@ -115,7 +115,7 @@ function RouteComponent() {
         phone: '5511999999999',
         ...(list?.additionalParams?.reduce(
           (acc, addParam) => ({
-            // biome-ignore lint/performance/noAccumulatingSpread: <explanation>
+            // biome-ignore lint/performance/noAccumulatingSpread: necessary here
             ...acc,
             [addParam]: '',
           }),

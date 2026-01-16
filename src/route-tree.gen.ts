@@ -31,6 +31,7 @@ import { Route as AppOrganizationSlugWhatsappChatIndexRouteImport } from './page
 import { Route as AppOrganizationSlugWhatsappAbsenceMessageIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/absence-message/index'
 import { Route as AppOrganizationSlugBroadcastListIndexRouteImport } from './pages/_app/$organizationSlug/broadcast/list/index'
 import { Route as AppOrganizationSlugBroadcastListListIdMembersIndexRouteImport } from './pages/_app/$organizationSlug/broadcast/list/$listId/members/index'
+import { Route as AppOrganizationSlugBroadcastListListIdCampaignsIndexRouteImport } from './pages/_app/$organizationSlug/broadcast/list/$listId/campaigns/index'
 import { Route as AppOrganizationSlugBroadcastListListIdMembersImportIndexRouteImport } from './pages/_app/$organizationSlug/broadcast/list/$listId/members/import/index'
 
 const AuthLayoutRoute = AuthLayoutRouteImport.update({
@@ -153,6 +154,12 @@ const AppOrganizationSlugBroadcastListListIdMembersIndexRoute =
     path: '/broadcast/list/$listId/members/',
     getParentRoute: () => AppOrganizationSlugRoute,
   } as any)
+const AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute =
+  AppOrganizationSlugBroadcastListListIdCampaignsIndexRouteImport.update({
+    id: '/broadcast/list/$listId/campaigns/',
+    path: '/broadcast/list/$listId/campaigns/',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
 const AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute =
   AppOrganizationSlugBroadcastListListIdMembersImportIndexRouteImport.update({
     id: '/broadcast/list/$listId/members/import/',
@@ -180,6 +187,7 @@ export interface FileRoutesByFullPath {
   '/$organizationSlug/whatsapp/absence-message': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
   '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
+  '/$organizationSlug/broadcast/list/$listId/campaigns': typeof AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute
   '/$organizationSlug/broadcast/list/$listId/members': typeof AppOrganizationSlugBroadcastListListIdMembersIndexRoute
   '/$organizationSlug/broadcast/list/$listId/members/import': typeof AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute
 }
@@ -203,6 +211,7 @@ export interface FileRoutesByTo {
   '/$organizationSlug/whatsapp/absence-message': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
   '/$organizationSlug/whatsapp/chat': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/$organizationSlug/whatsapp/templates': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
+  '/$organizationSlug/broadcast/list/$listId/campaigns': typeof AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute
   '/$organizationSlug/broadcast/list/$listId/members': typeof AppOrganizationSlugBroadcastListListIdMembersIndexRoute
   '/$organizationSlug/broadcast/list/$listId/members/import': typeof AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute
 }
@@ -229,6 +238,7 @@ export interface FileRoutesById {
   '/_app/$organizationSlug/whatsapp/absence-message/': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
   '/_app/$organizationSlug/whatsapp/chat/': typeof AppOrganizationSlugWhatsappChatIndexRoute
   '/_app/$organizationSlug/whatsapp/templates/': typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
+  '/_app/$organizationSlug/broadcast/list/$listId/campaigns/': typeof AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute
   '/_app/$organizationSlug/broadcast/list/$listId/members/': typeof AppOrganizationSlugBroadcastListListIdMembersIndexRoute
   '/_app/$organizationSlug/broadcast/list/$listId/members/import/': typeof AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute
 }
@@ -254,6 +264,7 @@ export interface FileRouteTypes {
     | '/$organizationSlug/whatsapp/absence-message'
     | '/$organizationSlug/whatsapp/chat'
     | '/$organizationSlug/whatsapp/templates'
+    | '/$organizationSlug/broadcast/list/$listId/campaigns'
     | '/$organizationSlug/broadcast/list/$listId/members'
     | '/$organizationSlug/broadcast/list/$listId/members/import'
   fileRoutesByTo: FileRoutesByTo
@@ -277,6 +288,7 @@ export interface FileRouteTypes {
     | '/$organizationSlug/whatsapp/absence-message'
     | '/$organizationSlug/whatsapp/chat'
     | '/$organizationSlug/whatsapp/templates'
+    | '/$organizationSlug/broadcast/list/$listId/campaigns'
     | '/$organizationSlug/broadcast/list/$listId/members'
     | '/$organizationSlug/broadcast/list/$listId/members/import'
   id:
@@ -302,6 +314,7 @@ export interface FileRouteTypes {
     | '/_app/$organizationSlug/whatsapp/absence-message/'
     | '/_app/$organizationSlug/whatsapp/chat/'
     | '/_app/$organizationSlug/whatsapp/templates/'
+    | '/_app/$organizationSlug/broadcast/list/$listId/campaigns/'
     | '/_app/$organizationSlug/broadcast/list/$listId/members/'
     | '/_app/$organizationSlug/broadcast/list/$listId/members/import/'
   fileRoutesById: FileRoutesById
@@ -469,6 +482,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganizationSlugBroadcastListListIdMembersIndexRouteImport
       parentRoute: typeof AppOrganizationSlugRoute
     }
+    '/_app/$organizationSlug/broadcast/list/$listId/campaigns/': {
+      id: '/_app/$organizationSlug/broadcast/list/$listId/campaigns/'
+      path: '/broadcast/list/$listId/campaigns'
+      fullPath: '/$organizationSlug/broadcast/list/$listId/campaigns'
+      preLoaderRoute: typeof AppOrganizationSlugBroadcastListListIdCampaignsIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
     '/_app/$organizationSlug/broadcast/list/$listId/members/import/': {
       id: '/_app/$organizationSlug/broadcast/list/$listId/members/import/'
       path: '/broadcast/list/$listId/members/import'
@@ -490,6 +510,7 @@ interface AppOrganizationSlugRouteChildren {
   AppOrganizationSlugWhatsappAbsenceMessageIndexRoute: typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
   AppOrganizationSlugWhatsappChatIndexRoute: typeof AppOrganizationSlugWhatsappChatIndexRoute
   AppOrganizationSlugWhatsappTemplatesIndexRoute: typeof AppOrganizationSlugWhatsappTemplatesIndexRoute
+  AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute: typeof AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute
   AppOrganizationSlugBroadcastListListIdMembersIndexRoute: typeof AppOrganizationSlugBroadcastListListIdMembersIndexRoute
   AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute: typeof AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute
 }
@@ -510,6 +531,8 @@ const AppOrganizationSlugRouteChildren: AppOrganizationSlugRouteChildren = {
     AppOrganizationSlugWhatsappChatIndexRoute,
   AppOrganizationSlugWhatsappTemplatesIndexRoute:
     AppOrganizationSlugWhatsappTemplatesIndexRoute,
+  AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute:
+    AppOrganizationSlugBroadcastListListIdCampaignsIndexRoute,
   AppOrganizationSlugBroadcastListListIdMembersIndexRoute:
     AppOrganizationSlugBroadcastListListIdMembersIndexRoute,
   AppOrganizationSlugBroadcastListListIdMembersImportIndexRoute:

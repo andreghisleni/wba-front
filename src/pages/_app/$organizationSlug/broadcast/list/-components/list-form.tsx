@@ -1,3 +1,4 @@
+/** biome-ignore-all lint/suspicious/noConsole: show errors */
 import { zodResolver } from '@hookform/resolvers/zod';
 import { DialogDescription } from '@radix-ui/react-dialog';
 import { useQueryClient } from '@tanstack/react-query';
@@ -74,7 +75,6 @@ export function ListForm({ list }: { list?: List }) {
         toast.success(`${formName} criado com sucesso`);
       },
       onError(error) {
-        // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log(error);
         toast.error(`Erro ao criar o ${formName}`, {
           description: error.response?.data?.error || error.message,
@@ -94,7 +94,6 @@ export function ListForm({ list }: { list?: List }) {
         toast.success(`${formName} atualizado com sucesso`);
       },
       onError(error) {
-        // biome-ignore lint/suspicious/noConsole: <explanation>
         console.log(error);
         toast.error(`Erro ao atualizar o ${formName}`, {
           description: error.response?.data?.error || error.message,
@@ -144,10 +143,10 @@ export function ListForm({ list }: { list?: List }) {
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-            <pre>
-              {/* {JSON.stringify(list, null, 2)} */}
-              {/* {JSON.stringify(Object.keys(listCreateSchema.shape), null, 2)} */}
-            </pre>
+            {/* <pre>
+            {JSON.stringify(list, null, 2)}
+            {JSON.stringify(Object.keys(listCreateSchema.shape), null, 2)}
+          </pre> */}
 
             {generateFormFieldsFromZodSchema(listCreateSchema, form, undefined, { additionalParams })}
 
