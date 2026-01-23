@@ -15,7 +15,7 @@ const RenderMessageContent = ({ message }: { message: any }) => {
     return null;
   }
 
-  const mediaUrl = `https://pub-bf29d6f6bf764b1982512ad9a0b5c9c0.r2.dev/${message.mediaFileName}`;
+  const mediaUrl = message.mediaFileName ? `https://pub-bf29d6f6bf764b1982512ad9a0b5c9c0.r2.dev/${message.mediaFileName}` : message.mediaUrl;
   // String(message.mediaUrl).replace(
   //   'https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/',
   //   'http://localhost:8787/'
@@ -29,8 +29,8 @@ const RenderMessageContent = ({ message }: { message: any }) => {
           <img
             alt="Imagem"
             className={`cursor-pointer rounded-lg object-cover hover:opacity-90 ${message.type === 'sticker'
-                ? 'h-32 w-32 bg-transparent'
-                : 'max-h-64 w-auto'
+              ? 'h-32 w-32 bg-transparent'
+              : 'max-h-64 w-auto'
               }`}
             onClick={() => window.open(mediaUrl, '_blank')}
             src={mediaUrl}
@@ -107,8 +107,8 @@ export function MessageBubble({ message }: { message: any }) {
     >
       <div
         className={`relative min-w-48 max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
-            ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
-            : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
+          ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
+          : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
           }`}
       >
         {/* 1. Renderiza a Mídia (se houver) */}

@@ -14,6 +14,8 @@ export type { GenerateWhatsappOauthLinkQueryKey } from "./hooks/useGenerateWhats
 export type { GenerateWhatsappOauthLinkSuspenseQueryKey } from "./hooks/useGenerateWhatsappOauthLinkSuspense.ts";
 export type { GetAbsenceMessageQueryKey } from "./hooks/useGetAbsenceMessage.ts";
 export type { GetAbsenceMessageSuspenseQueryKey } from "./hooks/useGetAbsenceMessageSuspense.ts";
+export type { GetAllowedUploadTypesQueryKey } from "./hooks/useGetAllowedUploadTypes.ts";
+export type { GetAllowedUploadTypesSuspenseQueryKey } from "./hooks/useGetAllowedUploadTypesSuspense.ts";
 export type { GetBroadcastCampaignQueryKey } from "./hooks/useGetBroadcastCampaign.ts";
 export type { GetBroadcastCampaignsQueryKey } from "./hooks/useGetBroadcastCampaigns.ts";
 export type { GetBroadcastCampaignsSuspenseQueryKey } from "./hooks/useGetBroadcastCampaignsSuspense.ts";
@@ -32,6 +34,7 @@ export type { GetDashboardApiKeysQueryKey } from "./hooks/useGetDashboardApiKeys
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./hooks/useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./hooks/useGetDashboardDataSuspense.ts";
+export type { GetPresignedUploadUrlMutationKey } from "./hooks/useGetPresignedUploadUrl.ts";
 export type { GetV1StatusQueryKey } from "./hooks/useGetV1Status.ts";
 export type { GetV1StatusSuspenseQueryKey } from "./hooks/useGetV1StatusSuspense.ts";
 export type { GetV1TemplatesQueryKey } from "./hooks/useGetV1Templates.ts";
@@ -83,6 +86,7 @@ export type { DeleteDashboardApiKeyPathParams, DeleteDashboardApiKey200, DeleteD
 export type { DeleteWebhookPathParams, DeleteWebhook200, DeleteWebhook404, DeleteWebhookMutationResponse, DeleteWebhookMutation } from "./types/DeleteWebhook.ts";
 export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLink400, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./types/GenerateWhatsappOauthLink.ts";
 export type { GetAbsenceMessage200, GetAbsenceMessageQueryResponse, GetAbsenceMessageQuery } from "./types/GetAbsenceMessage.ts";
+export type { GetAllowedUploadTypes200, GetAllowedUploadTypesQueryResponse, GetAllowedUploadTypesQuery } from "./types/GetAllowedUploadTypes.ts";
 export type { GetBroadcastCampaignPathParams, GetBroadcastCampaign200, GetBroadcastCampaign400, GetBroadcastCampaign404, GetBroadcastCampaignQueryResponse, GetBroadcastCampaignQuery } from "./types/GetBroadcastCampaign.ts";
 export type { GetBroadcastCampaignsPathParams, GetBroadcastCampaignsQueryParams, GetBroadcastCampaigns200, GetBroadcastCampaigns400, GetBroadcastCampaigns404, GetBroadcastCampaignsQueryResponse, GetBroadcastCampaignsQuery } from "./types/GetBroadcastCampaigns.ts";
 export type { GetBroadcastListPathParams, GetBroadcastList200, GetBroadcastList400, GetBroadcastList404, GetBroadcastListQueryResponse, GetBroadcastListQuery } from "./types/GetBroadcastList.ts";
@@ -92,6 +96,7 @@ export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQuery
 export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./types/GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./types/GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./types/GetDashboardData.ts";
+export type { GetPresignedUploadUrl200, GetPresignedUploadUrl400, GetPresignedUploadUrlMutationRequest, GetPresignedUploadUrlMutationResponse, GetPresignedUploadUrlMutation } from "./types/GetPresignedUploadUrl.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./types/GetV1Status.ts";
 export type { GetV1Templates200, GetV1TemplatesQueryResponse, GetV1TemplatesQuery } from "./types/GetV1Templates.ts";
 export type { GetWebhookLogDetailsPathParams, GetWebhookLogDetails200, GetWebhookLogDetails404, GetWebhookLogDetailsQueryResponse, GetWebhookLogDetailsQuery } from "./types/GetWebhookLogDetails.ts";
@@ -135,6 +140,8 @@ export { generateWhatsappOauthLinkQueryKey, generateWhatsappOauthLink, generateW
 export { generateWhatsappOauthLinkSuspenseQueryKey, generateWhatsappOauthLinkSuspense, generateWhatsappOauthLinkSuspenseQueryOptions, useGenerateWhatsappOauthLinkSuspense } from "./hooks/useGenerateWhatsappOauthLinkSuspense.ts";
 export { getAbsenceMessageQueryKey, getAbsenceMessage, getAbsenceMessageQueryOptions, useGetAbsenceMessage } from "./hooks/useGetAbsenceMessage.ts";
 export { getAbsenceMessageSuspenseQueryKey, getAbsenceMessageSuspense, getAbsenceMessageSuspenseQueryOptions, useGetAbsenceMessageSuspense } from "./hooks/useGetAbsenceMessageSuspense.ts";
+export { getAllowedUploadTypesQueryKey, getAllowedUploadTypes, getAllowedUploadTypesQueryOptions, useGetAllowedUploadTypes } from "./hooks/useGetAllowedUploadTypes.ts";
+export { getAllowedUploadTypesSuspenseQueryKey, getAllowedUploadTypesSuspense, getAllowedUploadTypesSuspenseQueryOptions, useGetAllowedUploadTypesSuspense } from "./hooks/useGetAllowedUploadTypesSuspense.ts";
 export { getBroadcastCampaignQueryKey, getBroadcastCampaign, getBroadcastCampaignQueryOptions, useGetBroadcastCampaign } from "./hooks/useGetBroadcastCampaign.ts";
 export { getBroadcastCampaignsQueryKey, getBroadcastCampaigns, getBroadcastCampaignsQueryOptions, useGetBroadcastCampaigns } from "./hooks/useGetBroadcastCampaigns.ts";
 export { getBroadcastCampaignsSuspenseQueryKey, getBroadcastCampaignsSuspense, getBroadcastCampaignsSuspenseQueryOptions, useGetBroadcastCampaignsSuspense } from "./hooks/useGetBroadcastCampaignsSuspense.ts";
@@ -153,6 +160,7 @@ export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQu
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./hooks/useGetDashboardData.ts";
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./hooks/useGetDashboardDataSuspense.ts";
+export { getPresignedUploadUrlMutationKey, getPresignedUploadUrl, useGetPresignedUploadUrl } from "./hooks/useGetPresignedUploadUrl.ts";
 export { getV1StatusQueryKey, getV1Status, getV1StatusQueryOptions, useGetV1Status } from "./hooks/useGetV1Status.ts";
 export { getV1StatusSuspenseQueryKey, getV1StatusSuspense, getV1StatusSuspenseQueryOptions, useGetV1StatusSuspense } from "./hooks/useGetV1StatusSuspense.ts";
 export { getV1TemplatesQueryKey, getV1Templates, getV1TemplatesQueryOptions, useGetV1Templates } from "./hooks/useGetV1Templates.ts";

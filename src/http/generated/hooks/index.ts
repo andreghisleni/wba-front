@@ -14,6 +14,8 @@ export type { GenerateWhatsappOauthLinkQueryKey } from "./useGenerateWhatsappOau
 export type { GenerateWhatsappOauthLinkSuspenseQueryKey } from "./useGenerateWhatsappOauthLinkSuspense.ts";
 export type { GetAbsenceMessageQueryKey } from "./useGetAbsenceMessage.ts";
 export type { GetAbsenceMessageSuspenseQueryKey } from "./useGetAbsenceMessageSuspense.ts";
+export type { GetAllowedUploadTypesQueryKey } from "./useGetAllowedUploadTypes.ts";
+export type { GetAllowedUploadTypesSuspenseQueryKey } from "./useGetAllowedUploadTypesSuspense.ts";
 export type { GetBroadcastCampaignQueryKey } from "./useGetBroadcastCampaign.ts";
 export type { GetBroadcastCampaignsQueryKey } from "./useGetBroadcastCampaigns.ts";
 export type { GetBroadcastCampaignsSuspenseQueryKey } from "./useGetBroadcastCampaignsSuspense.ts";
@@ -32,6 +34,7 @@ export type { GetDashboardApiKeysQueryKey } from "./useGetDashboardApiKeys.ts";
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./useGetDashboardDataSuspense.ts";
+export type { GetPresignedUploadUrlMutationKey } from "./useGetPresignedUploadUrl.ts";
 export type { GetV1StatusQueryKey } from "./useGetV1Status.ts";
 export type { GetV1StatusSuspenseQueryKey } from "./useGetV1StatusSuspense.ts";
 export type { GetV1TemplatesQueryKey } from "./useGetV1Templates.ts";
@@ -85,6 +88,8 @@ export { generateWhatsappOauthLinkQueryKey, generateWhatsappOauthLink, generateW
 export { generateWhatsappOauthLinkSuspenseQueryKey, generateWhatsappOauthLinkSuspense, generateWhatsappOauthLinkSuspenseQueryOptions, useGenerateWhatsappOauthLinkSuspense } from "./useGenerateWhatsappOauthLinkSuspense.ts";
 export { getAbsenceMessageQueryKey, getAbsenceMessage, getAbsenceMessageQueryOptions, useGetAbsenceMessage } from "./useGetAbsenceMessage.ts";
 export { getAbsenceMessageSuspenseQueryKey, getAbsenceMessageSuspense, getAbsenceMessageSuspenseQueryOptions, useGetAbsenceMessageSuspense } from "./useGetAbsenceMessageSuspense.ts";
+export { getAllowedUploadTypesQueryKey, getAllowedUploadTypes, getAllowedUploadTypesQueryOptions, useGetAllowedUploadTypes } from "./useGetAllowedUploadTypes.ts";
+export { getAllowedUploadTypesSuspenseQueryKey, getAllowedUploadTypesSuspense, getAllowedUploadTypesSuspenseQueryOptions, useGetAllowedUploadTypesSuspense } from "./useGetAllowedUploadTypesSuspense.ts";
 export { getBroadcastCampaignQueryKey, getBroadcastCampaign, getBroadcastCampaignQueryOptions, useGetBroadcastCampaign } from "./useGetBroadcastCampaign.ts";
 export { getBroadcastCampaignsQueryKey, getBroadcastCampaigns, getBroadcastCampaignsQueryOptions, useGetBroadcastCampaigns } from "./useGetBroadcastCampaigns.ts";
 export { getBroadcastCampaignsSuspenseQueryKey, getBroadcastCampaignsSuspense, getBroadcastCampaignsSuspenseQueryOptions, useGetBroadcastCampaignsSuspense } from "./useGetBroadcastCampaignsSuspense.ts";
@@ -103,6 +108,7 @@ export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQu
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./useGetDashboardData.ts";
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./useGetDashboardDataSuspense.ts";
+export { getPresignedUploadUrlMutationKey, getPresignedUploadUrl, useGetPresignedUploadUrl } from "./useGetPresignedUploadUrl.ts";
 export { getV1StatusQueryKey, getV1Status, getV1StatusQueryOptions, useGetV1Status } from "./useGetV1Status.ts";
 export { getV1StatusSuspenseQueryKey, getV1StatusSuspense, getV1StatusSuspenseQueryOptions, useGetV1StatusSuspense } from "./useGetV1StatusSuspense.ts";
 export { getV1TemplatesQueryKey, getV1Templates, getV1TemplatesQueryOptions, useGetV1Templates } from "./useGetV1Templates.ts";

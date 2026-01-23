@@ -12,6 +12,7 @@ export type { DeleteDashboardApiKeyPathParams, DeleteDashboardApiKey200, DeleteD
 export type { DeleteWebhookPathParams, DeleteWebhook200, DeleteWebhook404, DeleteWebhookMutationResponse, DeleteWebhookMutation } from "./DeleteWebhook.ts";
 export type { GenerateWhatsappOauthLinkQueryParams, GenerateWhatsappOauthLink200, GenerateWhatsappOauthLink400, GenerateWhatsappOauthLinkQueryResponse, GenerateWhatsappOauthLinkQuery } from "./GenerateWhatsappOauthLink.ts";
 export type { GetAbsenceMessage200, GetAbsenceMessageQueryResponse, GetAbsenceMessageQuery } from "./GetAbsenceMessage.ts";
+export type { GetAllowedUploadTypes200, GetAllowedUploadTypesQueryResponse, GetAllowedUploadTypesQuery } from "./GetAllowedUploadTypes.ts";
 export type { GetBroadcastCampaignPathParams, GetBroadcastCampaign200, GetBroadcastCampaign400, GetBroadcastCampaign404, GetBroadcastCampaignQueryResponse, GetBroadcastCampaignQuery } from "./GetBroadcastCampaign.ts";
 export type { GetBroadcastCampaignsPathParams, GetBroadcastCampaignsQueryParams, GetBroadcastCampaigns200, GetBroadcastCampaigns400, GetBroadcastCampaigns404, GetBroadcastCampaignsQueryResponse, GetBroadcastCampaignsQuery } from "./GetBroadcastCampaigns.ts";
 export type { GetBroadcastListPathParams, GetBroadcastList200, GetBroadcastList400, GetBroadcastList404, GetBroadcastListQueryResponse, GetBroadcastListQuery } from "./GetBroadcastList.ts";
@@ -21,6 +22,7 @@ export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQuery
 export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
+export type { GetPresignedUploadUrl200, GetPresignedUploadUrl400, GetPresignedUploadUrlMutationRequest, GetPresignedUploadUrlMutationResponse, GetPresignedUploadUrlMutation } from "./GetPresignedUploadUrl.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./GetV1Status.ts";
 export type { GetV1Templates200, GetV1TemplatesQueryResponse, GetV1TemplatesQuery } from "./GetV1Templates.ts";
 export type { GetWebhookLogDetailsPathParams, GetWebhookLogDetails200, GetWebhookLogDetails404, GetWebhookLogDetailsQueryResponse, GetWebhookLogDetailsQuery } from "./GetWebhookLogDetails.ts";

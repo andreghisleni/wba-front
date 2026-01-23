@@ -3,7 +3,7 @@
 /** biome-ignore-all lint/correctness/useExhaustiveDependencies: legacy code */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute } from '@tanstack/react-router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useSendRedded } from '@/contexts/send-redded';
 import { useDebounce } from '@/hooks/use-debounce';
@@ -170,6 +170,29 @@ function RouteComponent() {
     }
   };
 
+  const handleSendImage = useCallback(
+    async (imageUrl: string, caption?: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'image',
+            contactId: selectedContact.id,
+            image: {
+              url: imageUrl,
+              caption,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
   if (errorContacts) {
     return (
       <div className="p-8 text-center text-red-500">
@@ -196,6 +219,7 @@ function RouteComponent() {
       />
 
       <ChatWindow
+        handleSendImage={handleSendImage}
         handleSendMessage={handleSendMessage}
         inputMessage={inputMessage}
         isLoadingMessages={isLoadingMessages}
