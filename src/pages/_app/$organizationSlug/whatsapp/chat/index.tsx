@@ -193,6 +193,51 @@ function RouteComponent() {
     [selectedContact?.id, sendMessage]
   );
 
+  const handleSendVideo = useCallback(
+    async (videoUrl: string, caption?: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'video',
+            contactId: selectedContact.id,
+            video: {
+              url: videoUrl,
+              caption,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
+  const handleSendAudio = useCallback(
+    async (audioUrl: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'audio',
+            contactId: selectedContact.id,
+            audio: {
+              url: audioUrl,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
   if (errorContacts) {
     return (
       <div className="p-8 text-center text-red-500">
@@ -219,8 +264,10 @@ function RouteComponent() {
       />
 
       <ChatWindow
+        handleSendAudio={handleSendAudio}
         handleSendImage={handleSendImage}
         handleSendMessage={handleSendMessage}
+        handleSendVideo={handleSendVideo}
         inputMessage={inputMessage}
         isLoadingMessages={isLoadingMessages}
         isSending={isSending}

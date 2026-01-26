@@ -1,8 +1,8 @@
 /** biome-ignore-all lint/performance/useTopLevelRegex: regex usado dentro de função */
-/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: <explanation> */
+/** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: necessário para drag and drop */
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: necessário para drag and drop */
 /** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: componente de chat */
-import { ImageIcon, Loader2, Paperclip, Send } from 'lucide-react';
+import { FileIcon, Loader2, Mic, Paperclip, Send, Video } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -19,12 +19,41 @@ const ALLOWED_IMAGE_TYPES = [
   'image/webp',
   'image/gif',
 ];
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 
-interface PendingImage {
+// Tipos de vídeo permitidos
+const ALLOWED_VIDEO_TYPES = [
+  'video/mp4',
+  'video/3gpp',
+];
+
+// Tipos de áudio permitidos
+const ALLOWED_AUDIO_TYPES = [
+  'audio/aac',
+  'audio/mp4',
+  'audio/mpeg',
+  'audio/amr',
+  'audio/ogg',
+  'audio/opus',
+];
+
+// Todos os tipos de mídia permitidos
+const ALLOWED_MEDIA_TYPES = [
+  ...ALLOWED_IMAGE_TYPES,
+  ...ALLOWED_VIDEO_TYPES,
+  ...ALLOWED_AUDIO_TYPES,
+];
+
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+const MAX_VIDEO_SIZE = 16 * 1024 * 1024; // 16MB
+const MAX_AUDIO_SIZE = 16 * 1024 * 1024; // 16MB
+
+type MediaType = 'image' | 'video' | 'audio';
+
+interface PendingMedia {
   file: File;
   previewUrl: string;
   caption: string;
+  type: MediaType;
 }
 
 interface ChatInputProps {
@@ -32,6 +61,8 @@ interface ChatInputProps {
   setInputMessage: (msg: string) => void;
   handleSendMessage: () => void;
   handleSendImage: (imageUrl: string, caption?: string) => Promise<void>;
+  handleSendVideo: (videoUrl: string, caption?: string) => Promise<void>;
+  handleSendAudio: (audioUrl: string) => Promise<void>;
   isSending: boolean;
   isWindowClosed: boolean;
   selectedContactId: string;
@@ -42,42 +73,73 @@ export function ChatInput({
   setInputMessage,
   handleSendMessage,
   handleSendImage,
+  handleSendVideo,
+  handleSendAudio,
   isSending,
   isWindowClosed,
   selectedContactId,
 }: ChatInputProps) {
-  const [pendingImage, setPendingImage] = useState<PendingImage | null>(null);
+  const [pendingMedia, setPendingMedia] = useState<PendingMedia | null>(null);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { mutateAsync: getPresignedUrl } = useGetPresignedUploadUrl();
 
-  // Validar arquivo de imagem
-  const validateImageFile = useCallback((file: File): string | null => {
-    if (!ALLOWED_IMAGE_TYPES.includes(file.type)) {
-      return 'Tipo de arquivo não suportado. Use JPEG, PNG, WebP ou GIF.';
+  // Detectar tipo de mídia
+  const getMediaType = useCallback((mimeType: string): MediaType | null => {
+    if (ALLOWED_IMAGE_TYPES.includes(mimeType)) {
+      return 'image';
     }
-    if (file.size > MAX_IMAGE_SIZE) {
-      return 'Imagem muito grande. Máximo permitido: 5MB.';
+    if (ALLOWED_VIDEO_TYPES.includes(mimeType)) {
+      return 'video';
+    }
+    if (ALLOWED_AUDIO_TYPES.includes(mimeType)) {
+      return 'audio';
     }
     return null;
   }, []);
 
-  // Processar arquivo de imagem
-  const processImageFile = useCallback(
+  // Validar arquivo de mídia
+  const validateMediaFile = useCallback((file: File): string | null => {
+    const mediaType = getMediaType(file.type);
+    
+    if (!mediaType) {
+      return 'Tipo de arquivo não suportado. Use imagens (JPEG, PNG, WebP, GIF), vídeos (MP4, 3GPP) ou áudios (AAC, MP4, MP3, OGG).';
+    }
+    
+    if (mediaType === 'image' && file.size > MAX_IMAGE_SIZE) {
+      return 'Imagem muito grande. Máximo permitido: 5MB.';
+    }
+    if (mediaType === 'video' && file.size > MAX_VIDEO_SIZE) {
+      return 'Vídeo muito grande. Máximo permitido: 16MB.';
+    }
+    if (mediaType === 'audio' && file.size > MAX_AUDIO_SIZE) {
+      return 'Áudio muito grande. Máximo permitido: 16MB.';
+    }
+    
+    return null;
+  }, [getMediaType]);
+
+  // Processar arquivo de mídia
+  const processMediaFile = useCallback(
     (file: File) => {
-      const error = validateImageFile(file);
+      const error = validateMediaFile(file);
       if (error) {
         toast.error(error);
         return;
       }
 
+      const mediaType = getMediaType(file.type);
+      if (!mediaType) {
+        return;
+      }
+
       // Criar preview URL
       const previewUrl = URL.createObjectURL(file);
-      setPendingImage({ file, previewUrl, caption: '' });
+      setPendingMedia({ file, previewUrl, caption: '', type: mediaType });
     },
-    [validateImageFile]
+    [validateMediaFile, getMediaType]
   );
 
   // Handler para paste (Ctrl+V)
@@ -87,17 +149,17 @@ export function ChatInput({
       if (!items) { return; }
 
       for (const item of items) {
-        if (item.type.startsWith('image/')) {
+        if (item.type.startsWith('image/') || item.type.startsWith('video/') || item.type.startsWith('audio/')) {
           e.preventDefault();
           const file = item.getAsFile();
           if (file) {
-            processImageFile(file);
+            processMediaFile(file);
           }
           return;
         }
       }
     },
-    [processImageFile]
+    [processMediaFile]
   );
 
   // Handler para drag over
@@ -124,14 +186,15 @@ export function ChatInput({
       const files = e.dataTransfer?.files;
       if (files && files.length > 0) {
         const file = files[0];
-        if (file.type.startsWith('image/')) {
-          processImageFile(file);
+        const mediaType = getMediaType(file.type);
+        if (mediaType) {
+          processMediaFile(file);
         } else {
-          toast.error('Apenas imagens são suportadas no momento.');
+          toast.error('Tipo de arquivo não suportado.');
         }
       }
     },
-    [processImageFile]
+    [processMediaFile, getMediaType]
   );
 
   // Handler para seleção de arquivo via input
@@ -139,35 +202,35 @@ export function ChatInput({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const file = e.target.files?.[0];
       if (file) {
-        processImageFile(file);
+        processMediaFile(file);
       }
       // Reset input para permitir selecionar o mesmo arquivo novamente
       e.target.value = '';
     },
-    [processImageFile]
+    [processMediaFile]
   );
 
-  // Remover imagem pendente
-  const handleRemoveImage = useCallback(() => {
-    if (pendingImage) {
-      URL.revokeObjectURL(pendingImage.previewUrl);
-      setPendingImage(null);
+  // Remover mídia pendente
+  const handleRemoveMedia = useCallback(() => {
+    if (pendingMedia) {
+      URL.revokeObjectURL(pendingMedia.previewUrl);
+      setPendingMedia(null);
     }
-  }, [pendingImage]);
+  }, [pendingMedia]);
 
   // Atualizar legenda
   const handleCaptionChange = useCallback(
     (caption: string) => {
-      if (pendingImage) {
-        setPendingImage({ ...pendingImage, caption });
+      if (pendingMedia) {
+        setPendingMedia({ ...pendingMedia, caption });
       }
     },
-    [pendingImage]
+    [pendingMedia]
   );
 
-  // Enviar imagem
-  const handleSubmitImage = useCallback(async () => {
-    if (!pendingImage) {
+  // Enviar mídia
+  const handleSubmitMedia = useCallback(async () => {
+    if (!pendingMedia) {
       return;
     }
 
@@ -176,45 +239,59 @@ export function ChatInput({
       // 1. Obter URL pré-assinada
       const { uploadUrl, publicUrl } = await getPresignedUrl({
         data: {
-          fileName: pendingImage.file.name,
-          mimeType: pendingImage.file.type,
-          fileSize: pendingImage.file.size,
+          fileName: pendingMedia.file.name,
+          mimeType: pendingMedia.file.type,
+          fileSize: pendingMedia.file.size,
         },
       });
 
       // 2. Fazer upload para R2
       const uploadResponse = await fetch(uploadUrl, {
         method: 'PUT',
-        body: pendingImage.file,
+        body: pendingMedia.file,
         headers: {
-          'Content-Type': pendingImage.file.type,
+          'Content-Type': pendingMedia.file.type,
         },
       });
 
       if (!uploadResponse.ok) {
-        throw new Error('Falha no upload da imagem');
+        throw new Error('Falha no upload do arquivo');
       }
 
-      // 3. Enviar mensagem com a imagem
-      await handleSendImage(publicUrl, pendingImage.caption || undefined);
+      // 3. Enviar mensagem baseado no tipo de mídia
+      switch (pendingMedia.type) {
+        case 'image':
+          await handleSendImage(publicUrl, pendingMedia.caption || undefined);
+          break;
+        case 'video':
+          await handleSendVideo(publicUrl, pendingMedia.caption || undefined);
+          break;
+        case 'audio':
+          await handleSendAudio(publicUrl);
+          break;
+        default:
+          break;
+      }
 
       // 4. Limpar estado
-      handleRemoveImage();
-      toast.success('Imagem enviada com sucesso!');
+      handleRemoveMedia();
+      
+      const typeLabels = { image: 'Imagem', video: 'Vídeo', audio: 'Áudio' };
+      toast.success(`${typeLabels[pendingMedia.type]} enviado com sucesso!`);
     } catch (_) {
-      toast.error('Erro ao enviar imagem. Tente novamente.');
+      toast.error('Erro ao enviar arquivo. Tente novamente.');
     } finally {
       setIsUploading(false);
     }
-  }, [pendingImage, getPresignedUrl, handleSendImage, handleRemoveImage]);
+  }, [pendingMedia, getPresignedUrl, handleSendImage, handleSendVideo, handleSendAudio, handleRemoveMedia]);
 
   // Lógica para capturar o Enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     // 1. Envio com Enter (sem Shift)
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      if (pendingImage) {
-        handleSubmitImage();
+      if (pendingMedia) {
+        handleSubmitMedia();
       } else {
         handleSendMessage();
       }
@@ -271,7 +348,7 @@ export function ChatInput({
     >
       {/* Input de arquivo oculto */}
       <input
-        accept={ALLOWED_IMAGE_TYPES.join(',')}
+        accept={ALLOWED_MEDIA_TYPES.join(',')}
         className="hidden"
         onChange={handleFileSelect}
         ref={fileInputRef}
@@ -291,22 +368,85 @@ export function ChatInput({
       {/* Indicador de drag over */}
       {isDragOver && (
         <div className='mb-4 flex items-center justify-center gap-2 rounded-lg border-2 border-primary border-dashed bg-primary/5 p-6'>
-          <ImageIcon className="h-6 w-6 text-primary" />
-          <span className="font-medium text-primary">Solte a imagem aqui</span>
+          <FileIcon className="h-6 w-6 text-primary" />
+          <span className="font-medium text-primary">Solte o arquivo aqui (imagem, vídeo ou áudio)</span>
         </div>
       )}
 
-      {/* Preview da imagem pendente */}
-      {pendingImage && (
-        <div className="mx-auto max-w-4xl">
-          <ImagePreview
-            caption={pendingImage.caption}
-            file={pendingImage.file}
-            isUploading={isUploading}
-            onCaptionChange={handleCaptionChange}
-            onRemove={handleRemoveImage}
-            previewUrl={pendingImage.previewUrl}
-          />
+      {/* Preview da mídia pendente */}
+      {pendingMedia && (
+        <div className="mx-auto mb-4 max-w-4xl">
+          {pendingMedia.type === 'image' && (
+            <ImagePreview
+              caption={pendingMedia.caption}
+              file={pendingMedia.file}
+              isUploading={isUploading}
+              onCaptionChange={handleCaptionChange}
+              onRemove={handleRemoveMedia}
+              previewUrl={pendingMedia.previewUrl}
+            />
+          )}
+          {pendingMedia.type === 'video' && (
+            <div className="relative rounded-lg border bg-muted/50 p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <Video className="h-8 w-8 text-blue-500" />
+                <div className="flex-1">
+                  <p className="font-medium text-sm">{pendingMedia.file.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {(pendingMedia.file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+                <Button
+                  onClick={handleRemoveMedia}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  Remover
+                </Button>
+              </div>
+              {/* biome-ignore lint/a11y/useMediaCaption: preview de vídeo não precisa de legenda */}
+              <video
+                className="max-h-48 w-full rounded bg-black"
+                controls
+                src={pendingMedia.previewUrl}
+              />
+              <Textarea
+                className="mt-3"
+                onChange={(e) => handleCaptionChange(e.target.value)}
+                placeholder="Adicionar legenda (opcional)"
+                rows={1}
+                value={pendingMedia.caption}
+              />
+            </div>
+          )}
+          {pendingMedia.type === 'audio' && (
+            <div className="relative rounded-lg border bg-muted/50 p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <Mic className="h-8 w-8 text-green-500" />
+                <div className="flex-1">
+                  <p className="font-medium text-sm">{pendingMedia.file.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {(pendingMedia.file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+                <Button
+                  onClick={handleRemoveMedia}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  Remover
+                </Button>
+              </div>
+              {/* biome-ignore lint/a11y/useMediaCaption: preview de áudio não precisa de legenda */}
+              <audio
+                className="w-full"
+                controls
+                src={pendingMedia.previewUrl}
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -314,8 +454,8 @@ export function ChatInput({
         className="mx-auto flex max-w-4xl items-end gap-2"
         onSubmit={(e) => {
           e.preventDefault();
-          if (pendingImage) {
-            handleSubmitImage();
+          if (pendingMedia) {
+            handleSubmitMedia();
           } else {
             handleSendMessage();
           }
@@ -326,7 +466,7 @@ export function ChatInput({
           disabled={isWindowClosed || isSending || isUploading}
           onClick={() => fileInputRef.current?.click()}
           size="icon"
-          title="Anexar imagem"
+          title="Anexar arquivo (imagem, vídeo ou áudio)"
           type="button"
           variant="ghost"
         >
@@ -341,22 +481,22 @@ export function ChatInput({
           onKeyDown={handleKeyDown}
           onPaste={handlePaste}
           placeholder={
-            pendingImage
-              ? 'Pressione Enter para enviar a imagem'
-              : 'Digite uma mensagem... (Ctrl+V para colar imagem)'
+            pendingMedia
+              ? 'Pressione Enter para enviar'
+              : 'Digite uma mensagem... (Ctrl+V para colar mídia)'
           }
           rows={1}
           value={inputMessage}
         />
 
-        {inputMessage.trim() || pendingImage ? (
+        {inputMessage.trim() || pendingMedia ? (
           <Button
             className={cn(
               'mb-1',
               isWindowClosed ? 'cursor-not-allowed opacity-50' : ''
             )}
             disabled={
-              !(inputMessage.trim() || pendingImage) ||
+              !(inputMessage.trim() || pendingMedia) ||
               isSending ||
               isUploading ||
               isWindowClosed

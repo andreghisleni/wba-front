@@ -14,6 +14,8 @@ interface ChatWindowProps {
   setInputMessage: (msg: string) => void;
   handleSendMessage: () => void;
   handleSendImage: (imageUrl: string, caption?: string) => Promise<void>;
+  handleSendVideo: (videoUrl: string, caption?: string) => Promise<void>;
+  handleSendAudio: (audioUrl: string) => Promise<void>;
   isSending: boolean;
   isWindowClosed: boolean;
   messagesEndRef: RefObject<HTMLDivElement | null>;
@@ -27,6 +29,8 @@ export function ChatWindow({
   setInputMessage,
   handleSendMessage,
   handleSendImage,
+  handleSendVideo,
+  handleSendAudio,
   isSending,
   isWindowClosed,
   messagesEndRef,
@@ -54,8 +58,10 @@ export function ChatWindow({
       />
 
       <ChatInput
+        handleSendAudio={handleSendAudio}
         handleSendImage={handleSendImage}
         handleSendMessage={handleSendMessage}
+        handleSendVideo={handleSendVideo}
         inputMessage={inputMessage}
         isSending={isSending}
         isWindowClosed={isWindowClosed}
