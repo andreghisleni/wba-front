@@ -90,6 +90,14 @@ export type GetWhatsappContactsContactIdMessages200 = {
             value: string;
         }[];
     } | null) | null;
+    replyContext?: ({
+        /**
+         * @type string
+        */
+        quotedMessageId: string;
+        quotedMessageBody: (string | null) | null;
+        quotedMessageType: (string | null) | null;
+    } | null) | null;
 }[];
 
 export type GetWhatsappContactsContactIdMessages404 = {
