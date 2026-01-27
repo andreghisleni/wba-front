@@ -2,7 +2,7 @@
 /** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: necessário para drag and drop */
 /** biome-ignore-all lint/a11y/noStaticElementInteractions: necessário para drag and drop */
 /** biome-ignore-all lint/complexity/noExcessiveCognitiveComplexity: componente de chat */
-import { FileIcon, Loader2, Mic, Paperclip, Send, Video } from 'lucide-react';
+import { FileIcon, FileText, Loader2, Mic, Paperclip, Send, Video } from 'lucide-react';
 import { useCallback, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -36,18 +36,32 @@ const ALLOWED_AUDIO_TYPES = [
   'audio/opus',
 ];
 
+// Tipos de documento permitidos
+const ALLOWED_DOCUMENT_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.ms-excel',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.ms-powerpoint',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'text/plain',
+];
+
 // Todos os tipos de mídia permitidos
 const ALLOWED_MEDIA_TYPES = [
   ...ALLOWED_IMAGE_TYPES,
   ...ALLOWED_VIDEO_TYPES,
   ...ALLOWED_AUDIO_TYPES,
+  ...ALLOWED_DOCUMENT_TYPES,
 ];
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_VIDEO_SIZE = 16 * 1024 * 1024; // 16MB
 const MAX_AUDIO_SIZE = 16 * 1024 * 1024; // 16MB
+const MAX_DOCUMENT_SIZE = 100 * 1024 * 1024; // 100MB
 
-type MediaType = 'image' | 'video' | 'audio';
+type MediaType = 'image' | 'video' | 'audio' | 'document';
 
 interface PendingMedia {
   file: File;
@@ -63,6 +77,7 @@ interface ChatInputProps {
   handleSendImage: (imageUrl: string, caption?: string) => Promise<void>;
   handleSendVideo: (videoUrl: string, caption?: string) => Promise<void>;
   handleSendAudio: (audioUrl: string) => Promise<void>;
+  handleSendDocument: (documentUrl: string, filename: string, caption?: string) => Promise<void>;
   isSending: boolean;
   isWindowClosed: boolean;
   selectedContactId: string;
@@ -75,6 +90,7 @@ export function ChatInput({
   handleSendImage,
   handleSendVideo,
   handleSendAudio,
+  handleSendDocument,
   isSending,
   isWindowClosed,
   selectedContactId,
@@ -97,6 +113,9 @@ export function ChatInput({
     if (ALLOWED_AUDIO_TYPES.includes(mimeType)) {
       return 'audio';
     }
+    if (ALLOWED_DOCUMENT_TYPES.includes(mimeType)) {
+      return 'document';
+    }
     return null;
   }, []);
 
@@ -105,7 +124,7 @@ export function ChatInput({
     const mediaType = getMediaType(file.type);
     
     if (!mediaType) {
-      return 'Tipo de arquivo não suportado. Use imagens (JPEG, PNG, WebP, GIF), vídeos (MP4, 3GPP) ou áudios (AAC, MP4, MP3, OGG).';
+      return 'Tipo de arquivo não suportado. Use imagens (JPEG, PNG, WebP, GIF), vídeos (MP4, 3GPP), áudios (AAC, MP4, MP3, OGG) ou documentos (PDF, DOC, XLS, PPT, TXT).';
     }
     
     if (mediaType === 'image' && file.size > MAX_IMAGE_SIZE) {
@@ -116,6 +135,9 @@ export function ChatInput({
     }
     if (mediaType === 'audio' && file.size > MAX_AUDIO_SIZE) {
       return 'Áudio muito grande. Máximo permitido: 16MB.';
+    }
+    if (mediaType === 'document' && file.size > MAX_DOCUMENT_SIZE) {
+      return 'Documento muito grande. Máximo permitido: 100MB.';
     }
     
     return null;
@@ -269,6 +291,9 @@ export function ChatInput({
         case 'audio':
           await handleSendAudio(publicUrl);
           break;
+        case 'document':
+          await handleSendDocument(publicUrl, pendingMedia.file.name, pendingMedia.caption || undefined);
+          break;
         default:
           break;
       }
@@ -276,14 +301,14 @@ export function ChatInput({
       // 4. Limpar estado
       handleRemoveMedia();
       
-      const typeLabels = { image: 'Imagem', video: 'Vídeo', audio: 'Áudio' };
+      const typeLabels = { image: 'Imagem', video: 'Vídeo', audio: 'Áudio', document: 'Documento' };
       toast.success(`${typeLabels[pendingMedia.type]} enviado com sucesso!`);
     } catch (_) {
       toast.error('Erro ao enviar arquivo. Tente novamente.');
     } finally {
       setIsUploading(false);
     }
-  }, [pendingMedia, getPresignedUrl, handleSendImage, handleSendVideo, handleSendAudio, handleRemoveMedia]);
+  }, [pendingMedia, getPresignedUrl, handleSendImage, handleSendVideo, handleSendAudio, handleSendDocument, handleRemoveMedia]);
 
   // Lógica para capturar o Enter
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
@@ -369,7 +394,7 @@ export function ChatInput({
       {isDragOver && (
         <div className='mb-4 flex items-center justify-center gap-2 rounded-lg border-2 border-primary border-dashed bg-primary/5 p-6'>
           <FileIcon className="h-6 w-6 text-primary" />
-          <span className="font-medium text-primary">Solte o arquivo aqui (imagem, vídeo ou áudio)</span>
+          <span className="font-medium text-primary">Solte o arquivo aqui (imagem, vídeo, áudio ou documento)</span>
         </div>
       )}
 
@@ -447,6 +472,33 @@ export function ChatInput({
               />
             </div>
           )}
+          {pendingMedia.type === 'document' && (
+            <div className="relative rounded-lg border bg-muted/50 p-4">
+              <div className="mb-3 flex items-center gap-3">
+                <FileText className="h-8 w-8 text-red-500" />
+                <div className="flex-1">
+                  <p className="font-medium text-sm">{pendingMedia.file.name}</p>
+                  <p className="text-muted-foreground text-xs">
+                    {(pendingMedia.file.size / 1024 / 1024).toFixed(2)} MB
+                  </p>
+                </div>
+                <Button
+                  onClick={handleRemoveMedia}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  Remover
+                </Button>
+              </div>
+              <Textarea
+                onChange={(e) => handleCaptionChange(e.target.value)}
+                placeholder="Adicionar legenda (opcional)"
+                rows={1}
+                value={pendingMedia.caption}
+              />
+            </div>
+          )}
         </div>
       )}
 
@@ -466,7 +518,7 @@ export function ChatInput({
           disabled={isWindowClosed || isSending || isUploading}
           onClick={() => fileInputRef.current?.click()}
           size="icon"
-          title="Anexar arquivo (imagem, vídeo ou áudio)"
+          title="Anexar arquivo (imagem, vídeo, áudio ou documento)"
           type="button"
           variant="ghost"
         >

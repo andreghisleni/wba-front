@@ -238,6 +238,30 @@ function RouteComponent() {
     [selectedContact?.id, sendMessage]
   );
 
+  const handleSendDocument = useCallback(
+    async (documentUrl: string, filename: string, caption?: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'document',
+            contactId: selectedContact.id,
+            document: {
+              url: documentUrl,
+              filename,
+              caption,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
   if (errorContacts) {
     return (
       <div className="p-8 text-center text-red-500">
@@ -265,6 +289,7 @@ function RouteComponent() {
 
       <ChatWindow
         handleSendAudio={handleSendAudio}
+        handleSendDocument={handleSendDocument}
         handleSendImage={handleSendImage}
         handleSendMessage={handleSendMessage}
         handleSendVideo={handleSendVideo}
