@@ -23,9 +23,9 @@ export function ChatHeader({ selectedContact }: ChatHeaderProps) {
           <h2 className="font-semibold text-sm">
             {selectedContact.pushName || PhoneComponent({ phone: selectedContact.waId })}
           </h2>
-          <p className="text-muted-foreground text-xs">
+          <div className="text-muted-foreground text-xs">
             <PhoneComponent phone={selectedContact.waId} />
-          </p>
+          </div>
         </div>
       </div>
       <div className="flex gap-2">

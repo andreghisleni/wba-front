@@ -19,12 +19,19 @@ import {
 } from '@/http/generated/hooks';
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
+import { auth } from '@/lib/auth';
+import { useChatSocket } from '@/hooks/use-chat-socket';
 
 export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+
+// 1. Crie a referência
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  
+  const { data: activeOrg } = auth.useActiveOrganization();
   const { sendRedded } = useSendRedded();
   // const [selectedContactId, setSelectedContactId] = useState<string | null>(
   //   null
@@ -45,6 +52,11 @@ function RouteComponent() {
 
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useChatSocket({
+    organizationId: activeOrg?.id || '',
+    selectedContactId: selectedContact?.id || null,
+  });
 
   // Hook de Marcar como Lida (Manual ou Gerado)
   const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead({
@@ -68,11 +80,11 @@ function RouteComponent() {
       search: debouncedSearch || undefined,
       unreadOnly: showUnreadOnly ? 'true' : undefined,
     },
-    {
-      query: {
-        refetchInterval: 10_000,
-      },
-    }
+    // {
+    //   query: {
+    //     refetchInterval: 10_000,
+    //   },
+    // }
   );
 
   // Extrair dados e meta da resposta paginada
@@ -101,7 +113,7 @@ function RouteComponent() {
     useGetWhatsappContactsContactIdMessages(selectedContact?.id as string, {
       query: {
         enabled: !!selectedContact?.id,
-        refetchInterval: 5000,
+        // refetchInterval: 5000,
       },
     });
 
@@ -121,6 +133,15 @@ function RouteComponent() {
               selectedContact?.id as string
             ),
           });
+
+          console.log('invalidate')
+
+          if(inputRef.current){
+            setTimeout(() => {
+            console.log('here')
+        inputRef.current?.focus();
+      }, 50); // 50ms é suficiente
+          }
         },
         onError: (error) => {
           console.error(error);
@@ -294,6 +315,7 @@ function RouteComponent() {
         handleSendMessage={handleSendMessage}
         handleSendVideo={handleSendVideo}
         inputMessage={inputMessage}
+        inputRef={inputRef}
         isLoadingMessages={isLoadingMessages}
         isSending={isSending}
         isWindowClosed={isWindowClosed}

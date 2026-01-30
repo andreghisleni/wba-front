@@ -200,11 +200,11 @@ export function MessageBubble({ message }: { message: any }) {
 
         {/* 2. Renderiza o Texto/Legenda (se houver) */}
         {message.body && (
-          <p
+          <div
             className={`whitespace-pre-wrap text-sm ${message.type !== 'text' ? 'mt-2' : ''}`}
           >
             {formatWhatsAppText(message.body)}
-          </p>
+          </div>
         )}
 
         {/* RODAPÉ DA MENSAGEM */}
