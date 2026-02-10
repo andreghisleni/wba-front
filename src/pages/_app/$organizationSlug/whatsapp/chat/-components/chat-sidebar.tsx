@@ -1,4 +1,4 @@
-import { format } from 'date-fns';
+import { differenceInDays, format } from 'date-fns';
 import {
   AudioLines,
   ChevronLeft,
@@ -80,6 +80,22 @@ interface ChatSidebarProps {
   page: number;
   totalPages: number;
   onPageChange: (page: number) => void;
+}
+// if is today show only time, else show yesterday, ante ontem or date, with date-fns
+function dateParserView(date: string | number) {
+  const parsedDate = new Date(date);
+  const now = new Date();
+
+  if (differenceInDays(now, parsedDate) === 0) {
+    return format(parsedDate, 'HH:mm');
+  }
+  if (differenceInDays(now, parsedDate) === 1) {
+    return 'Ontem';
+  }
+  if (differenceInDays(now, parsedDate) === 2) {
+    return 'Anteontem';
+  }
+  return format(parsedDate, 'dd/MM/yyyy');
 }
 
 export function ChatSidebar({
@@ -187,7 +203,7 @@ export function ChatSidebar({
                   </span>
                   <span className="text-[10px] text-muted-foreground">
                     {contact.lastMessageAt &&
-                      format(new Date(contact.lastMessageAt), 'HH:mm')}
+                      dateParserView(contact.lastMessageAt)}
                   </span>
                 </div>
 
