@@ -19,12 +19,19 @@ import {
 } from '@/http/generated/hooks';
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
+import { auth } from '@/lib/auth';
+import { useChatSocket } from '@/hooks/use-chat-socket';
 
 export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
+
+// 1. Crie a referência
+  const inputRef = useRef<HTMLTextAreaElement>(null);
+  
+  const { data: activeOrg } = auth.useActiveOrganization();
   const { sendRedded } = useSendRedded();
   // const [selectedContactId, setSelectedContactId] = useState<string | null>(
   //   null
@@ -45,6 +52,11 @@ function RouteComponent() {
 
   const queryClient = useQueryClient();
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  useChatSocket({
+    organizationId: activeOrg?.id || '',
+    selectedContactId: selectedContact?.id || null,
+  });
 
   // Hook de Marcar como Lida (Manual ou Gerado)
   const { mutate: markAsRead } = useMarkWhatsappMessagesAsRead({
@@ -68,11 +80,11 @@ function RouteComponent() {
       search: debouncedSearch || undefined,
       unreadOnly: showUnreadOnly ? 'true' : undefined,
     },
-    {
-      query: {
-        refetchInterval: 10_000,
-      },
-    }
+    // {
+    //   query: {
+    //     refetchInterval: 10_000,
+    //   },
+    // }
   );
 
   // Extrair dados e meta da resposta paginada
@@ -101,7 +113,7 @@ function RouteComponent() {
     useGetWhatsappContactsContactIdMessages(selectedContact?.id as string, {
       query: {
         enabled: !!selectedContact?.id,
-        refetchInterval: 5000,
+        // refetchInterval: 5000,
       },
     });
 
@@ -121,6 +133,15 @@ function RouteComponent() {
               selectedContact?.id as string
             ),
           });
+
+          console.log('invalidate')
+
+          if(inputRef.current){
+            setTimeout(() => {
+            console.log('here')
+        inputRef.current?.focus();
+      }, 50); // 50ms é suficiente
+          }
         },
         onError: (error) => {
           console.error(error);
@@ -193,6 +214,75 @@ function RouteComponent() {
     [selectedContact?.id, sendMessage]
   );
 
+  const handleSendVideo = useCallback(
+    async (videoUrl: string, caption?: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'video',
+            contactId: selectedContact.id,
+            video: {
+              url: videoUrl,
+              caption,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
+  const handleSendAudio = useCallback(
+    async (audioUrl: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'audio',
+            contactId: selectedContact.id,
+            audio: {
+              url: audioUrl,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
+  const handleSendDocument = useCallback(
+    async (documentUrl: string, filename: string, caption?: string) => {
+      if (!selectedContact?.id) {
+        return;
+      }
+      try {
+        await sendMessage({
+          data: {
+            type: 'document',
+            contactId: selectedContact.id,
+            document: {
+              url: documentUrl,
+              filename,
+              caption,
+            },
+          },
+        });
+      } catch {
+        // Erro tratado no hook
+      }
+    },
+    [selectedContact?.id, sendMessage]
+  );
+
   if (errorContacts) {
     return (
       <div className="p-8 text-center text-red-500">
@@ -219,9 +309,13 @@ function RouteComponent() {
       />
 
       <ChatWindow
+        handleSendAudio={handleSendAudio}
+        handleSendDocument={handleSendDocument}
         handleSendImage={handleSendImage}
         handleSendMessage={handleSendMessage}
+        handleSendVideo={handleSendVideo}
         inputMessage={inputMessage}
+        inputRef={inputRef}
         isLoadingMessages={isLoadingMessages}
         isSending={isSending}
         isWindowClosed={isWindowClosed}

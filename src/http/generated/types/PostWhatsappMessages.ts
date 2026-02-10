@@ -111,7 +111,7 @@ export type PostWhatsappMessagesMutationRequest = {
      * @type string
     */
     contactId: string;
-    type: (string | string | string);
+    type: (string | string | string | string | string | string);
     /**
      * @type string | undefined
     */
@@ -155,6 +155,45 @@ export type PostWhatsappMessagesMutationRequest = {
          * @type string, uri
         */
         url: string;
+        /**
+         * @type string | undefined
+        */
+        caption?: string;
+    };
+    /**
+     * @type object | undefined
+    */
+    video?: {
+        /**
+         * @type string, uri
+        */
+        url: string;
+        /**
+         * @type string | undefined
+        */
+        caption?: string;
+    };
+    /**
+     * @type object | undefined
+    */
+    audio?: {
+        /**
+         * @type string, uri
+        */
+        url: string;
+    };
+    /**
+     * @type object | undefined
+    */
+    document?: {
+        /**
+         * @type string, uri
+        */
+        url: string;
+        /**
+         * @type string
+        */
+        filename: string;
         /**
          * @type string | undefined
         */

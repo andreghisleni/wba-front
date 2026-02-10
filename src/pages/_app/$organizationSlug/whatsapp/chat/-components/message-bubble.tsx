@@ -3,10 +3,89 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: tipos dinâmicos de mensagem */
 /** biome-ignore-all lint/performance/noImgElement: necessário para mídia */
 /** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: clique em imagem */
-import { Download, FileText } from 'lucide-react';
+import { Download, FileText, ImageIcon, FileVideo, Mic } from 'lucide-react';
 import { formatWhatsAppText } from '@/utils/whatsapp-formatter';
 import { MessageStatus } from './message-status';
 import { TemplateMessageBubble } from './template-message-bubble';
+
+// Função auxiliar para obter ícone do tipo de mídia citada
+function getQuotedMediaIcon(type: string | null | undefined) {
+  switch (type) {
+    case 'image':
+    case 'sticker':
+      return <ImageIcon className="h-4 w-4 opacity-70" />;
+    case 'video':
+      return <FileVideo className="h-4 w-4 opacity-70" />;
+    case 'audio':
+    case 'voice':
+    case 'ptt':
+      return <Mic className="h-4 w-4 opacity-70" />;
+    case 'document':
+      return <FileText className="h-4 w-4 opacity-70" />;
+    default:
+      return null;
+  }
+}
+
+// Função auxiliar para obter texto de descrição do tipo de mídia citada
+function getQuotedMediaLabel(type: string | null | undefined) {
+  switch (type) {
+    case 'image':
+      return 'Imagem';
+    case 'sticker':
+      return 'Figurinha';
+    case 'video':
+      return 'Vídeo';
+    case 'audio':
+    case 'voice':
+    case 'ptt':
+      return 'Áudio';
+    case 'document':
+      return 'Documento';
+    default:
+      return null;
+  }
+}
+
+// Componente para renderizar a mensagem citada (reply)
+function QuotedMessage({
+  replyContext,
+  isMe,
+}: {
+  replyContext: {
+    quotedMessageId: string;
+    quotedMessageBody: string | null;
+    quotedMessageType: string | null;
+  };
+  isMe: boolean;
+}) {
+  const mediaIcon = getQuotedMediaIcon(replyContext.quotedMessageType);
+  const mediaLabel = getQuotedMediaLabel(replyContext.quotedMessageType);
+  const isMediaOnly = mediaLabel && !replyContext.quotedMessageBody;
+
+  return (
+    <div
+      className={`mb-2 rounded-md border-l-4 px-3 py-2 ${
+        isMe
+          ? 'border-green-300 bg-green-700/50'
+          : 'border-gray-400 bg-gray-100 dark:border-gray-500 dark:bg-gray-700/50'
+      }`}
+    >
+      <div className="flex items-center gap-2">
+        {mediaIcon}
+        <p
+          className={`line-clamp-2 text-xs ${
+            isMe ? 'text-green-100' : 'text-gray-600 dark:text-gray-300'
+          }`}
+        >
+          {isMediaOnly
+            ? mediaLabel
+            : replyContext.quotedMessageBody || 'Mensagem não disponível'}
+        </p>
+      </div>
+    </div>
+  );
+}
 
 // Função auxiliar para renderizar o conteúdo baseado no tipo
 const RenderMessageContent = ({ message }: { message: any }) => {
@@ -111,16 +190,21 @@ export function MessageBubble({ message }: { message: any }) {
           : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
           }`}
       >
+        {/* 0. Renderiza a mensagem citada (se for reply) */}
+        {message.replyContext && (
+          <QuotedMessage isMe={isMe} replyContext={message.replyContext} />
+        )}
+
         {/* 1. Renderiza a Mídia (se houver) */}
         <RenderMessageContent message={message} />
 
         {/* 2. Renderiza o Texto/Legenda (se houver) */}
         {message.body && (
-          <p
+          <div
             className={`whitespace-pre-wrap text-sm ${message.type !== 'text' ? 'mt-2' : ''}`}
           >
             {formatWhatsAppText(message.body)}
-          </p>
+          </div>
         )}
 
         {/* RODAPÉ DA MENSAGEM */}
