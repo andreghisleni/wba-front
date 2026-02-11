@@ -2,13 +2,15 @@ import { formatPhoneNumber, parsePhoneNumber } from 'react-phone-number-input';
 import flags from 'react-phone-number-input/flags';
 
 type PhoneComponentProps = {
-  phone: string;
+  phone: string | number;
 };
 
 export function PhoneComponent({ phone: p }: PhoneComponentProps) {
   if (!p) { return <span>-</span>; }
 
-  const phone = p.startsWith('+') ? p : `+${p}`;
+  const phoneStr = String(p).trim();
+
+  const phone = phoneStr.startsWith('+') ? phoneStr : `+${phoneStr}`;
   const parsed = parsePhoneNumber(phone);
   if (!parsed) {
     return <span>{phone}{JSON.stringify({ parsed })}</span>;
