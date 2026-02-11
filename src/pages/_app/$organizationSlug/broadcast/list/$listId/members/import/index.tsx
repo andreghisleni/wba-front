@@ -96,7 +96,7 @@ function RouteComponent() {
       data: {
         members: items.map((item) => ({
           name: item.internal_name,
-          phone: item.phone,
+          phone: String(item.phone),
           additionalParams: Object.fromEntries(
             Object.entries(item).filter(
               ([key]) => key !== 'internal_name' && key !== 'phone'
