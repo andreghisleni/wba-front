@@ -12,7 +12,7 @@ type Props = {
 };
 
 export const columns = ({ additionalParams }: Props): ColumnDef<Item>[] => [
-  tdb('name', 'Nome'),
+  tdb('internal_name', 'Nome'),
   tdb('phone', 'Telefone', 'phone'),
 
   ...additionalParams.map((e) => tdb(e, e)),

@@ -64,7 +64,7 @@ function RouteComponent() {
     });
     promise.then((d) => {
       const itemsComOrdem = (d as Item[])
-        .filter((i) => i.name && i.name !== '#N/A') // 1. Filtra primeiro
+        .filter((i) => i.internal_name && i.internal_name !== '#N/A') // 1. Filtra primeiro
         .map((item) => ({
           // 2. Depois adiciona a ordem
           ...item,
