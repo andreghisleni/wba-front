@@ -79,7 +79,11 @@ function SignIn() {
 
     toast.success(`Bem-vindo ${data.user.name} ${callbackURL}`);
     // Navega para o dashboard após o login bem-sucedido
-    navigate({ to: callbackURL ?? '/', replace: true, href: callbackURL ?? '/' });
+    // navigate({ to: callbackURL ?? '/', replace: true, href: callbackURL ?? '/' });
+
+    setTimeout(() => {
+      navigate({ to: callbackURL ?? '/', replace: true, href: callbackURL ?? '/' });
+    }, 500);
   }
 
   return (

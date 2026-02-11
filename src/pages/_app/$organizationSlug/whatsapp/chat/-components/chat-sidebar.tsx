@@ -81,6 +81,41 @@ interface ChatSidebarProps {
   totalPages: number;
   onPageChange: (page: number) => void;
 }
+// if is today show only time, else show yesterday, ante ontem or date, with date-fns
+function dateParserView(date: string | number) {
+  const parsedDate = new Date(date);
+  const now = new Date();
+
+  const isToday =
+    parsedDate.getDate() === now.getDate() &&
+    parsedDate.getMonth() === now.getMonth() &&
+    parsedDate.getFullYear() === now.getFullYear();
+
+  const yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 1);
+
+  const isYesterday =
+    parsedDate.getDate() === yesterday.getDate() &&
+    parsedDate.getMonth() === yesterday.getMonth() &&
+    parsedDate.getFullYear() === yesterday.getFullYear();
+
+  const isDayBeforeYesterday = new Date(now);
+  isDayBeforeYesterday.setDate(now.getDate() - 2);
+
+  const isAnteOntem =
+    parsedDate.getDate() === isDayBeforeYesterday.getDate() &&
+    parsedDate.getMonth() === isDayBeforeYesterday.getMonth() &&
+    parsedDate.getFullYear() === isDayBeforeYesterday.getFullYear();
+
+  if (isToday) {
+    return format(parsedDate, 'HH:mm');
+  } if (isYesterday) {
+    return 'Ontem';
+  } if (isAnteOntem) {
+    return 'Anteontem';
+  }
+  return format(parsedDate, 'dd/MM/yyyy');
+}
 
 export function ChatSidebar({
   contacts,
@@ -186,13 +221,14 @@ export function ChatSidebar({
                     {contact.pushName || contact.waId}
                   </span>
                   <span className="text-[10px] text-muted-foreground">
-                    {contact.lastMessageAt &&
-                      format(new Date(contact.lastMessageAt), 'HH:mm')}
+
+                    {contact.lastMessageAt && dateParserView(contact.lastMessageAt)
+                    }
                   </span>
                 </div>
 
                 <div className="mt-1 flex items-center justify-between gap-2">
-                  <div className="flex h-4 min-w-0 flex-1 items-center gap-1 text-muted-foreground text-xs">
+                  <div className='flex h-4 min-w-0 flex-1 items-center gap-1 text-muted-foreground text-xs'>
                     {contact.lastMessageStatus && (
                       <MessageStatus
                         isUser={true}
