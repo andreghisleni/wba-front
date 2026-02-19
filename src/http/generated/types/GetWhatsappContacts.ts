@@ -64,6 +64,24 @@ export type GetWhatsappContacts200 = {
          * @type boolean
         */
         isWindowOpen: boolean;
+        tag: ({
+            /**
+             * @type string
+            */
+            id: string;
+            /**
+             * @type string
+            */
+            name: string;
+            /**
+             * @type string
+            */
+            color: string;
+            /**
+             * @type number
+            */
+            priority: number;
+        } | null) | null;
     }[];
     /**
      * @type object

@@ -1,9 +1,11 @@
 export type { ActivateAbsenceMessage200, ActivateAbsenceMessageMutationRequest, ActivateAbsenceMessageMutationResponse, ActivateAbsenceMessageMutation } from "./ActivateAbsenceMessage.ts";
+export type { AddTagToContactPathParams, AddTagToContact201, AddTagToContact400, AddTagToContact404, AddTagToContactMutationRequest, AddTagToContactMutationResponse, AddTagToContactMutation } from "./AddTagToContact.ts";
 export type { CreateBroadcastCampaignPathParams, CreateBroadcastCampaign201, CreateBroadcastCampaign400, CreateBroadcastCampaign401, CreateBroadcastCampaign403, CreateBroadcastCampaign404, CreateBroadcastCampaignMutationRequest, CreateBroadcastCampaignMutationResponse, CreateBroadcastCampaignMutation } from "./CreateBroadcastCampaign.ts";
 export type { CreateBroadcastList201, CreateBroadcastList400, CreateBroadcastList401, CreateBroadcastList403, CreateBroadcastListMutationRequest, CreateBroadcastListMutationResponse, CreateBroadcastListMutation } from "./CreateBroadcastList.ts";
 export type { CreateBroadcastListMemberPathParams, CreateBroadcastListMember201, CreateBroadcastListMember400, CreateBroadcastListMember401, CreateBroadcastListMember403, CreateBroadcastListMember404, CreateBroadcastListMember409, CreateBroadcastListMemberMutationRequest, CreateBroadcastListMemberMutationResponse, CreateBroadcastListMemberMutation } from "./CreateBroadcastListMember.ts";
 export type { CreateDashboardApiKey200, CreateDashboardApiKey400, CreateDashboardApiKeyMutationRequest, CreateDashboardApiKeyMutationResponse, CreateDashboardApiKeyMutation } from "./CreateDashboardApiKey.ts";
 export type { CreateOrUpdateAbsenceMessage200, CreateOrUpdateAbsenceMessageMutationRequest, CreateOrUpdateAbsenceMessageMutationResponse, CreateOrUpdateAbsenceMessageMutation } from "./CreateOrUpdateAbsenceMessage.ts";
+export type { CreateTag200, CreateTag404, CreateTagMutationRequest, CreateTagMutationResponse, CreateTagMutation } from "./CreateTag.ts";
 export type { CreateWebhook200, CreateWebhookMutationRequest, CreateWebhookMutationResponse, CreateWebhookMutation } from "./CreateWebhook.ts";
 export type { CreateWhatsappContact200, CreateWhatsappContact400, CreateWhatsappContactMutationRequest, CreateWhatsappContactMutationResponse, CreateWhatsappContactMutation } from "./CreateWhatsappContact.ts";
 export type { CreateWhatsappTemplates200, CreateWhatsappTemplates400, CreateWhatsappTemplates404, CreateWhatsappTemplatesMutationRequest, CreateWhatsappTemplatesMutationResponse, CreateWhatsappTemplatesMutation } from "./CreateWhatsappTemplates.ts";
@@ -23,6 +25,9 @@ export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetConta
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
 export type { GetPresignedUploadUrl200, GetPresignedUploadUrl400, GetPresignedUploadUrlMutationRequest, GetPresignedUploadUrlMutationResponse, GetPresignedUploadUrlMutation } from "./GetPresignedUploadUrl.ts";
+export type { GetTagByIdPathParams, GetTagById200, GetTagById404, GetTagByIdQueryResponse, GetTagByIdQuery } from "./GetTagById.ts";
+export type { GetTagsQueryParams, GetTags200, GetTagsQueryResponse, GetTagsQuery } from "./GetTags.ts";
+export type { GetTestWs200, GetTestWsQueryResponse, GetTestWsQuery } from "./GetTestWs.ts";
 export type { GetV1Status200, GetV1StatusQueryResponse, GetV1StatusQuery } from "./GetV1Status.ts";
 export type { GetV1Templates200, GetV1TemplatesQueryResponse, GetV1TemplatesQuery } from "./GetV1Templates.ts";
 export type { GetWebhookLogDetailsPathParams, GetWebhookLogDetails200, GetWebhookLogDetails404, GetWebhookLogDetailsQueryResponse, GetWebhookLogDetailsQuery } from "./GetWebhookLogDetails.ts";
@@ -47,6 +52,7 @@ export type { TestWebhookPathParams, TestWebhook200, TestWebhook404, TestWebhook
 export type { UpdateBroadcastListPathParams, UpdateBroadcastListQueryParams, UpdateBroadcastList200, UpdateBroadcastList400, UpdateBroadcastList401, UpdateBroadcastList403, UpdateBroadcastList404, UpdateBroadcastListMutationRequest, UpdateBroadcastListMutationResponse, UpdateBroadcastListMutation } from "./UpdateBroadcastList.ts";
 export type { UpdateBroadcastListMemberPathParams, UpdateBroadcastListMember200, UpdateBroadcastListMember400, UpdateBroadcastListMember401, UpdateBroadcastListMember403, UpdateBroadcastListMember404, UpdateBroadcastListMemberMutationRequest, UpdateBroadcastListMemberMutationResponse, UpdateBroadcastListMemberMutation } from "./UpdateBroadcastListMember.ts";
 export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus200, UpdateDashboardApiKeyStatus404, UpdateDashboardApiKeyStatusMutationRequest, UpdateDashboardApiKeyStatusMutationResponse, UpdateDashboardApiKeyStatusMutation } from "./UpdateDashboardApiKeyStatus.ts";
+export type { UpdateTagPathParams, UpdateTag200, UpdateTag400, UpdateTag404, UpdateTagMutationRequest, UpdateTagMutationResponse, UpdateTagMutation } from "./UpdateTag.ts";
 export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, UpdateWebhookMutationRequest, UpdateWebhookMutationResponse, UpdateWebhookMutation } from "./UpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaPathParams, UpdateWhatsappTemplateMedia200, UpdateWhatsappTemplateMedia403, UpdateWhatsappTemplateMedia404, UpdateWhatsappTemplateMediaMutationRequest, UpdateWhatsappTemplateMediaMutationResponse, UpdateWhatsappTemplateMediaMutation } from "./UpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./WhatsappOnboard.ts";

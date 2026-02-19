@@ -24,6 +24,7 @@ import { Route as AppOrganizationSlugSettingsRouteImport } from './pages/_app/$o
 import { Route as AppOrganizationSlugOrganizationRouteImport } from './pages/_app/$organizationSlug/organization'
 import { Route as AppOrganizationSlugDashboardRouteImport } from './pages/_app/$organizationSlug/dashboard'
 import { Route as AppOrganizationSlugWebhooksIndexRouteImport } from './pages/_app/$organizationSlug/webhooks/index'
+import { Route as AppOrganizationSlugTagsIndexRouteImport } from './pages/_app/$organizationSlug/tags/index'
 import { Route as AppOrganizationSlugApiKeysIndexRouteImport } from './pages/_app/$organizationSlug/api-keys/index'
 import { Route as AppOrganizationSlugWhatsappConnectRouteImport } from './pages/_app/$organizationSlug/whatsapp/connect'
 import { Route as AppOrganizationSlugWhatsappTemplatesIndexRouteImport } from './pages/_app/$organizationSlug/whatsapp/templates/index'
@@ -112,6 +113,12 @@ const AppOrganizationSlugWebhooksIndexRoute =
     path: '/webhooks/',
     getParentRoute: () => AppOrganizationSlugRoute,
   } as any)
+const AppOrganizationSlugTagsIndexRoute =
+  AppOrganizationSlugTagsIndexRouteImport.update({
+    id: '/tags/',
+    path: '/tags/',
+    getParentRoute: () => AppOrganizationSlugRoute,
+  } as any)
 const AppOrganizationSlugApiKeysIndexRoute =
   AppOrganizationSlugApiKeysIndexRouteImport.update({
     id: '/api-keys/',
@@ -182,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
   '/$organizationSlug/api-keys': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/$organizationSlug/tags': typeof AppOrganizationSlugTagsIndexRoute
   '/$organizationSlug/webhooks': typeof AppOrganizationSlugWebhooksIndexRoute
   '/$organizationSlug/broadcast/list': typeof AppOrganizationSlugBroadcastListIndexRoute
   '/$organizationSlug/whatsapp/absence-message': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
@@ -206,6 +214,7 @@ export interface FileRoutesByTo {
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
   '/$organizationSlug/api-keys': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/$organizationSlug/tags': typeof AppOrganizationSlugTagsIndexRoute
   '/$organizationSlug/webhooks': typeof AppOrganizationSlugWebhooksIndexRoute
   '/$organizationSlug/broadcast/list': typeof AppOrganizationSlugBroadcastListIndexRoute
   '/$organizationSlug/whatsapp/absence-message': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
@@ -233,6 +242,7 @@ export interface FileRoutesById {
   '/webhook/oauth/callback': typeof WebhookOauthCallbackRoute
   '/_app/$organizationSlug/whatsapp/connect': typeof AppOrganizationSlugWhatsappConnectRoute
   '/_app/$organizationSlug/api-keys/': typeof AppOrganizationSlugApiKeysIndexRoute
+  '/_app/$organizationSlug/tags/': typeof AppOrganizationSlugTagsIndexRoute
   '/_app/$organizationSlug/webhooks/': typeof AppOrganizationSlugWebhooksIndexRoute
   '/_app/$organizationSlug/broadcast/list/': typeof AppOrganizationSlugBroadcastListIndexRoute
   '/_app/$organizationSlug/whatsapp/absence-message/': typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
@@ -259,6 +269,7 @@ export interface FileRouteTypes {
     | '/webhook/oauth/callback'
     | '/$organizationSlug/whatsapp/connect'
     | '/$organizationSlug/api-keys'
+    | '/$organizationSlug/tags'
     | '/$organizationSlug/webhooks'
     | '/$organizationSlug/broadcast/list'
     | '/$organizationSlug/whatsapp/absence-message'
@@ -283,6 +294,7 @@ export interface FileRouteTypes {
     | '/webhook/oauth/callback'
     | '/$organizationSlug/whatsapp/connect'
     | '/$organizationSlug/api-keys'
+    | '/$organizationSlug/tags'
     | '/$organizationSlug/webhooks'
     | '/$organizationSlug/broadcast/list'
     | '/$organizationSlug/whatsapp/absence-message'
@@ -309,6 +321,7 @@ export interface FileRouteTypes {
     | '/webhook/oauth/callback'
     | '/_app/$organizationSlug/whatsapp/connect'
     | '/_app/$organizationSlug/api-keys/'
+    | '/_app/$organizationSlug/tags/'
     | '/_app/$organizationSlug/webhooks/'
     | '/_app/$organizationSlug/broadcast/list/'
     | '/_app/$organizationSlug/whatsapp/absence-message/'
@@ -433,6 +446,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOrganizationSlugWebhooksIndexRouteImport
       parentRoute: typeof AppOrganizationSlugRoute
     }
+    '/_app/$organizationSlug/tags/': {
+      id: '/_app/$organizationSlug/tags/'
+      path: '/tags'
+      fullPath: '/$organizationSlug/tags'
+      preLoaderRoute: typeof AppOrganizationSlugTagsIndexRouteImport
+      parentRoute: typeof AppOrganizationSlugRoute
+    }
     '/_app/$organizationSlug/api-keys/': {
       id: '/_app/$organizationSlug/api-keys/'
       path: '/api-keys'
@@ -505,6 +525,7 @@ interface AppOrganizationSlugRouteChildren {
   AppOrganizationSlugSettingsRoute: typeof AppOrganizationSlugSettingsRoute
   AppOrganizationSlugWhatsappConnectRoute: typeof AppOrganizationSlugWhatsappConnectRoute
   AppOrganizationSlugApiKeysIndexRoute: typeof AppOrganizationSlugApiKeysIndexRoute
+  AppOrganizationSlugTagsIndexRoute: typeof AppOrganizationSlugTagsIndexRoute
   AppOrganizationSlugWebhooksIndexRoute: typeof AppOrganizationSlugWebhooksIndexRoute
   AppOrganizationSlugBroadcastListIndexRoute: typeof AppOrganizationSlugBroadcastListIndexRoute
   AppOrganizationSlugWhatsappAbsenceMessageIndexRoute: typeof AppOrganizationSlugWhatsappAbsenceMessageIndexRoute
@@ -522,6 +543,7 @@ const AppOrganizationSlugRouteChildren: AppOrganizationSlugRouteChildren = {
   AppOrganizationSlugWhatsappConnectRoute:
     AppOrganizationSlugWhatsappConnectRoute,
   AppOrganizationSlugApiKeysIndexRoute: AppOrganizationSlugApiKeysIndexRoute,
+  AppOrganizationSlugTagsIndexRoute: AppOrganizationSlugTagsIndexRoute,
   AppOrganizationSlugWebhooksIndexRoute: AppOrganizationSlugWebhooksIndexRoute,
   AppOrganizationSlugBroadcastListIndexRoute:
     AppOrganizationSlugBroadcastListIndexRoute,

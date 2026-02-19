@@ -61,7 +61,7 @@ export function Header() {
       href: `/${organizationSlug}/broadcast/list`,
       label: 'Listas de Transmissão',
       role: ['owner'],
-    }
+    },
   ];
 
   const nLinks = navigationLinks.filter((link) => {

@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import type { GetWhatsappContacts200 } from '@/http/generated';
 import { cn } from '@/lib/utils';
+import { cssColors } from '../../../tags/-components/colors';
 import { MessageStatus } from './message-status';
 import { NewChatDialog } from './new-chat-dialog';
 
@@ -52,22 +53,8 @@ const typeLabels: Record<string, string> = {
   unknown: 'Desconhecido',
 };
 
-// Tipo do contato individual (vai ser atualizado pelo Kubb)
-type ContactItem = {
-  id: string;
-  pushName: string;
-  waId: string;
-  profilePicUrl: string | null;
-  unreadCount: number;
-  lastMessage: string;
-  lastMessageType: string;
-  lastMessageStatus?: string;
-  lastMessageAt: string | number;
-  isWindowOpen: boolean;
-};
-
 interface ChatSidebarProps {
-  contacts: ContactItem[];
+  contacts: GetWhatsappContacts200['data'][0][];
   isLoadingContacts: boolean;
   selectedContactId: string | null;
   onSelectContact: (contact: GetWhatsappContacts200['data'][0]) => void;
@@ -109,9 +96,11 @@ function dateParserView(date: string | number) {
 
   if (isToday) {
     return format(parsedDate, 'HH:mm');
-  } if (isYesterday) {
+  }
+  if (isYesterday) {
     return 'Ontem';
-  } if (isAnteOntem) {
+  }
+  if (isAnteOntem) {
     return 'Anteontem';
   }
   return format(parsedDate, 'dd/MM/yyyy');
@@ -198,7 +187,10 @@ export function ChatSidebar({
             <button
               className={cn(
                 'flex w-full items-center gap-3 border-border/50 border-b p-4 text-left transition-colors hover:bg-accent',
-                selectedContactId === contact.id && 'bg-accent'
+                selectedContactId === contact.id && 'bg-accent',
+                contact.tag && cssColors[
+                contact.tag?.color as keyof typeof cssColors
+                ]
               )}
               key={contact.id}
               onClick={() => onSelectContact(contact)}

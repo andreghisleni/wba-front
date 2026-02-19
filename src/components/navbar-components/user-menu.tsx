@@ -1,6 +1,6 @@
-import { useNavigate } from '@tanstack/react-router';
+import { Link, useNavigate, useParams } from '@tanstack/react-router';
 
-import { BookOpenIcon, LogOutIcon, PinIcon, UserPenIcon } from 'lucide-react';
+import { BoltIcon, BookOpenIcon, LogOutIcon, PinIcon, UserPenIcon } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -18,12 +18,13 @@ import { auth } from '@/lib/auth';
 import { getNameInitials } from '@/utils/get-name-initials';
 
 export default function UserMenu() {
-  // const { eventId } = useParams({
-  //   strict: false,
-  // });
+  const { organizationSlug } = useParams({
+    strict: false,
+  });
 
   const navigate = useNavigate();
   const { data } = auth.useSession();
+  const { data: activeMemberData } = auth.useActiveMember();
   async function handleLogout() {
     await auth.signOut();
     navigate({
@@ -63,12 +64,12 @@ export default function UserMenu() {
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          {/* {eventId && (<DropdownMenuItem asChild>
-            <Link params={{ eventId }} to={'/$eventId/event/edit'}>
+          {organizationSlug && activeMemberData?.role === 'owner' && (<DropdownMenuItem asChild>
+            <Link params={{ organizationSlug }} to={'/$organizationSlug/tags'}>
               <BoltIcon aria-hidden="true" className="opacity-60" size={16} />
-              <span>Evento</span>
+              <span>Tags</span>
             </Link>
-          </DropdownMenuItem>)} */}
+          </DropdownMenuItem>)}
           <DropdownMenuItem onClick={() => setSendRedded((old) => !old)}>
             <WhatsAppTicks
               aria-hidden="true"
