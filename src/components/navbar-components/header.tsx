@@ -55,7 +55,6 @@ export function Header() {
     {
       href: `/${organizationSlug}/whatsapp/absence-message`,
       label: 'Mensagem de Ausência',
-      role: ['owner'],
     },
     {
       href: `/${organizationSlug}/broadcast/list`,
