@@ -60,6 +60,10 @@ export type GetTags200 = {
          * @type number
         */
         priority: number;
+        /**
+         * @type string
+        */
+        type: string;
         createdAt: (string | string | number);
         updatedAt: (string | string | number);
     }[];

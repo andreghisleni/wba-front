@@ -22,18 +22,15 @@ import {
 import {
   getTagByIdQueryKey,
   getTagsQueryKey,
-  useCreateTag,
-  useUpdateTag,
+  useCreateTag
 } from '@/http/generated';
 import type { Tag } from './columns';
 
 export const formSchema = z.object({
   name: z.string().min(1, 'O nome da tag é obrigatório').describe('Nome da tag'),
-  priority: z.string().describe('Prioridade'),
-  colorName: z.string().min(1, 'A cor é obrigatória').describe('Cor'),
 });
 
-export function TagForm({ tag }: { tag?: Tag }) {
+export function TagKanbanForm({ tag }: { tag?: Tag }) {
   const queryClient = useQueryClient();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -59,40 +56,14 @@ export function TagForm({ tag }: { tag?: Tag }) {
     },
   });
 
-  const updateTag = useUpdateTag({
-    mutation: {
-      onSuccess: async (data) => {
-        form.reset();
-        setIsOpen(false);
-        toast.success('Tag atualizada com sucesso');
-
-        await queryClient.invalidateQueries({
-          queryKey: getTagsQueryKey(),
-        });
-        await queryClient.invalidateQueries({
-          queryKey: getTagByIdQueryKey(data.id),
-        });
-      },
-      onError: (error) => {
-        toast.error('Erro ao atualizar tag', {
-          description: error.message,
-        });
-      },
-    },
-  });
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: tag?.name || '',
-      priority: tag?.priority ? String(tag?.priority) : '',
-      colorName: tag?.colorName || '',
       // ...tag,
     },
     values: {
       name: tag?.name || '',
-      priority: tag?.priority ? String(tag?.priority) : '',
-      colorName: tag?.colorName || '',
       // ...tag,
     },
   });
@@ -101,23 +72,14 @@ export function TagForm({ tag }: { tag?: Tag }) {
     // biome-ignore lint/suspicious/noConsole: hi
     console.log(values);
     try {
-      tag?.id
-        ? await updateTag.mutateAsync({
-          id: tag.id,
-          data: {
-            name: values.name,
-            priority: Number(values.priority),
-            colorName: values.colorName,
-          },
-        })
-        : await createTag.mutateAsync({
-          data: {
-            name: values.name,
-            priority: Number(values.priority),
-            colorName: values.colorName,
-            type: 'general',
-          },
-        });
+      await createTag.mutateAsync({
+        data: {
+          name: values.name,
+          priority: 0,
+          colorName: '',
+          type: 'kanban',
+        },
+      });
     } catch (error) {
       // biome-ignore lint/suspicious/noConsole: hi
       console.log(error);
@@ -133,37 +95,17 @@ export function TagForm({ tag }: { tag?: Tag }) {
   return (
     <Dialog onOpenChange={setIsOpen} open={isOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{tag ? 'Editar' : 'Adicionar tag'}</Button>
+        <Button variant="outline">{tag ? 'Editar' : 'Adicionar kanban'}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {tag ? 'Editar' : 'Cadastrar'} tag
+            {tag ? 'Editar' : 'Cadastrar'} kanban
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form className="space-y-8" onSubmit={form.handleSubmit(onSubmit)}>
-            {generateFormFieldsFromZodSchema(formSchema, form, {
-              colorName: {
-                loading: false,
-                values: [
-                  { label: 'Vermelho', value: 'red' },
-                  { label: 'Verde', value: 'green' },
-                  { label: 'Azul', value: 'blue' },
-                  { label: 'Amarelo', value: 'yellow' },
-                  { label: 'Roxo', value: 'purple' },
-                  { label: 'Laranja', value: 'orange' },
-                ],
-              },
-              priority: {
-                loading: false,
-                values: [
-                  { label: 'Baixa', value: '0' },
-                  { label: 'Média', value: '1' },
-                  { label: 'Alta', value: '2' },
-                ],
-              },
-            })}
+            {generateFormFieldsFromZodSchema(formSchema, form)}
 
             <Button className="w-full" type="submit">
               {form.formState.isSubmitting ? (

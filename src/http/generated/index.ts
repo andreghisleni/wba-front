@@ -1,4 +1,5 @@
 export type { ActivateAbsenceMessageMutationKey } from "./hooks/useActivateAbsenceMessage.ts";
+export type { AddTagKanbanToContactMutationKey } from "./hooks/useAddTagKanbanToContact.ts";
 export type { AddTagToContactMutationKey } from "./hooks/useAddTagToContact.ts";
 export type { CreateBroadcastCampaignMutationKey } from "./hooks/useCreateBroadcastCampaign.ts";
 export type { CreateBroadcastListMutationKey } from "./hooks/useCreateBroadcastList.ts";
@@ -82,6 +83,7 @@ export type { UpdateWebhookMutationKey } from "./hooks/useUpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaMutationKey } from "./hooks/useUpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboardMutationKey } from "./hooks/useWhatsappOnboard.ts";
 export type { ActivateAbsenceMessage200, ActivateAbsenceMessageMutationRequest, ActivateAbsenceMessageMutationResponse, ActivateAbsenceMessageMutation } from "./types/ActivateAbsenceMessage.ts";
+export type { AddTagKanbanToContactPathParams, AddTagKanbanToContact201, AddTagKanbanToContact400, AddTagKanbanToContact404, AddTagKanbanToContactMutationRequest, AddTagKanbanToContactMutationResponse, AddTagKanbanToContactMutation } from "./types/AddTagKanbanToContact.ts";
 export type { AddTagToContactPathParams, AddTagToContact201, AddTagToContact400, AddTagToContact404, AddTagToContactMutationRequest, AddTagToContactMutationResponse, AddTagToContactMutation } from "./types/AddTagToContact.ts";
 export type { CreateBroadcastCampaignPathParams, CreateBroadcastCampaign201, CreateBroadcastCampaign400, CreateBroadcastCampaign401, CreateBroadcastCampaign403, CreateBroadcastCampaign404, CreateBroadcastCampaignMutationRequest, CreateBroadcastCampaignMutationResponse, CreateBroadcastCampaignMutation } from "./types/CreateBroadcastCampaign.ts";
 export type { CreateBroadcastList201, CreateBroadcastList400, CreateBroadcastList401, CreateBroadcastList403, CreateBroadcastListMutationRequest, CreateBroadcastListMutationResponse, CreateBroadcastListMutation } from "./types/CreateBroadcastList.ts";
@@ -140,6 +142,7 @@ export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, Updat
 export type { UpdateWhatsappTemplateMediaPathParams, UpdateWhatsappTemplateMedia200, UpdateWhatsappTemplateMedia403, UpdateWhatsappTemplateMedia404, UpdateWhatsappTemplateMediaMutationRequest, UpdateWhatsappTemplateMediaMutationResponse, UpdateWhatsappTemplateMediaMutation } from "./types/UpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./types/WhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./hooks/useActivateAbsenceMessage.ts";
+export { addTagKanbanToContactMutationKey, addTagKanbanToContact, useAddTagKanbanToContact } from "./hooks/useAddTagKanbanToContact.ts";
 export { addTagToContactMutationKey, addTagToContact, useAddTagToContact } from "./hooks/useAddTagToContact.ts";
 export { createBroadcastCampaignMutationKey, createBroadcastCampaign, useCreateBroadcastCampaign } from "./hooks/useCreateBroadcastCampaign.ts";
 export { createBroadcastListMutationKey, createBroadcastList, useCreateBroadcastList } from "./hooks/useCreateBroadcastList.ts";

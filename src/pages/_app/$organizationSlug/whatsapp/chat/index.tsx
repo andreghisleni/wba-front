@@ -6,6 +6,7 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { toast } from 'sonner';
 import { useSendRedded } from '@/contexts/send-redded';
+import { useChatSocket } from '@/hooks/use-chat-socket';
 import { useDebounce } from '@/hooks/use-debounce';
 import type { GetWhatsappContacts200 } from '@/http/generated';
 // Seus hooks gerados
@@ -17,20 +18,18 @@ import {
   useMarkWhatsappMessagesAsRead,
   usePostWhatsappMessages,
 } from '@/http/generated/hooks';
+import { auth } from '@/lib/auth';
 import { ChatSidebar } from './-components/chat-sidebar';
 import { ChatWindow } from './-components/chat-window';
-import { auth } from '@/lib/auth';
-import { useChatSocket } from '@/hooks/use-chat-socket';
 
 export const Route = createFileRoute('/_app/$organizationSlug/whatsapp/chat/')({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-
-// 1. Crie a referência
+  // 1. Crie a referência
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  
+
   const { data: activeOrg } = auth.useActiveOrganization();
   const { sendRedded } = useSendRedded();
   // const [selectedContactId, setSelectedContactId] = useState<string | null>(
@@ -44,6 +43,7 @@ function RouteComponent() {
   // Estados para filtros e paginação
   const [searchTerm, setSearchTerm] = useState('');
   const [showUnreadOnly, setShowUnreadOnly] = useState(false);
+  const [kanbanTagId, setKanbanTagId] = useState<string | undefined>(undefined);
   const [page, setPage] = useState(1);
   const limit = 50;
 
@@ -79,7 +79,8 @@ function RouteComponent() {
       limit,
       search: debouncedSearch || undefined,
       unreadOnly: showUnreadOnly ? 'true' : undefined,
-    },
+      kanbanTagId,
+    }
     // {
     //   query: {
     //     refetchInterval: 10_000,
@@ -94,7 +95,11 @@ function RouteComponent() {
   // Reset página quando filtros mudam
   useEffect(() => {
     setPage(1);
-  }, [debouncedSearch, showUnreadOnly]);
+  }, [debouncedSearch, showUnreadOnly, kanbanTagId]);
+
+  const handleKanbanTagChange = (value: string | undefined) => {
+    setKanbanTagId(value);
+  };
 
   // Handlers para filtros
   const handleSearchChange = (value: string) => {
@@ -134,13 +139,13 @@ function RouteComponent() {
             ),
           });
 
-          console.log('invalidate')
+          console.log('invalidate');
 
-          if(inputRef.current){
+          if (inputRef.current) {
             setTimeout(() => {
-            console.log('here')
-        inputRef.current?.focus();
-      }, 50); // 50ms é suficiente
+              console.log('here');
+              inputRef.current?.focus();
+            }, 50); // 50ms é suficiente
           }
         },
         onError: (error) => {
@@ -297,6 +302,8 @@ function RouteComponent() {
       <ChatSidebar
         contacts={contacts}
         isLoadingContacts={isLoadingContacts}
+        kanbanTagId={kanbanTagId}
+        onKanbanTagChange={handleKanbanTagChange}
         onPageChange={handlePageChange}
         onSearchChange={handleSearchChange}
         onSelectContact={setSelectedContact}

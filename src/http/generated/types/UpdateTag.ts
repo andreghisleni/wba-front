@@ -28,6 +28,10 @@ export type UpdateTag200 = {
      * @type number
     */
     priority: number;
+    /**
+     * @type string
+    */
+    type: string;
     createdAt: (string | string | number);
     updatedAt: (string | string | number);
 };
@@ -61,7 +65,6 @@ export type UpdateTagMutationRequest = {
     name: string;
     /**
      * @description Color of the tag
-     * @minLength 1
      * @type string
     */
     colorName: string;

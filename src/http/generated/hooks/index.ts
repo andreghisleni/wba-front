@@ -1,4 +1,5 @@
 export type { ActivateAbsenceMessageMutationKey } from "./useActivateAbsenceMessage.ts";
+export type { AddTagKanbanToContactMutationKey } from "./useAddTagKanbanToContact.ts";
 export type { AddTagToContactMutationKey } from "./useAddTagToContact.ts";
 export type { CreateBroadcastCampaignMutationKey } from "./useCreateBroadcastCampaign.ts";
 export type { CreateBroadcastListMutationKey } from "./useCreateBroadcastList.ts";
@@ -82,6 +83,7 @@ export type { UpdateWebhookMutationKey } from "./useUpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaMutationKey } from "./useUpdateWhatsappTemplateMedia.ts";
 export type { WhatsappOnboardMutationKey } from "./useWhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./useActivateAbsenceMessage.ts";
+export { addTagKanbanToContactMutationKey, addTagKanbanToContact, useAddTagKanbanToContact } from "./useAddTagKanbanToContact.ts";
 export { addTagToContactMutationKey, addTagToContact, useAddTagToContact } from "./useAddTagToContact.ts";
 export { createBroadcastCampaignMutationKey, createBroadcastCampaign, useCreateBroadcastCampaign } from "./useCreateBroadcastCampaign.ts";
 export { createBroadcastListMutationKey, createBroadcastList, useCreateBroadcastList } from "./useCreateBroadcastList.ts";

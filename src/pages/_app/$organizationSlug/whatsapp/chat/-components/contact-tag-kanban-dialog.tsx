@@ -18,15 +18,14 @@ import {
 import { Form } from '@/components/ui/form';
 import {
   getWhatsappContactsQueryKey,
-  useAddTagToContact,
-  useGetTags,
+  useAddTagKanbanToContact, useGetTags
 } from '@/http/generated';
 
 export const formSchema = z.object({
   tagId: z.string().min(1, 'Selecione uma tag').describe('Tag do cliente'),
 });
 
-export function ContactTagForm({
+export function ContactTagKanbanForm({
   tagId,
   clientId,
   isOpen,
@@ -44,7 +43,7 @@ export function ContactTagForm({
     'p.pageSize': 100,
   });
 
-  const addTagToContact = useAddTagToContact({
+  const addTagToContact = useAddTagKanbanToContact({
     mutation: {
       onSuccess: async () => {
         form.reset();
@@ -83,7 +82,7 @@ export function ContactTagForm({
     try {
       await addTagToContact.mutateAsync({
         data: {
-          tagId: values.tagId,
+          tagKanbanId: values.tagId,
         },
         id: clientId,
       });
@@ -104,7 +103,7 @@ export function ContactTagForm({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {tagId ? 'Editar' : 'Cadastrar'} a tag
+            {tagId ? 'Editar' : 'Cadastrar'} kanban
           </DialogTitle>
         </DialogHeader>
         <Form {...form}>
@@ -113,7 +112,7 @@ export function ContactTagForm({
               tagId: {
                 loading: isLoading,
                 values:
-                  data?.data.filter((tag) => tag.type === 'general').map((tag) => ({
+                  data?.data.filter((tag) => tag.type === 'kanban').map((tag) => ({
                     label: tag.name,
                     value: tag.id,
                   })) || [],

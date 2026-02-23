@@ -20,7 +20,15 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { GetWhatsappContacts200 } from '@/http/generated';
+import { useGetTags } from '@/http/generated';
 import { cn } from '@/lib/utils';
 import { cssColors } from '../../../tags/-components/colors';
 import { MessageStatus } from './message-status';
@@ -63,6 +71,9 @@ interface ChatSidebarProps {
   onSearchChange: (value: string) => void;
   showUnreadOnly: boolean;
   onUnreadFilterChange: (value: boolean) => void;
+  // Filtro por kanban tag
+  kanbanTagId: string | undefined;
+  onKanbanTagChange: (value: string | undefined) => void;
   // Paginação
   page: number;
   totalPages: number;
@@ -115,10 +126,19 @@ export function ChatSidebar({
   onSearchChange,
   showUnreadOnly,
   onUnreadFilterChange,
+  kanbanTagId,
+  onKanbanTagChange,
   page,
   totalPages,
   onPageChange,
 }: ChatSidebarProps) {
+  const { data: tagsData } = useGetTags({
+    'p.page': 1,
+    'p.pageSize': 100,
+  });
+
+  const kanbanTags = tagsData?.data.filter((tag) => tag.type === 'kanban') ?? [];
+
   return (
     <div className="flex w-80 flex-col border-r bg-muted/10">
       <div className="flex flex-none flex-row items-center gap-2 border-b p-4">
@@ -158,6 +178,35 @@ export function ChatSidebar({
           onContactCreated={(contact) => onSelectContact(contact)}
         />
       </div>
+
+      {/* Filtro por Kanban Tag */}
+      {kanbanTags.length > 0 && (
+        <div className="flex-none border-b px-4 py-2">
+          <Select
+            onValueChange={(value) => {
+              if (value === 'all') {
+                onKanbanTagChange(undefined);
+              } else {
+                onKanbanTagChange(value);
+              }
+            }}
+            value={kanbanTagId ?? 'all'}
+          >
+            <SelectTrigger className="h-8 w-full">
+              <SelectValue placeholder="Filtrar por etapa" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todas as etapas</SelectItem>
+              <SelectItem value="none">Sem etapa</SelectItem>
+              {kanbanTags.map((tag) => (
+                <SelectItem key={tag.id} value={tag.id}>
+                  {tag.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
 
       <div className="w-full flex-1 overflow-auto">
         <div className="flex flex-col">

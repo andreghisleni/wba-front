@@ -33,10 +33,7 @@ export type AddTagToContact404 = {
 };
 
 export type AddTagToContactMutationRequest = {
-    /**
-     * @type string, uuid
-    */
-    tagId: string;
+    tagId: (string | null) | null;
 };
 
 export type AddTagToContactMutationResponse = AddTagToContact201;

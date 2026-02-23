@@ -23,6 +23,7 @@ export type GetWhatsappContactsQueryParams = {
      * @type string | undefined
     */
     unreadOnly?: string;
+    kanbanTagId?: (string | string);
 };
 
 export type GetWhatsappContacts200 = {
@@ -65,22 +66,14 @@ export type GetWhatsappContacts200 = {
         */
         isWindowOpen: boolean;
         tag: ({
-            /**
-             * @type string
-            */
-            id: string;
-            /**
-             * @type string
-            */
-            name: string;
-            /**
-             * @type string
-            */
-            color: string;
-            /**
-             * @type number
-            */
-            priority: number;
+            id: (string | null) | null;
+            name: (string | null) | null;
+            color: (string | null) | null;
+            priority: (number | null) | null;
+        } | null) | null;
+        kanbanTag: ({
+            id: (string | null) | null;
+            name: (string | null) | null;
         } | null) | null;
     }[];
     /**

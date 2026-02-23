@@ -9,6 +9,7 @@ import { usePagination } from '@/hooks/use-pagination';
 import { useGetTags } from '@/http/generated';
 import { columns } from './-components/columns';
 import { TagForm } from './-components/tag-form';
+import { TagKanbanForm } from './-components/tag-kanban-form';
 
 export const Route = createFileRoute('/_app/$organizationSlug/tags/')({
   component: RouteComponent,
@@ -47,7 +48,7 @@ function RouteComponent() {
     <div className="px-8 pt-8">
       <h2 className="font-bold text-3xl tracking-tight">Tags</h2>
       <DataTable
-        addComponent={<TagForm />}
+        addComponent={[<TagForm key="tag-form" />, <TagKanbanForm key="tag-kanban-form" />]}
         columns={columns()}
         data={data?.data || []}
         filterComponent={<FilterBase />}

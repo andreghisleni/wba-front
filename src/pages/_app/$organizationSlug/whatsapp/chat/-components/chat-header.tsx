@@ -15,6 +15,7 @@ import type { GetWhatsappContactsQueryResponse } from '@/http/generated/types/Ge
 import { cn } from '@/lib/utils';
 import { cssColors } from '../../../tags/-components/colors';
 import { ContactTagForm } from './contact-tag-dialog';
+import { ContactTagKanbanForm } from './contact-tag-kanban-dialog';
 import { PhoneComponent } from './phone';
 
 interface ChatHeaderProps {
@@ -23,6 +24,8 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ selectedContact }: ChatHeaderProps) {
   const [open, setOpen] = useState(false);
+  const [openKanban, setOpenKanban] = useState(false);
+
   return (
     <div className="z-10 flex flex-none items-center justify-between border-b bg-background p-3 px-6 shadow-sm">
       <div className="flex items-center gap-3">
@@ -84,6 +87,10 @@ export function ChatHeader({ selectedContact }: ChatHeaderProps) {
                 <Tag aria-hidden="true" className="opacity-60" size={16} />
                 <span>Tag</span>
               </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setOpenKanban(true)}>
+                <Tag aria-hidden="true" className="opacity-60" size={16} />
+                <span>Kanban</span>
+              </DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -91,7 +98,13 @@ export function ChatHeader({ selectedContact }: ChatHeaderProps) {
           clientId={selectedContact.id}
           isOpen={open}
           setIsOpen={setOpen}
-          tagId={selectedContact.tag?.id}
+          tagId={selectedContact.tag?.id || undefined}
+        />
+        <ContactTagKanbanForm
+          clientId={selectedContact.id}
+          isOpen={openKanban}
+          setIsOpen={setOpenKanban}
+          tagId={selectedContact.kanbanTag?.id || undefined}
         />
       </div>
     </div>

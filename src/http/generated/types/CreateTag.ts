@@ -21,6 +21,10 @@ export type CreateTag200 = {
      * @type number
     */
     priority: number;
+    /**
+     * @type string
+    */
+    type: string;
     createdAt: (string | string | number);
     updatedAt: (string | string | number);
 };
@@ -44,7 +48,6 @@ export type CreateTagMutationRequest = {
     name: string;
     /**
      * @description Color name of the tag
-     * @minLength 1
      * @type string
     */
     colorName: string;
@@ -53,6 +56,11 @@ export type CreateTagMutationRequest = {
      * @type number
     */
     priority: number;
+    /**
+     * @description Type of the tag
+     * @type string
+    */
+    type: string;
 };
 
 export type CreateTagMutationResponse = CreateTag200;
