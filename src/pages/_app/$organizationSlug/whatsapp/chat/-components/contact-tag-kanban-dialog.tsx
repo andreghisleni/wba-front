@@ -22,7 +22,7 @@ import {
 } from '@/http/generated';
 
 export const formSchema = z.object({
-  tagId: z.string().min(1, 'Selecione uma tag').describe('Tag do cliente'),
+  tagId: z.string().describe('Tag do cliente'),
 });
 
 export function ContactTagKanbanForm({
@@ -82,7 +82,7 @@ export function ContactTagKanbanForm({
     try {
       await addTagToContact.mutateAsync({
         data: {
-          tagKanbanId: values.tagId,
+          tagKanbanId: values.tagId === 'none' ? null : values.tagId,
         },
         id: clientId,
       });
@@ -112,10 +112,11 @@ export function ContactTagKanbanForm({
               tagId: {
                 loading: isLoading,
                 values:
-                  data?.data.filter((tag) => tag.type === 'kanban').map((tag) => ({
+                  [{ label: 'Sem kanban', value: 'none' },
+                  ...(data?.data.filter((tag) => tag.type === 'kanban').map((tag) => ({
                     label: tag.name,
                     value: tag.id,
-                  })) || [],
+                  })) || [])],
               },
             })}
 
