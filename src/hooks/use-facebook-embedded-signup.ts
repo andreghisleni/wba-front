@@ -137,25 +137,24 @@ export function useFacebookEmbeddedSignup({
 
         console.log('FB.login response:', response);
 
-        if (response.status === 'connected' && response.authResponse) {
-          const { code, accessToken } = response.authResponse;
-
-          if (code || accessToken) {
-            onSuccess?.({
-              code,
-              accessToken,
-            });
-          } else {
-            console.warn('FB.login: authResponse sem code ou accessToken');
-            onError?.(new Error('Resposta incompleta do Facebook'));
-          }
+        // Verifica se tem code no authResponse, independente do status
+        // O Embedded Signup pode retornar status 'unknown' mesmo com code válido
+        if (response.authResponse?.code) {
+          console.log('FB.login: Code obtido com sucesso');
+          onSuccess?.({
+            code: response.authResponse.code,
+            accessToken: response.authResponse.accessToken,
+          });
         } else if (response.status === 'not_authorized') {
           console.log('FB.login: Usuário não autorizou o app');
           onCancel?.();
-        } else {
-          // status === 'unknown' - pode ser que o popup foi fechado ou outro motivo
-          console.log('FB.login: Status desconhecido ou popup fechado');
+        } else if (!response.authResponse) {
+          // Sem authResponse = popup fechado ou cancelado
+          console.log('FB.login: Popup fechado ou cancelado');
           onCancel?.();
+        } else {
+          console.warn('FB.login: authResponse sem code');
+          onError?.(new Error('Resposta incompleta do Facebook'));
         }
       },
       {
