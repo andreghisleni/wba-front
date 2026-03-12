@@ -25,6 +25,7 @@ export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQuery
 export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./GetDashboardData.ts";
+export type { GetEmbeddedSignupConfig200, GetEmbeddedSignupConfig400, GetEmbeddedSignupConfigQueryResponse, GetEmbeddedSignupConfigQuery } from "./GetEmbeddedSignupConfig.ts";
 export type { GetPresignedUploadUrl200, GetPresignedUploadUrl400, GetPresignedUploadUrlMutationRequest, GetPresignedUploadUrlMutationResponse, GetPresignedUploadUrlMutation } from "./GetPresignedUploadUrl.ts";
 export type { GetTagByIdPathParams, GetTagById200, GetTagById404, GetTagByIdQueryResponse, GetTagByIdQuery } from "./GetTagById.ts";
 export type { GetTagsQueryParams, GetTags200, GetTagsQueryResponse, GetTagsQuery } from "./GetTags.ts";
@@ -56,4 +57,4 @@ export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus
 export type { UpdateTagPathParams, UpdateTag200, UpdateTag400, UpdateTag404, UpdateTagMutationRequest, UpdateTagMutationResponse, UpdateTagMutation } from "./UpdateTag.ts";
 export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, UpdateWebhookMutationRequest, UpdateWebhookMutationResponse, UpdateWebhookMutation } from "./UpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaPathParams, UpdateWhatsappTemplateMedia200, UpdateWhatsappTemplateMedia403, UpdateWhatsappTemplateMedia404, UpdateWhatsappTemplateMediaMutationRequest, UpdateWhatsappTemplateMediaMutationResponse, UpdateWhatsappTemplateMediaMutation } from "./UpdateWhatsappTemplateMedia.ts";
-export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./WhatsappOnboard.ts";
+export type { WhatsappOnboard200, WhatsappOnboard400, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./WhatsappOnboard.ts";

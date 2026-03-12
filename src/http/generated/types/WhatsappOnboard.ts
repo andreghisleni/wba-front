@@ -4,7 +4,27 @@
 */
 
 
-export type WhatsappOnboard200 = any;
+export type WhatsappOnboard200 = {
+    /**
+     * @type boolean
+    */
+    success: boolean;
+    /**
+     * @type string
+    */
+    message: string;
+    /**
+     * @type boolean | undefined
+    */
+    coexistenceMode?: boolean;
+};
+
+export type WhatsappOnboard400 = {
+    /**
+     * @type string
+    */
+    error: string;
+};
 
 export type WhatsappOnboardMutationRequest = {
     /**
@@ -18,5 +38,5 @@ export type WhatsappOnboardMutationResponse = WhatsappOnboard200;
 export type WhatsappOnboardMutation = {
     Response: WhatsappOnboard200;
     Request: WhatsappOnboardMutationRequest;
-    Errors: any;
+    Errors: WhatsappOnboard400;
 };

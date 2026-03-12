@@ -37,6 +37,8 @@ export type { GetDashboardApiKeysQueryKey } from "./useGetDashboardApiKeys.ts";
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./useGetDashboardDataSuspense.ts";
+export type { GetEmbeddedSignupConfigQueryKey } from "./useGetEmbeddedSignupConfig.ts";
+export type { GetEmbeddedSignupConfigSuspenseQueryKey } from "./useGetEmbeddedSignupConfigSuspense.ts";
 export type { GetPresignedUploadUrlMutationKey } from "./useGetPresignedUploadUrl.ts";
 export type { GetTagByIdQueryKey } from "./useGetTagById.ts";
 export type { GetTagByIdSuspenseQueryKey } from "./useGetTagByIdSuspense.ts";
@@ -121,6 +123,8 @@ export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQu
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./useGetDashboardData.ts";
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./useGetDashboardDataSuspense.ts";
+export { getEmbeddedSignupConfigQueryKey, getEmbeddedSignupConfig, getEmbeddedSignupConfigQueryOptions, useGetEmbeddedSignupConfig } from "./useGetEmbeddedSignupConfig.ts";
+export { getEmbeddedSignupConfigSuspenseQueryKey, getEmbeddedSignupConfigSuspense, getEmbeddedSignupConfigSuspenseQueryOptions, useGetEmbeddedSignupConfigSuspense } from "./useGetEmbeddedSignupConfigSuspense.ts";
 export { getPresignedUploadUrlMutationKey, getPresignedUploadUrl, useGetPresignedUploadUrl } from "./useGetPresignedUploadUrl.ts";
 export { getTagByIdQueryKey, getTagById, getTagByIdQueryOptions, useGetTagById } from "./useGetTagById.ts";
 export { getTagByIdSuspenseQueryKey, getTagByIdSuspense, getTagByIdSuspenseQueryOptions, useGetTagByIdSuspense } from "./useGetTagByIdSuspense.ts";

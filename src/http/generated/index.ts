@@ -37,6 +37,8 @@ export type { GetDashboardApiKeysQueryKey } from "./hooks/useGetDashboardApiKeys
 export type { GetDashboardApiKeysSuspenseQueryKey } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export type { GetDashboardDataQueryKey } from "./hooks/useGetDashboardData.ts";
 export type { GetDashboardDataSuspenseQueryKey } from "./hooks/useGetDashboardDataSuspense.ts";
+export type { GetEmbeddedSignupConfigQueryKey } from "./hooks/useGetEmbeddedSignupConfig.ts";
+export type { GetEmbeddedSignupConfigSuspenseQueryKey } from "./hooks/useGetEmbeddedSignupConfigSuspense.ts";
 export type { GetPresignedUploadUrlMutationKey } from "./hooks/useGetPresignedUploadUrl.ts";
 export type { GetTagByIdQueryKey } from "./hooks/useGetTagById.ts";
 export type { GetTagByIdSuspenseQueryKey } from "./hooks/useGetTagByIdSuspense.ts";
@@ -109,6 +111,7 @@ export type { GetBroadcastLists200, GetBroadcastLists400, GetBroadcastListsQuery
 export type { GetContacts200, GetContacts400, GetContactsQueryResponse, GetContactsQuery } from "./types/GetContacts.ts";
 export type { GetDashboardApiKeys200, GetDashboardApiKeysQueryResponse, GetDashboardApiKeysQuery } from "./types/GetDashboardApiKeys.ts";
 export type { GetDashboardData200, GetDashboardData404, GetDashboardData500, GetDashboardDataQueryResponse, GetDashboardDataQuery } from "./types/GetDashboardData.ts";
+export type { GetEmbeddedSignupConfig200, GetEmbeddedSignupConfig400, GetEmbeddedSignupConfigQueryResponse, GetEmbeddedSignupConfigQuery } from "./types/GetEmbeddedSignupConfig.ts";
 export type { GetPresignedUploadUrl200, GetPresignedUploadUrl400, GetPresignedUploadUrlMutationRequest, GetPresignedUploadUrlMutationResponse, GetPresignedUploadUrlMutation } from "./types/GetPresignedUploadUrl.ts";
 export type { GetTagByIdPathParams, GetTagById200, GetTagById404, GetTagByIdQueryResponse, GetTagByIdQuery } from "./types/GetTagById.ts";
 export type { GetTagsQueryParams, GetTags200, GetTagsQueryResponse, GetTagsQuery } from "./types/GetTags.ts";
@@ -140,7 +143,7 @@ export type { UpdateDashboardApiKeyStatusPathParams, UpdateDashboardApiKeyStatus
 export type { UpdateTagPathParams, UpdateTag200, UpdateTag400, UpdateTag404, UpdateTagMutationRequest, UpdateTagMutationResponse, UpdateTagMutation } from "./types/UpdateTag.ts";
 export type { UpdateWebhookPathParams, UpdateWebhook200, UpdateWebhook404, UpdateWebhookMutationRequest, UpdateWebhookMutationResponse, UpdateWebhookMutation } from "./types/UpdateWebhook.ts";
 export type { UpdateWhatsappTemplateMediaPathParams, UpdateWhatsappTemplateMedia200, UpdateWhatsappTemplateMedia403, UpdateWhatsappTemplateMedia404, UpdateWhatsappTemplateMediaMutationRequest, UpdateWhatsappTemplateMediaMutationResponse, UpdateWhatsappTemplateMediaMutation } from "./types/UpdateWhatsappTemplateMedia.ts";
-export type { WhatsappOnboard200, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./types/WhatsappOnboard.ts";
+export type { WhatsappOnboard200, WhatsappOnboard400, WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboardMutation } from "./types/WhatsappOnboard.ts";
 export { activateAbsenceMessageMutationKey, activateAbsenceMessage, useActivateAbsenceMessage } from "./hooks/useActivateAbsenceMessage.ts";
 export { addTagKanbanToContactMutationKey, addTagKanbanToContact, useAddTagKanbanToContact } from "./hooks/useAddTagKanbanToContact.ts";
 export { addTagToContactMutationKey, addTagToContact, useAddTagToContact } from "./hooks/useAddTagToContact.ts";
@@ -180,6 +183,8 @@ export { getDashboardApiKeysQueryKey, getDashboardApiKeys, getDashboardApiKeysQu
 export { getDashboardApiKeysSuspenseQueryKey, getDashboardApiKeysSuspense, getDashboardApiKeysSuspenseQueryOptions, useGetDashboardApiKeysSuspense } from "./hooks/useGetDashboardApiKeysSuspense.ts";
 export { getDashboardDataQueryKey, getDashboardData, getDashboardDataQueryOptions, useGetDashboardData } from "./hooks/useGetDashboardData.ts";
 export { getDashboardDataSuspenseQueryKey, getDashboardDataSuspense, getDashboardDataSuspenseQueryOptions, useGetDashboardDataSuspense } from "./hooks/useGetDashboardDataSuspense.ts";
+export { getEmbeddedSignupConfigQueryKey, getEmbeddedSignupConfig, getEmbeddedSignupConfigQueryOptions, useGetEmbeddedSignupConfig } from "./hooks/useGetEmbeddedSignupConfig.ts";
+export { getEmbeddedSignupConfigSuspenseQueryKey, getEmbeddedSignupConfigSuspense, getEmbeddedSignupConfigSuspenseQueryOptions, useGetEmbeddedSignupConfigSuspense } from "./hooks/useGetEmbeddedSignupConfigSuspense.ts";
 export { getPresignedUploadUrlMutationKey, getPresignedUploadUrl, useGetPresignedUploadUrl } from "./hooks/useGetPresignedUploadUrl.ts";
 export { getTagByIdQueryKey, getTagById, getTagByIdQueryOptions, useGetTagById } from "./hooks/useGetTagById.ts";
 export { getTagByIdSuspenseQueryKey, getTagByIdSuspense, getTagByIdSuspenseQueryOptions, useGetTagByIdSuspense } from "./hooks/useGetTagByIdSuspense.ts";

@@ -4,7 +4,7 @@
 */
 
 import fetch from "@/lib/api";
-import type { WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse } from "../types/WhatsappOnboard.ts";
+import type { WhatsappOnboardMutationRequest, WhatsappOnboardMutationResponse, WhatsappOnboard400 } from "../types/WhatsappOnboard.ts";
 import type { RequestConfig, ResponseErrorConfig } from "@/lib/api";
 import type { UseMutationOptions, QueryClient } from "@tanstack/react-query";
 import { useMutation } from "@tanstack/react-query";
@@ -14,7 +14,8 @@ export const whatsappOnboardMutationKey = () => [{ url: '/whatsapp/onboard' }] a
 export type WhatsappOnboardMutationKey = ReturnType<typeof whatsappOnboardMutationKey>
 
 /**
- * @summary Onboard a WhatsApp Business Account using OAuth2 code.
+ * @description Processa o código de autorização do Embedded Signup da Meta, suportando coexistência com BSPs existentes.
+ * @summary Onboard a WhatsApp Business Account using Embedded Signup code.
  * {@link /whatsapp/onboard}
  */
 export async function whatsappOnboard(data: WhatsappOnboardMutationRequest, config: Partial<RequestConfig<WhatsappOnboardMutationRequest>> & { client?: typeof fetch } = {}) {
@@ -22,17 +23,18 @@ export async function whatsappOnboard(data: WhatsappOnboardMutationRequest, conf
   
   const requestData = data  
   
-  const res = await request<WhatsappOnboardMutationResponse, ResponseErrorConfig<Error>, WhatsappOnboardMutationRequest>({ method : "POST", url : `/whatsapp/onboard`, data : requestData, ... requestConfig })  
+  const res = await request<WhatsappOnboardMutationResponse, ResponseErrorConfig<WhatsappOnboard400>, WhatsappOnboardMutationRequest>({ method : "POST", url : `/whatsapp/onboard`, data : requestData, ... requestConfig })  
   return res.data
 }
 
 /**
- * @summary Onboard a WhatsApp Business Account using OAuth2 code.
+ * @description Processa o código de autorização do Embedded Signup da Meta, suportando coexistência com BSPs existentes.
+ * @summary Onboard a WhatsApp Business Account using Embedded Signup code.
  * {@link /whatsapp/onboard}
  */
 export function useWhatsappOnboard<TContext>(options: 
 {
-  mutation?: UseMutationOptions<WhatsappOnboardMutationResponse, ResponseErrorConfig<Error>, {data: WhatsappOnboardMutationRequest}, TContext> & { client?: QueryClient },
+  mutation?: UseMutationOptions<WhatsappOnboardMutationResponse, ResponseErrorConfig<WhatsappOnboard400>, {data: WhatsappOnboardMutationRequest}, TContext> & { client?: QueryClient },
   client?: Partial<RequestConfig<WhatsappOnboardMutationRequest>> & { client?: typeof fetch },
 }
  = {}) {
@@ -40,7 +42,7 @@ export function useWhatsappOnboard<TContext>(options:
   const { client: queryClient, ...mutationOptions } = mutation;
   const mutationKey = mutationOptions.mutationKey ?? whatsappOnboardMutationKey()
 
-  return useMutation<WhatsappOnboardMutationResponse, ResponseErrorConfig<Error>, {data: WhatsappOnboardMutationRequest}, TContext>({
+  return useMutation<WhatsappOnboardMutationResponse, ResponseErrorConfig<WhatsappOnboard400>, {data: WhatsappOnboardMutationRequest}, TContext>({
     mutationFn: async({ data }) => {
       return whatsappOnboard(data, config)
     },
