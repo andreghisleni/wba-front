@@ -35,9 +35,10 @@ interface FacebookLoginOptions {
   response_type: string;
   override_default_response_type: boolean;
   extras: {
-    setup: Record<string, unknown>;
     featureType: string;
     sessionInfoVersion: string;
+    version: string;
+    features: Array<{ name: string }>;
   };
 }
 
@@ -104,7 +105,7 @@ export function useFacebookEmbeddedSignup({
         appId,
         cookie: true,
         xfbml: true,
-        version: 'v21.0',
+        version: 'v25.0',
       });
       setIsSDKLoaded(true);
     };
@@ -146,15 +147,16 @@ export function useFacebookEmbeddedSignup({
       },
       {
         config_id: configId,
-        response_type: 'code', // Pede o code para trocar no servidor
+        response_type: 'code',
         override_default_response_type: true,
         extras: {
           featureType: 'whatsapp_business_app_onboarding',
           sessionInfoVersion: '3',
-          setup: {
-            // Recursos para coexistência com BSPs
-            solutionID: configId,
-          },
+          version: 'v3',
+          features: [
+            { name: 'marketing_messages_lite' },
+            { name: 'app_only_install' },
+          ],
         },
       }
     );
