@@ -1,3 +1,5 @@
+/** biome-ignore-all lint/suspicious/noConsole: <explanation> */
+/** biome-ignore-all lint/complexity/noForEach: <explanation> */
 import { useQueryClient } from '@tanstack/react-query';
 import { createFileRoute, Link } from '@tanstack/react-router';
 import { ArrowLeftFromLineIcon } from 'lucide-react';
@@ -91,18 +93,59 @@ function RouteComponent() {
   });
 
   const handleCreate = () => {
+    // 1. Sanitização dos dados vindos do Excel
+    const sanitizedMembers = items.map((item) => {
+      // Garante que o nome seja sempre uma string e remove espaços sobrando
+      const nameStr = String(item.internal_name || '').trim();
+
+      // Garante que o telefone seja string. (Opcional: você poderia usar .replace(/\D/g, '') para tirar traços e parênteses)
+      const phoneStr = String(item.phone || '').trim();
+
+      return {
+        name: nameStr,
+        phone: phoneStr,
+        additionalParams: Object.fromEntries(
+          Object.entries(item).filter(
+            ([key]) => key !== 'internal_name' && key !== 'phone'
+          )
+        ),
+      };
+    });
+
+    // 2. (OPCIONAL) Debug com Zod: Descobre quem está quebrando a regra!
+    // Usando o schema que criamos na resposta anterior
+    const importMemberSchema = z.object({
+      name: z.string().min(5, "Nome muito curto (< 5)"),
+      phone: z.string().min(10, "Telefone muito curto (< 10)"),
+      additionalParams: z.any().optional(),
+    });
+
+    const payloadSchema = z.object({ members: z.array(importMemberSchema) });
+    const check = payloadSchema.safeParse({ members: sanitizedMembers });
+
+    if (!check.success) {
+      // Se cair aqui, abra o F12 (Console) no navegador! Ele vai te dizer a linha exata do erro.
+      console.error("🚨 O Excel possui dados inválidos que o Backend vai rejeitar:");
+      check.error.issues.forEach(issue => {
+        const rowIndex = issue.path[1]; // Pega o índice do array
+        const field = issue.path[2];    // Pega o campo (name ou phone)
+
+        // Mostra qual linha do Excel (aproximadamente) está com problema
+        console.error(
+          `Linha ${Number(rowIndex) + 2} | Campo '${field}': ${issue.message} -> Valor lido:`,
+          sanitizedMembers[Number(rowIndex)]
+        );
+      });
+
+      toast.error("Alguns contatos estão inválidos. Verifique o console (F12) para ver os detalhes.");
+      return; // Para a execução e não envia pro backend!
+    }
+
+    // 3. Se tudo estiver perfeito, envia a requisição!
     importMembers.mutate({
       listId,
       data: {
-        members: items.map((item) => ({
-          name: item.internal_name,
-          phone: String(item.phone),
-          additionalParams: Object.fromEntries(
-            Object.entries(item).filter(
-              ([key]) => key !== 'internal_name' && key !== 'phone'
-            )
-          ),
-        })),
+        members: sanitizedMembers,
       },
     });
   };
