@@ -8,12 +8,12 @@ import type { Item } from '../.';
 // You can use a Zod schema here if you want.
 
 type Props = {
-  additionalParams: string[];
+  additionalParams?: string[];
 };
 
 export const columns = ({ additionalParams }: Props): ColumnDef<Item>[] => [
   tdb('internal_name', 'Nome'),
   tdb('phone', 'Telefone', 'phone'),
 
-  ...additionalParams.map((e) => tdb(e, e)),
+  ...(additionalParams ? additionalParams.map((e) => tdb(e, e)) : []),
 ];

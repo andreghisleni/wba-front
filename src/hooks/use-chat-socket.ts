@@ -52,6 +52,13 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
       try {
         const payload = JSON.parse(event.data);
         const { event: eventName, data } = payload;
+        
+        console.log('📩 WebSocket recebeu evento:', eventName, {
+          contactId: data.contactId,
+          messageId: data.id,
+          direction: data.direction,
+          selectedContactId: selectedContactIdRef.current,
+        });
 
         // ============================================================
         // 📨 EVENTO: NOVA MENSAGEM (Atualiza Chat + Lista de Contatos)
@@ -62,15 +69,25 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
           
           // 1. Se a conversa desse contato estiver aberta, adiciona a mensagem
           if (data.contactId === currentContactId) {
+            console.log('✅ Adicionando mensagem ao chat ativo:', data.id);
             queryClient.setQueryData(
               getWhatsappContactsContactIdMessagesQueryKey(currentContactId as string),
               (oldMessages: any[] | undefined) => {
-                if (!oldMessages) { return [data]; }
+                if (!oldMessages) { 
+                  console.log('🔄 Criando array de mensagens (não existia)');
+                  return [data]; 
+                }
                 // Evita duplicatas
-                if (oldMessages.some((m) => m.id === data.id)){ return oldMessages;}
+                if (oldMessages.some((m) => m.id === data.id)){ 
+                  console.log('⚠️ Mensagem duplicada ignorada:', data.id);
+                  return oldMessages;
+                }
+                console.log('✅ Mensagem adicionada ao array existente. Total:', oldMessages.length + 1);
                 return [...oldMessages, data];
               }
             );
+          } else {
+            console.log('ℹ️ Mensagem não é do chat ativo. ContactId:', data.contactId, 'vs', currentContactId);
           }
 
           // 2. Atualiza a Sidebar (Lista de Contatos)
