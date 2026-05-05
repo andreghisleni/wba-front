@@ -20,6 +20,14 @@ interface UseChatSocketProps {
 export function useChatSocket({ organizationId, selectedContactId }: UseChatSocketProps) {
   const queryClient = useQueryClient();
   const socketRef = useRef<WebSocket | null>(null);
+  
+  // 🔥 SOLUÇÃO: Usar ref para selectedContactId para evitar closure trap
+  const selectedContactIdRef = useRef(selectedContactId);
+
+  // Mantém o ref sincronizado com o prop (roda toda vez que selectedContactId muda)
+  useEffect(() => {
+    selectedContactIdRef.current = selectedContactId;
+  }, [selectedContactId]);
 
   useEffect(() => {
     if (!organizationId){ return;}
@@ -35,6 +43,7 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
     socketRef.current = ws;
 
     ws.onopen = () => {
+      console.log('🔌 WebSocket conectado');
       // Entra na sala da organização
       ws.send(JSON.stringify({ event: 'join', organizationId }));
     };
@@ -48,10 +57,13 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
         // 📨 EVENTO: NOVA MENSAGEM (Atualiza Chat + Lista de Contatos)
         // ============================================================
         if (eventName === 'chat:message:new') {
+          // 🔥 CORREÇÃO: Ler do ref ao invés de closure
+          const currentContactId = selectedContactIdRef.current;
+          
           // 1. Se a conversa desse contato estiver aberta, adiciona a mensagem
-          if (data.contactId === selectedContactId) {
+          if (data.contactId === currentContactId) {
             queryClient.setQueryData(
-              getWhatsappContactsContactIdMessagesQueryKey(selectedContactId as string),
+              getWhatsappContactsContactIdMessagesQueryKey(currentContactId as string),
               (oldMessages: any[] | undefined) => {
                 if (!oldMessages) { return [data]; }
                 // Evita duplicatas
@@ -80,9 +92,9 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
                 contact.lastMessageStatus = data.status;
                 contact.lastMessageType = data.type;
 
-                // Incrementa contador se não for msg minha e não estiver no chat aberto
+                // 🔥 CORREÇÃO: Ler do ref
                 const isMyMessage = data.direction === 'OUTBOUND';
-                const isChatOpen = data.contactId === selectedContactId;
+                const isChatOpen = data.contactId === currentContactId;
                 if (!(isMyMessage || isChatOpen)) {
                   contact.unreadCount = (contact.unreadCount || 0) + 1;
                 }
@@ -109,10 +121,13 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
         // ✅ EVENTO: ATUALIZAÇÃO DE STATUS (Ticks Azuis)
         // ============================================================
         if (eventName === 'chat:message:update') {
+          // 🔥 CORREÇÃO: Ler do ref
+          const currentContactId = selectedContactIdRef.current;
+          
           // 1. Atualizar Mensagens no CHAT ABERTO
           // Focamos apenas na conversa ativa para garantir performance e precisão
-          if (selectedContactId) {
-            const activeChatKey = getWhatsappContactsContactIdMessagesQueryKey(selectedContactId);
+          if (currentContactId) {
+            const activeChatKey = getWhatsappContactsContactIdMessagesQueryKey(currentContactId);
             
             queryClient.setQueryData(activeChatKey, (oldMessages: any) => {
                // Validação defensiva: se não for array, não mexe
@@ -168,8 +183,17 @@ export function useChatSocket({ organizationId, selectedContactId }: UseChatSock
       }
     };
 
+    ws.onerror = (error) => {
+      console.error('❌ Erro no WebSocket:', error);
+    };
+
+    ws.onclose = () => {
+      console.log('🔌 WebSocket desconectado');
+    };
+
     return () => {
+      console.log('🧹 Limpando WebSocket');
       ws.close();
     };
-  }, [organizationId, selectedContactId, queryClient]);
+  }, [organizationId, queryClient]); // 🔥 CORREÇÃO: Remover selectedContactId das dependências
 }
