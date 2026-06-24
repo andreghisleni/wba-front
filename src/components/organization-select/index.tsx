@@ -35,7 +35,9 @@ export function OrganizationSelect() {
 
   async function handleSelect(orgId: string) {
     const selectedOrg = organizations?.find((o) => o.id === orgId);
-    if (!selectedOrg) return;
+    if (!selectedOrg) {
+      return;
+    }
 
     await auth.organization.setActive({
       organizationId: orgId,
@@ -88,9 +90,9 @@ export function OrganizationSelect() {
                 >
                   {currentOrganizationId
                     ? organizations?.find(
-                      (organization) =>
-                        organization.id === currentOrganizationId
-                    )?.name
+                        (organization) =>
+                          organization.id === currentOrganizationId
+                      )?.name
                     : 'Select an organization'}
                 </span>
               )}

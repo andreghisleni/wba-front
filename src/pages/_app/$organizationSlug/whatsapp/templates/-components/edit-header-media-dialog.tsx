@@ -24,38 +24,42 @@ type EditHeaderMediaDialogProps = {
   template: Template;
 };
 
-export function EditHeaderMediaDialog({ template }: EditHeaderMediaDialogProps) {
+export function EditHeaderMediaDialog({
+  template,
+}: EditHeaderMediaDialogProps) {
   const [open, setOpen] = useState(false);
   const [mediaUrl, setMediaUrl] = useState(template.headerMediaUrl || '');
   const queryClient = useQueryClient();
 
-  const { mutateAsync: updateMedia, isPending } = useUpdateWhatsappTemplateMedia({
-    mutation: {
-      onSuccess: async () => {
-        toast.success('URL da mídia atualizada com sucesso!');
-        await queryClient.invalidateQueries({
-          queryKey: getWhatsappTemplatesQueryKey(),
-        });
-        setOpen(false);
+  const { mutateAsync: updateMedia, isPending } =
+    useUpdateWhatsappTemplateMedia({
+      mutation: {
+        onSuccess: async () => {
+          toast.success('URL da mídia atualizada com sucesso!');
+          await queryClient.invalidateQueries({
+            queryKey: getWhatsappTemplatesQueryKey(),
+          });
+          setOpen(false);
+        },
+        onError: (error) => {
+          toast.error(`Erro ao atualizar: ${error.message}`);
+        },
       },
-      onError: (error) => {
-        toast.error(`Erro ao atualizar: ${error.message}`);
-      },
-    },
-  });
+    });
 
   // Verifica se o template tem header de vídeo
   const structure = template.structure || [];
   const headerComponent = structure.find(
-    (c: TemplateComponent) => c.type === 'HEADER' && c.format === 'VIDEO'
+    (c: TemplateComponent) =>
+      c.type === 'HEADER' && (c.format === 'VIDEO' || c.format === 'IMAGE')
   );
 
-  // Se não tem header de vídeo, não renderiza nada
+  // Se não tem header de vídeo ou imagem, não renderiza nada
   if (!headerComponent) {
     return null;
   }
 
-
+  const isImageHeader = headerComponent.format === 'IMAGE';
 
   const handleSave = async () => {
     await updateMedia({
@@ -81,14 +85,14 @@ export function EditHeaderMediaDialog({ template }: EditHeaderMediaDialogProps) 
             Editar Mídia do Header
           </DialogTitle>
           <DialogDescription>
-            Configure a URL do vídeo que será enviado no header do template "{template.name}".
+            Configure a URL do vídeo ou imagem que será enviado no header do template "{template.name}".
           </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
           {/* Campo de URL */}
           <div className="space-y-2">
-            <Label htmlFor="mediaUrl">URL do Vídeo</Label>
+            <Label htmlFor="mediaUrl">URL do Vídeo ou Imagem</Label>
             <Input
               id="mediaUrl"
               onChange={(e) => setMediaUrl(e.target.value)}
@@ -101,20 +105,23 @@ export function EditHeaderMediaDialog({ template }: EditHeaderMediaDialogProps) 
             </p>
           </div>
 
-          {/* Preview do vídeo */}
+          {/* Preview do vídeo ou imagem */}
           {mediaUrl && (
             <div className="space-y-2">
               <Label>Preview</Label>
               <div className="overflow-hidden rounded-lg border bg-gray-900">
-                <video
-                  className="aspect-video w-full"
-                  controls
-                  key={mediaUrl}
-                  preload="metadata"
-                  src={mediaUrl}
-                >
-                  <track kind="captions" />
-                </video>
+                {isImageHeader ? (
+                  <img alt="Preview" className="w-full" src={mediaUrl} />
+                ) : (
+                  <video
+                    className="aspect-video w-full"
+                    controls
+                    key={mediaUrl}
+                    preload="metadata"
+                    src={mediaUrl}
+                  >
+                    <track kind="captions" />
+                  </video>)}
               </div>
             </div>
           )}
