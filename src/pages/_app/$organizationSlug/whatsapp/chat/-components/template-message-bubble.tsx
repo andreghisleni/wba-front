@@ -478,7 +478,7 @@ export function TemplateMessageBubble({ message }: TemplateMessageBubbleProps) {
         )}
 
         {/* RODAPÉ DA MENSAGEM */}
-        <div className="mt-1 flex select-none items-center justify-between gap-1">
+        <div className="mt-1 flex select-none items-center justify-between gap-1 px-3 pb-2">
           <Dialog>
             <DialogTrigger asChild>
               <button
