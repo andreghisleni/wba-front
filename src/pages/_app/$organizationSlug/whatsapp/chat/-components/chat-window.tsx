@@ -1,5 +1,5 @@
 import { Phone } from 'lucide-react';
-import { useEffect, type RefObject } from 'react';
+import { type RefObject, useEffect } from 'react';
 import type { GetWhatsappContactsQueryResponse } from '@/http/generated/types/GetWhatsappContacts';
 import type { GetWhatsappContactsContactIdMessagesQueryResponse } from '@/http/generated/types/GetWhatsappContactsContactIdMessages';
 import { ChatHeader } from './chat-header';
@@ -16,7 +16,11 @@ interface ChatWindowProps {
   handleSendImage: (imageUrl: string, caption?: string) => Promise<void>;
   handleSendVideo: (videoUrl: string, caption?: string) => Promise<void>;
   handleSendAudio: (audioUrl: string) => Promise<void>;
-  handleSendDocument: (documentUrl: string, filename: string, caption?: string) => Promise<void>;
+  handleSendDocument: (
+    documentUrl: string,
+    filename: string,
+    caption?: string
+  ) => Promise<void>;
   isSending: boolean;
   isWindowClosed: boolean;
   messagesEndRef: RefObject<HTMLDivElement | null>;

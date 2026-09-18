@@ -3,7 +3,22 @@
 /** biome-ignore-all lint/suspicious/noExplicitAny: tipos dinâmicos de mensagem */
 /** biome-ignore-all lint/performance/noImgElement: necessário para mídia */
 /** biome-ignore-all lint/nursery/noNoninteractiveElementInteractions: clique em imagem */
-import { Download, FileText, ImageIcon, FileVideo, Mic } from 'lucide-react';
+import {
+  Download,
+  Eye,
+  FileText,
+  FileVideo,
+  ImageIcon,
+  Mic,
+} from 'lucide-react';
+import { ShowJson } from '@/components/show-json';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { formatWhatsAppText } from '@/utils/whatsapp-formatter';
 import { MessageStatus } from './message-status';
 import { TemplateMessageBubble } from './template-message-bubble';
@@ -65,18 +80,16 @@ function QuotedMessage({
 
   return (
     <div
-      className={`mb-2 rounded-md border-l-4 px-3 py-2 ${
-        isMe
+      className={`mb-2 rounded-md border-l-4 px-3 py-2 ${isMe
           ? 'border-green-300 bg-green-700/50'
           : 'border-gray-400 bg-gray-100 dark:border-gray-500 dark:bg-gray-700/50'
-      }`}
+        }`}
     >
       <div className="flex items-center gap-2">
         {mediaIcon}
         <p
-          className={`line-clamp-2 text-xs ${
-            isMe ? 'text-green-100' : 'text-gray-600 dark:text-gray-300'
-          }`}
+          className={`line-clamp-2 text-xs ${isMe ? 'text-green-100' : 'text-gray-600 dark:text-gray-300'
+            }`}
         >
           {isMediaOnly
             ? mediaLabel
@@ -94,7 +107,9 @@ const RenderMessageContent = ({ message }: { message: any }) => {
     return null;
   }
 
-  const mediaUrl = message.mediaFileName ? `https://pub-bf29d6f6bf764b1982512ad9a0b5c9c0.r2.dev/${message.mediaFileName}` : message.mediaUrl;
+  const mediaUrl = message.mediaFileName
+    ? `https://pub-bf29d6f6bf764b1982512ad9a0b5c9c0.r2.dev/${message.mediaFileName}`
+    : message.mediaUrl;
   // String(message.mediaUrl).replace(
   //   'https://pub-a72a6f120019167e519d34db3c3c75b5.r2.dev/',
   //   'http://localhost:8787/'
@@ -108,8 +123,8 @@ const RenderMessageContent = ({ message }: { message: any }) => {
           <img
             alt="Imagem"
             className={`cursor-pointer rounded-lg object-cover hover:opacity-90 ${message.type === 'sticker'
-              ? 'h-32 w-32 bg-transparent'
-              : 'max-h-64 w-auto'
+                ? 'h-32 w-32 bg-transparent'
+                : 'max-h-64 w-auto'
               }`}
             onClick={() => window.open(mediaUrl, '_blank')}
             src={mediaUrl}
@@ -186,8 +201,8 @@ export function MessageBubble({ message }: { message: any }) {
     >
       <div
         className={`relative min-w-48 max-w-[80%] rounded-lg p-3 shadow-sm md:max-w-[60%] ${isMe
-          ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
-          : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
+            ? 'rounded-tr-none bg-green-600 text-white dark:bg-green-700 dark:text-gray-100'
+            : 'rounded-tl-none border border-gray-200 bg-white text-gray-900 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-200'
           }`}
       >
         {/* 0. Renderiza a mensagem citada (se for reply) */}
@@ -208,22 +223,40 @@ export function MessageBubble({ message }: { message: any }) {
         )}
 
         {/* RODAPÉ DA MENSAGEM */}
-        <div className="mt-1 flex select-none items-center justify-end gap-1">
-          <span className="pt-0.5 text-[10px] text-gray-500 leading-none dark:text-gray-400">
-            {new Date(message.timestamp).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </span>
+        <div className="mt-1 flex select-none items-center justify-between gap-1">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="text-gray-500 text-xs dark:text-gray-400"
+                type="button"
+              >
+                <Eye className="h-4 w-4" />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Visualização da Mensagem</DialogTitle>
+              </DialogHeader>
+              <ShowJson data={message} />
+            </DialogContent>
+          </Dialog>
+          <div className="flex select-none items-center justify-end gap-1">
+            <span className="pt-0.5 text-[10px] text-gray-500 leading-none dark:text-gray-400">
+              {new Date(message.timestamp).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
 
-          {/* O COMPONENTE DE STATUS ENTRA AQUI */}
-          {/* Ele só vai renderizar se isMe for true, pois configuramos isso dentro dele */}
-          <MessageStatus
-            errorDefinition={message.errorDefinition}
-            errorDesc={message.errorDesc}
-            isUser={isMe}
-            status={message.status}
-          />
+            {/* O COMPONENTE DE STATUS ENTRA AQUI */}
+            {/* Ele só vai renderizar se isMe for true, pois configuramos isso dentro dele */}
+            <MessageStatus
+              errorDefinition={message.errorDefinition}
+              errorDesc={message.errorDesc}
+              isUser={isMe}
+              status={message.status}
+            />
+          </div>
         </div>
       </div>
     </div>
