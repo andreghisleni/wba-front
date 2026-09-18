@@ -5,11 +5,20 @@
 import {
   Copy,
   ExternalLink,
+  Eye,
   FileText,
   ImageIcon,
   Phone,
   PlayCircle,
 } from 'lucide-react';
+import { ShowJson } from '@/components/show-json';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { useGetWhatsappTemplates } from '@/http/generated/hooks';
 import { cn } from '@/lib/utils';
 import { MessageStatus } from './message-status';
@@ -57,7 +66,13 @@ type TemplateMessageBubbleProps = {
     status: string;
     timestamp: string | Date;
     templateParams?: TemplateParams | null;
-    errorDesc?: string | null;
+    errorDesc?: string;
+    errorDefinition?: {
+      id: string;
+      metaCode: number;
+      shortExplanation?: string | null;
+      detailedExplanation?: string | null;
+    };
   };
 };
 
@@ -247,9 +262,7 @@ function TemplateButton({
   const baseClassName = cn(
     'flex items-center justify-center gap-1 py-1.5 text-center font-medium transition-opacity',
     !isLast && borderClass,
-    isMe
-      ? 'text-white/90 hover:text-white'
-      : 'text-blue-500 dark:text-blue-400'
+    isMe ? 'text-white/90 hover:text-white' : 'text-blue-500 dark:text-blue-400'
   );
 
   // Se for botão de URL, renderiza como link clicável
@@ -307,9 +320,7 @@ function ButtonsRenderer({
   }
 
   // Cria um mapa de índice -> valor para fácil acesso
-  const paramsMap = new Map(
-    buttonParams?.map((p) => [p.index, p.value]) ?? []
-  );
+  const paramsMap = new Map(buttonParams?.map((p) => [p.index, p.value]) ?? []);
 
   return (
     <div
@@ -466,19 +477,41 @@ export function TemplateMessageBubble({ message }: TemplateMessageBubbleProps) {
           </div>
         )}
 
-        {/* Timestamp e Status */}
-        <div className="flex select-none items-center justify-end gap-1 px-3 pb-2">
-          <span className="pt-0.5 text-[10px] leading-none opacity-70">
-            {new Date(message.timestamp).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-            })}
-          </span>
-          <MessageStatus
-            errorDesc={message.errorDesc ?? undefined}
-            isUser={isMe}
-            status={message.status}
-          />
+        {/* RODAPÉ DA MENSAGEM */}
+        <div className="mt-1 flex select-none items-center justify-between gap-1">
+          <Dialog>
+            <DialogTrigger asChild>
+              <button
+                className="text-gray-500 text-xs dark:text-gray-400"
+                type="button"
+              >
+                <Eye className="h-4 w-4" />
+              </button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Visualização da Mensagem</DialogTitle>
+              </DialogHeader>
+              <ShowJson data={message} />
+            </DialogContent>
+          </Dialog>
+          <div className="flex select-none items-center justify-end gap-1">
+            <span className="pt-0.5 text-[10px] text-gray-500 leading-none dark:text-gray-400">
+              {new Date(message.timestamp).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
+            </span>
+
+            {/* O COMPONENTE DE STATUS ENTRA AQUI */}
+            {/* Ele só vai renderizar se isMe for true, pois configuramos isso dentro dele */}
+            <MessageStatus
+              errorDefinition={message.errorDefinition}
+              errorDesc={message.errorDesc || undefined}
+              isUser={isMe}
+              status={message.status}
+            />
+          </div>
         </div>
       </div>
     </div>
